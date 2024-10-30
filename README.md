@@ -31,3 +31,44 @@
 ```
 
 This repository is the code for my **final year project**, dealing with **decentralised approaches to graph colouring**.
+
+## Installation
+
+- clone the repo
+- compile `colouring.c` with gcc or whatever compiler you want to use
+```
+g++ ./colouring -o ./colouring.exe
+```
+
+## Usage
+
+- Run the executable you compiled from the command line with some variation of the following options
+```
+-n [integer]     set the number of nodes in the graph
+                   default is 10
+-v               set verbose mode on
+                   prints the graph when the colouring is complete
+                   default is off
+-g [generator]   set the generator
+                   sets the graph generator function to use
+                   there are currently two different types of graphs you can use
+                   o: ring graph; undirected graph where each node has two neighbours (default)
+                   r: random graph; a graph where each edge has a p% chance of existing
+                     options:
+                       -p [float]     probability (as a floating point number between 0 and 1)
+                                        probability that each edge of the graph exists
+                                        default is 0.5
+-m [integer]     set the max iteration on random colour
+                   default is 100
+                   random colour is the only colouring algorithm at the moment
+```
+
+#### Example Usage
+**colour a ring graph with 51 nodes and 10000 iterations per run of random colour**
+```
+./colouring.c -v -m 10000
+```
+**colour a random graph which has a probability of 30% that each edge exists**
+```
+./colouring.exe -v -g r -p 0.3
+```
