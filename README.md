@@ -1,4 +1,4 @@
-
+```
 
  ________ ___  ________   ________  ___                                  
 |\  _____\\  \|\   ___  \|\   __  \|\  \                                 
@@ -28,8 +28,6 @@
    \ \__\    \ \__\\ _\\ \_______\ \________\ \_______\ \_______\  \ \__\
     \|__|     \|__|\|__|\|_______|\|________|\|_______|\|_______|   \|__|
 
+```
 
-
-This repository is the code for my final year project, dealing with decentralised approaches to graph colouring.
-
-![a computer screen with a lot of lines of text on it](https://media.tenor.com/UE3WvX55MpMAAAAM/hacking-computer.gif](https://tenor.com/view/hacking-computer-gif-25751062)
+This repository is the code for my **final year project**, dealing with **decentralised approaches to graph colouring**.
