@@ -44,6 +44,8 @@ g++ ./colouring -o ./colouring.exe
 
 - Run the executable you compiled from the command line with some variation of the following options
 ```
+usage: colouring.exe [options]
+options:
 -n [integer]     set the number of nodes in the graph
                    default is 10
 -v               set verbose mode on
@@ -66,7 +68,7 @@ g++ ./colouring -o ./colouring.exe
 #### Example Usage
 **colour a ring graph with 51 nodes and 10000 iterations per run of random colour**
 ```
-./colouring.c -v -m 10000
+./colouring.c -v -m 10000 -n 51
 ```
 **colour a random graph which has a probability of 30% that each edge exists**
 ```
