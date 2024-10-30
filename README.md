@@ -68,7 +68,7 @@ options:
 #### Example Usage
 **colour a ring graph with 51 nodes and 10000 iterations per run of random colour**
 ```
-./colouring.c -v -m 10000 -n 51
+./colouring.exe -v -m 10000 -n 51
 ```
 **colour a random graph which has a probability of 30% that each edge exists**
 ```
