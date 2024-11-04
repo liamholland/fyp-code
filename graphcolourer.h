@@ -14,7 +14,7 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
     int maxColour = numNodes;   //the ultimate maximum is a different colour for every node
 
     node** colouringGraph = copyGraph(graph, numNodes);     //this graph is used to find colouring solutions
-    int* lastBestSolution = extractGraphColours(colouringGraph, numNodes);   //array to store colouring solutions
+    int* lastBestSolution = extractGraphColours(colouringGraph, numNodes);   //array to store colouring solutions. centralised?
 
     while(maxColour > 0) {
         int anyConflicts = 0;
@@ -60,7 +60,20 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
     printf("final max colour: %d\n", maxColour + 1);    //+1 because the current max was the attempt that did not work
     
     // UNCOMMENT THE BELOW LINE TO VERIFY EVERY COLOUR FROM 1..(maxColour + 1) IS USED IN THE COLOURING
-    // printf("chromatic colour: %d\n", findChromaticColour(lastBestSolution, numNodes, maxColour + 1)); 
+    // printf("chromatic colour: %d\n", findNumColoursUsed(lastBestSolution, numNodes, maxColour + 1)); 
+
+    return colouringGraph;
+}
+
+node** noGlobalKnowledgeColour(node** graph, int numNodes, int maxIterations, int numAnts) {
+    node** colouringGraph = copyGraph(graph, numNodes);
+
+    int numNoChangeBreak = 10;
+    int numNoChangePerculate = 5;
+
+    node** antLocations = fetchNUniqueNodes(colouringGraph, numNodes, numAnts);
+
+    printGraph(antLocations, numAnts);
 
     return colouringGraph;
 }
