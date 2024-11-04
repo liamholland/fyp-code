@@ -37,6 +37,9 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-g")) {
             generator = *argv[i + 1];
         }
+        else if(!strcmp(argv[i], "-s")) {
+            nodesInSetOne = atoi(argv[i + 1]);
+        }
     }
 
     //generate the graph
