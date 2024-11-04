@@ -9,10 +9,17 @@
 int main(int argc, char const *argv[]) {
 
     int numNodes = 10;
-    int maxIterations = 100;
-    float prob = 0.5;
-    int verbose = 0;
     char generator = 'o';
+    int verbose = 0;
+
+    //random colour
+    int maxIterations = 100;
+
+    //random generator
+    float prob = 0.5;
+
+    //bipartite generator
+    int nodesInSetOne = 0;
 
     for(int i = 0; i < argc; i++) {
         if(!strcmp(argv[i], "-n")) {
@@ -40,7 +47,13 @@ int main(int argc, char const *argv[]) {
         break;
     case 'r':
         graph = generateRandomGraph(numNodes, prob);
-        break;    
+        break;
+    case 'b':
+        graph = generateBipartiteGraph(
+            nodesInSetOne ? nodesInSetOne : numNodes / 2,
+            nodesInSetOne ? numNodes - nodesInSetOne : numNodes - (numNodes / 2)
+        );
+        break;
     default:
         printf("invalid generator");
         return 1;

@@ -53,8 +53,12 @@ node** generateRandomGraph(int numNodes, float p) {
     return graph;
 }
 
+// generate a bipartite graph
+// in this graph, there are two sets of nodes
+// in each set, every node is connected to every node in the other set
+// all nodes in a set are independent
 node** generateBipartiteGraph(int setOne, int setTwo) {
-    node** g1 = initialiseGraph(setOne, setTwo);
+    node** g1 = initialiseGraph(setOne + setTwo, setTwo);
     node** g2 = initialiseGraph(setTwo, setOne);
 
     //connect the nodes
@@ -64,11 +68,16 @@ node** generateBipartiteGraph(int setOne, int setTwo) {
         }
     }
 
-        //connect the nodes
     for(int n = 0; n < setTwo; n++) {
         for(int nb = 0; nb < setOne; nb++) {
             g2[n]->neighbours[nb] = g1[nb];
         }
+    }
+
+    //add g2 to g1
+    for(int n = setOne; n < setOne + setTwo; n++) {
+        g1[n] = g2[n - setOne];
+        g1[n]->id = n;
     }
 
     g2 = NULL;
