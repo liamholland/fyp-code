@@ -65,7 +65,8 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
 
 // inspired by ant colouring algorithms, although this algorithm has no "intelligence"
 // the agents (fish) move between the nodes blindly, making no distinction as to whether they have been there recently
-// if the fish lands on a node that is conflicting, it will reduce its colour until it can do so no longer
+// if the fish lands on a node that is conflicting, it will reduce its colour
+// if the fish uncolours the node, it will reset the colour to the node's degree and colour the conflicting node instead
 node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations, int numFish, int numMoves) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
@@ -87,15 +88,21 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
 
             //check for conflicts in neighbours
             for(int nb = 0; nb < fish[f]->degree; nb++) {
-                if(fish[f]->colour > 1 && fish[f]->neighbours[nb]->colour == fish[f]->colour) {
+                if(fish[f]->neighbours[nb]->colour == fish[f]->colour) {
                     fish[f]->colour--;
+
+                    if(!fish[f]->colour) {
+                        fish[f]->colour = fish[f]->degree;
+                        fish[f]->neighbours[nb]->colour = fish[f]->degree - 1;
+                    }
+
                     numChanges++;
                     break;
                 }
 
             }
 
-            //the "fish" "moves" to a different node
+            //the fish wanders in its locality
             for(int m = 0; m < numMoves; m++) {
                 fish[f] = fish[f]->neighbours[rand() % fish[f]->degree];
             }
