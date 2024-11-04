@@ -102,8 +102,8 @@ int* extractGraphColours(node** graph, int numNodes) {
     return colourVector;
 }
 
-int findChromaticColour(node** graph, int numNodes, int maxColour) {
-    int chromaticColour = 0;
+int findNumColoursUsed(node** graph, int numNodes, int maxColour) {
+    int numColours = 0;
     int* coloursSeen = (int*)malloc(sizeof(int) * maxColour);
 
     for(int i = 0; i < maxColour; i++) {
@@ -115,11 +115,11 @@ int findChromaticColour(node** graph, int numNodes, int maxColour) {
 
         if(!coloursSeen[c - 1]) {
             coloursSeen[c - 1] = 1;
-            chromaticColour++;
+            numColours++;
         }
     }
 
-    return chromaticColour;
+    return numColours;
 }
 
 #endif
