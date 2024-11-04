@@ -7,6 +7,7 @@
 #include "graphutil.h"
 
 int main(int argc, char const *argv[]) {
+    srand((unsigned) time(NULL));
 
     int numNodes = 10;
     char generator = 'o';
@@ -14,6 +15,10 @@ int main(int argc, char const *argv[]) {
 
     //random colour
     int maxIterations = 100;
+
+    //agent colour
+    int numAgents = 5;
+    int numMoves = 1;
 
     //random generator
     float prob = 0.5;
@@ -25,7 +30,7 @@ int main(int argc, char const *argv[]) {
         if(!strcmp(argv[i], "-n")) {
             numNodes = atoi(argv[i + 1]);
         }
-        else if(!strcmp(argv[i], "-m")) {
+        else if(!strcmp(argv[i], "-M")) {
             maxIterations = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-v")) {
@@ -39,6 +44,12 @@ int main(int argc, char const *argv[]) {
         }
         else if(!strcmp(argv[i], "-s")) {
             nodesInSetOne = atoi(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-a")) {
+            numAgents = atoi(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-m")) {
+            numMoves = atoi(argv[i + 1]);
         }
     }
 
@@ -64,7 +75,7 @@ int main(int argc, char const *argv[]) {
 
     //colour the graph
     // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
-    node** colouredGraph = noGlobalKnowledgeColour(graph, numNodes, maxIterations, 5);
+    node** colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
 
     if(verbose) {
         printGraph(colouredGraph, numNodes);

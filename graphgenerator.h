@@ -23,8 +23,6 @@ node** generateRingGraph(int numNodes) {
 // each node has an edge to each other node, which has a
 // percentage probability p that it exists
 node** generateRandomGraph(int numNodes, float p) {
-    srand((unsigned) time(NULL));
-    
     //initialising 1 node pointer's worth of memory allows us to use realloc
     node** graph = initialiseGraph(numNodes, 1);
 

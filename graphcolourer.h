@@ -9,8 +9,6 @@
 // it continues until there were no conflicts or the cutoff of maxIterations
 // the current implementation will not necessarily find the best solution, but the one before the first failure
 node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
-    srand((unsigned) time(NULL));
-
     int maxColour = numNodes;   //the ultimate maximum is a different colour for every node
 
     node** colouringGraph = copyGraph(graph, numNodes);     //this graph is used to find colouring solutions
@@ -65,15 +63,67 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
     return colouringGraph;
 }
 
-node** noGlobalKnowledgeColour(node** graph, int numNodes, int maxIterations, int numAnts) {
+// inspired by ant colouring algorithms, although this algorithm has no "intelligence"
+// the agents (fish) move between the nodes blindly, making no distinction as to whether they have been there recently
+// if the fish lands on a node that is conflicting, it will reduce its colour until it can do so no longer
+node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations, int numFish, int numMoves) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
-    int numNoChangeBreak = 10;
-    int numNoChangePerculate = 5;
+    int numNoChangesPerculate = 10;    //if no agent makes a change in x iterations, we move them all around
+    int numNoChangesBreak = 30;      //if no agent makes a change in x iterations, the algorithm ends
 
-    node** antLocations = fetchNUniqueNodes(colouringGraph, numNodes, numAnts);
+    //pick some starting nodes for the "fish"
+    node** fish = fetchNUniqueNodes(colouringGraph, numNodes, numFish);
 
-    printGraph(antLocations, numAnts);
+    //start the iterations
+    for(int i = 0; i < maxIterations; i++) {
+        int numChanges = 0;
+
+        //each "fish" makes changes to the graph
+        for(int f = 0; f < numFish; f++) {
+            if(!fish[f]->colour){
+                fish[f]->colour = fish[f]->degree;
+            }
+
+            //check for conflicts in neighbours
+            for(int nb = 0; nb < fish[f]->degree; nb++) {
+                if(fish[f]->colour > 1 && fish[f]->neighbours[nb]->colour == fish[f]->colour) {
+                    fish[f]->colour--;
+                    numChanges++;
+                    break;
+                }
+
+            }
+
+            //the "fish" "moves" to a different node
+            for(int m = 0; m < numMoves; m++) {
+                fish[f] = fish[f]->neighbours[rand() % fish[f]->degree];
+            }
+        }
+
+        if(!numChanges) {
+            numNoChangesPerculate--;
+            if(!numNoChangesPerculate) {
+                free(fish);
+                fish = fetchNUniqueNodes(colouringGraph, numNodes, numFish);
+            }
+
+            numNoChangesBreak--;
+            if(!numNoChangesBreak) {
+                printf("no changes after %d iterations\n", i);
+                break;
+            }
+        }
+        else{
+            numNoChangesPerculate = 5;
+            numNoChangesBreak = 10;
+        }
+    }
+
+    printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
+        numFish, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
+
+    free(fish); //hopefully to their natural habitat :)
 
     return colouringGraph;
 }
