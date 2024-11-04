@@ -52,3 +52,26 @@ node** generateRandomGraph(int numNodes, float p) {
 
     return graph;
 }
+
+node** generateBipartiteGraph(int setOne, int setTwo) {
+    node** g1 = initialiseGraph(setOne, setTwo);
+    node** g2 = initialiseGraph(setTwo, setOne);
+
+    //connect the nodes
+    for(int n = 0; n < setOne; n++) {
+        for(int nb = 0; nb < setTwo; nb++) {
+            g1[n]->neighbours[nb] = g2[nb];
+        }
+    }
+
+        //connect the nodes
+    for(int n = 0; n < setTwo; n++) {
+        for(int nb = 0; nb < setOne; nb++) {
+            g2[n]->neighbours[nb] = g1[nb];
+        }
+    }
+
+    g2 = NULL;
+
+    return g1;  //this pointer now points to the entire graph
+}
