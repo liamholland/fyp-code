@@ -60,7 +60,26 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
     printf("final max colour: %d\n", maxColour + 1);    //+1 because the current max was the attempt that did not work
     
     // UNCOMMENT THE BELOW LINE TO VERIFY EVERY COLOUR FROM 1..(maxColour + 1) IS USED IN THE COLOURING
-    // printf("chromatic colour: %d\n", findChromaticColour(lastBestSolution, numNodes, maxColour + 1)); 
+    // printf("chromatic colour: %d\n", findChromaticColour(lastBestSolution, numNodes, maxColour + 1));
+
+    return colouringGraph;
+}
+
+node** antColour(node** graph, int numNodes) {
+    node** colouringGraph = copyGraph(graph, numNodes);
+
+    //for i cycles
+    
+    //move the ants
+
+    //run tabu search on the vertex the ant is on
+    //this should colour the vertex with the lowest available colour with the highest trail value in the colour class
+
+    //based on the result of the search, update the trail
+
+    //modify the graph to escape local maxima
+
+    //stop when there is no change for n cycles
 
     return colouringGraph;
 }
