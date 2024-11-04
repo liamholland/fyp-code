@@ -122,13 +122,39 @@ int findNumColoursUsed(node** graph, int numNodes, int maxColour) {
     return numColours;
 }
 
+int findNumConflicts(node** graph, int numNodes) {
+    int numConflicts = 0;
+
+    for(int i = 0; i < numNodes; i++) {
+        for(int j = 0; j < graph[i]->degree; j++) {
+            if(graph[i]->colour == graph[i]->neighbours[j]->colour) {
+                // printf("conflict at %d->%d\n", graph[i]->id, graph[i]->neighbours[j]->id);
+                numConflicts++;
+            }
+        }
+    }
+
+    return numConflicts / 2;    //each conflict is counted twice
+}
+
+int findNumUncolouredNodes(node** graph, int numNodes) {
+    int numUncoloured = 0;
+
+    for(int n = 0; n < numNodes; n++) {
+        if(!graph[n]->colour) {
+            numUncoloured++;
+        }
+    }
+
+    return numUncoloured;
+}
+
 node** fetchNUniqueNodes(node** fullGraph, int numNodes, int n) {
-    if(n > numNodes) {
+    if(n >= numNodes) {
         return fullGraph;
     }
     
     node** nodes = (node**)malloc(sizeof(node*) * n);
-    srand((unsigned)time(NULL));
 
     int* selectedIndex = (int*)malloc(sizeof(int) * numNodes);
     for(int i = 0; i < numNodes; i++) {
