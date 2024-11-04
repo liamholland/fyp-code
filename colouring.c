@@ -63,7 +63,8 @@ int main(int argc, char const *argv[]) {
     }
 
     //colour the graph
-    node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
+    // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
+    node** colouredGraph = noGlobalKnowledgeColour(graph, numNodes, maxIterations, 5);
 
     if(verbose) {
         printGraph(colouredGraph, numNodes);

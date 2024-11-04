@@ -25,7 +25,7 @@ node** initialiseGraph(int numNodes, int degree) {
 // print each node in the graph
 int printGraph(node** graph, int numNodes) {
     for(int i = 0; i < numNodes; i++) {
-        printf("node: %d; colour: %d; degree: %d; neighbours: ", i, graph[i]->colour, graph[i]->degree);
+        printf("node: %d; colour: %d; degree: %d; neighbours: ", graph[i]->id, graph[i]->colour, graph[i]->degree);
         for(int nb = 0; nb < graph[i]->degree; nb++) {
             printf("%d ", graph[i]->neighbours[nb]->id);
         }
@@ -120,6 +120,36 @@ int findNumColoursUsed(node** graph, int numNodes, int maxColour) {
     }
 
     return numColours;
+}
+
+node** fetchNUniqueNodes(node** fullGraph, int numNodes, int n) {
+    if(n > numNodes) {
+        return fullGraph;
+    }
+    
+    node** nodes = (node**)malloc(sizeof(node*) * n);
+    srand((unsigned)time(NULL));
+
+    int* selectedIndex = (int*)malloc(sizeof(int) * numNodes);
+    for(int i = 0; i < numNodes; i++) {
+        selectedIndex[i] = 0;
+    }
+
+    //fetch random nodes
+    for(int i = 0; i < n; i++) {
+        int node;
+
+        do {
+            node = rand() % numNodes;
+        }while(selectedIndex[node]);
+
+        selectedIndex[node] = 1;
+        nodes[i] = fullGraph[node];
+    }
+
+    free(selectedIndex);
+
+    return nodes;
 }
 
 #endif
