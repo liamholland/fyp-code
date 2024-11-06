@@ -69,6 +69,17 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
 // if the fish uncolours the node, it will reset the colour to the node's degree and colour the conflicting node instead
 node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations, int numFish, int numMoves) {
     node** colouringGraph = copyGraph(graph, numNodes);
+    int* initColouring = (int*)malloc(sizeof(int) * numNodes);
+
+    //create an initial colouring
+    for(int k = 0; k < numNodes; k++) {
+        // initColouring[k] = (rand() % numNodes) + 1; //random
+        initColouring[k] = graph[k]->degree;    //degree of each node
+    }
+
+    applyColouring(colouringGraph, initColouring, numNodes);
+
+    free(initColouring);
 
     int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
 
@@ -95,8 +106,8 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
                     fish[f]->colour--;
 
                     if(!fish[f]->colour) {
-                        fish[f]->colour = fish[f]->degree;
-                        fish[f]->neighbours[nb]->colour = fish[f]->degree - 1;
+                        fish[f]->colour = fish[f]->degree + 1;
+                        // fish[f]->neighbours[nb]->colour = fish[f]->degree - 1;
                     }
 
                     numChanges++;

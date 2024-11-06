@@ -127,7 +127,7 @@ int findNumConflicts(node** graph, int numNodes) {
 
     for(int i = 0; i < numNodes; i++) {
         for(int j = 0; j < graph[i]->degree; j++) {
-            if(graph[i]->colour == graph[i]->neighbours[j]->colour) {
+            if(graph[i]->colour == graph[i]->neighbours[j]->colour && graph[i]->colour > 0) {
                 // printf("conflict at %d->%d\n", graph[i]->id, graph[i]->neighbours[j]->id);
                 numConflicts++;
             }
