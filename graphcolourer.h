@@ -147,12 +147,7 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
         numFish, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
 
     // write to csv file
-    FILE* results = fopen("results.csv", "w");
-    for(int c = 0; c < i; c++) {
-        fprintf(results, "%d\n", conflictsAtIterationI[c]);
-    }
-
-    fclose(results);
+    appendToResults(conflictsAtIterationI, i);
 
     free(conflictsAtIterationI);
     free(fish); //hopefully to their natural habitat :)
