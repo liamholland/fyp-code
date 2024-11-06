@@ -12,6 +12,7 @@ int main(int argc, char const *argv[]) {
     int numNodes = 10;
     char generator = 'o';
     int verbose = 0;
+    int autoRuns = 1;
 
     //random colour
     int maxIterations = 100;
@@ -51,31 +52,37 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-m")) {
             numMoves = atoi(argv[i + 1]);
         }
+        else if(!strcmp(argv[i], "-A")) {
+            autoRuns = atoi(argv[i + 1]);
+        }
     }
 
-    //generate the graph
     node** graph;
-    switch (generator) {
-    case 'o':
-        graph = generateRingGraph(numNodes);
-        break;
-    case 'r':
-        graph = generateRandomGraph(numNodes, prob);
-        break;
-    case 'b':
-        graph = generateBipartiteGraph(
-            nodesInSetOne ? nodesInSetOne : numNodes / 2,
-            nodesInSetOne ? numNodes - nodesInSetOne : numNodes - (numNodes / 2)
-        );
-        break;
-    default:
-        printf("invalid generator");
-        return 1;
-    }
+    node** colouredGraph;
+    for(int a = 0; a < autoRuns; a++) {
+        //generate the graph
+        switch (generator) {
+        case 'o':
+            graph = generateRingGraph(numNodes);
+            break;
+        case 'r':
+            graph = generateRandomGraph(numNodes, prob);
+            break;
+        case 'b':
+            graph = generateBipartiteGraph(
+                nodesInSetOne ? nodesInSetOne : numNodes / 2,
+                nodesInSetOne ? numNodes - nodesInSetOne : numNodes - (numNodes / 2)
+            );
+            break;
+        default:
+            printf("invalid generator");
+            return 1;
+        }
 
-    //colour the graph
-    // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
-    node** colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
+        //colour the graph
+        // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
+        colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
+    }
 
     if(verbose) {
         printGraph(colouredGraph, numNodes);
