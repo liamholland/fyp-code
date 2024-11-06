@@ -2,6 +2,7 @@
 #define UTIL
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "node.h"
 
 node** initialiseGraph(int numNodes, int degree) {
@@ -176,6 +177,68 @@ node** fetchNUniqueNodes(node** fullGraph, int numNodes, int n) {
     free(selectedIndex);
 
     return nodes;
+}
+
+int appendToResults(int* conflictArray, int numIterations) {
+    FILE* results = fopen("results.csv", "r");
+    FILE* temp = fopen("temp.csv", "w");
+
+    char line[1024];
+    int lineNum = 0;
+
+    while(fgets(line, 1024, results)) {
+        //remove newline from end of line
+        line[strcspn(line, "\n")] = '\0';
+
+        if(lineNum < numIterations) {
+            fprintf(temp, "%s,%d\n", line, conflictArray[lineNum]);
+        }
+        else {
+            fprintf(temp, "%s,\n", line);   //just add another empty column
+        }
+
+        lineNum++;
+    }
+
+    rewind(results);
+    fgets(line, 1024, results); //get the first line of the file again
+    int numCols = 0;
+    for(int i = 0; i < strlen(line); i++) {
+        if(line[i] == ',') {
+            numCols++;
+        }
+    }
+
+    fclose(results);
+
+    char* emptyColString;
+    if(numCols > 0) {
+        //construct the empty col string
+        emptyColString = (char*)malloc(sizeof(char) * (numCols + 1));
+        for(int i = 0; i < numCols; i++) {
+            emptyColString[i] = ',';
+        }
+
+        emptyColString[numCols] = '\0';
+    }
+
+    //append any leftover data in the new array
+    while (lineNum < numIterations) {
+        if(numCols > 0) {
+            fprintf(temp, "%s,%d\n", emptyColString, conflictArray[lineNum]);
+        }
+        else {
+            fprintf(temp, "%d\n", conflictArray[lineNum]);
+        }
+        lineNum++;
+    }
+
+    fclose(temp);
+
+    remove("results.csv");
+    rename("temp.csv", "results.csv");
+
+    return 0;
 }
 
 #endif
