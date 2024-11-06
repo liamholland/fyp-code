@@ -70,6 +70,8 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
 node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations, int numFish, int numMoves) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
+    int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
+
     int numNoChangesPerculate = 10;    //if no agent makes a change in x iterations, we move them all around
     int numNoChangesBreak = 30;      //if no agent makes a change in x iterations, the algorithm ends
 
@@ -77,7 +79,8 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
     node** fish = fetchNUniqueNodes(colouringGraph, numNodes, numFish);
 
     //start the iterations
-    for(int i = 0; i < maxIterations; i++) {
+    int i;
+    for(i = 0; i < maxIterations; i++) {
         int numChanges = 0;
 
         //each "fish" makes changes to the graph
@@ -106,6 +109,8 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
             for(int m = 0; m < numMoves; m++) {
                 fish[f] = fish[f]->neighbours[rand() % fish[f]->degree];
             }
+
+            conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
         }
 
         if(!numChanges) {
@@ -130,6 +135,15 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
     printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
         numFish, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
 
+    // write to csv file
+    FILE* results = fopen("results.csv", "w");
+    for(int c = 0; c < i; c++) {
+        fprintf(results, "%d\n", conflictsAtIterationI[c]);
+    }
+
+    fclose(results);
+
+    free(conflictsAtIterationI);
     free(fish); //hopefully to their natural habitat :)
 
     return colouringGraph;
