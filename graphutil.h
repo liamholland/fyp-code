@@ -183,6 +183,10 @@ int appendToResults(int* conflictArray, int numIterations) {
     FILE* results = fopen("results.csv", "r");
     FILE* temp = fopen("temp.csv", "w");
 
+    if(results == NULL) {
+        results = fopen("results.csv", "w+");
+    }
+
     char line[1024];
     int lineNum = 0;
 
