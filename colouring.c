@@ -82,15 +82,15 @@ int main(int argc, char const *argv[]) {
         //colour the graph
         // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
         colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
-    }
 
-    if(verbose) {
-        printGraph(colouredGraph, numNodes);
-    }
+        if(verbose) {
+            printGraph(colouredGraph, numNodes);
+        }
 
-    //free memory
-    freeGraph(graph, numNodes);
-    freeGraph(colouredGraph, numNodes);
+        //free memory
+        freeGraph(graph, numNodes);
+        freeGraph(colouredGraph, numNodes);
+    }
 
     return 0;
 }
