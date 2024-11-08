@@ -4,6 +4,9 @@
 #include "node.h"
 #include "graphutil.h"
 
+#define AGENT_PERC_LIMIT 10
+#define AGENT_BREAK_LIMIT 30
+
 // this literally just has each node choose a random colour between 1 and the max colour (== numNodes)
 // however, it only changes its colour if it is conflicting with its neighbours
 // it continues until there were no conflicts or the cutoff of maxIterations
@@ -65,8 +68,8 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
 
 // inspired by ant colouring algorithms, although this algorithm has no "intelligence"
 // the agents (fish) move between the nodes blindly, making no distinction as to whether they have been there recently
-// if the fish lands on a node that is conflicting, it will reduce its colour
-// if the fish uncolours the node, it will reset the colour to the node's degree and colour the conflicting node instead
+// if the fish lands on a node that is conflicting, try the next colour in the range 1..deg(n)
+// the nodes are initially coloured with the colour equalling their degree
 node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations, int numFish, int numMoves) {
     node** colouringGraph = copyGraph(graph, numNodes);
     int* initColouring = (int*)malloc(sizeof(int) * numNodes);
@@ -83,8 +86,8 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
 
     int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
 
-    int numNoChangesPerculate = 10;    //if no agent makes a change in x iterations, we move them all around
-    int numNoChangesBreak = 30;      //if no agent makes a change in x iterations, the algorithm ends
+    int numNoChangesPerculate = 0;    //if no agent makes a change in x iterations, we move them all around
+    int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
 
     //pick some starting nodes for the "fish"
     node** fish = fetchNUniqueNodes(colouringGraph, numNodes, numFish);
@@ -96,18 +99,14 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
 
         //each "fish" makes changes to the graph
         for(int f = 0; f < numFish; f++) {
-            if(!fish[f]->colour){
-                fish[f]->colour = fish[f]->degree;
-            }
 
             //check for conflicts in neighbours
             for(int nb = 0; nb < fish[f]->degree; nb++) {
                 if(fish[f]->neighbours[nb]->colour == fish[f]->colour) {
-                    fish[f]->colour--;
+                    fish[f]->colour = (fish[f]->colour + 1) % (fish[f]->degree + 1);
 
                     if(!fish[f]->colour) {
-                        fish[f]->colour = fish[f]->degree + 1;
-                        // fish[f]->neighbours[nb]->colour = fish[f]->degree - 1;
+                        fish[f]->colour++;
                     }
 
                     numChanges++;
@@ -125,21 +124,21 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
         }
 
         if(!numChanges) {
-            numNoChangesPerculate--;
-            if(!numNoChangesPerculate) {
+            numNoChangesPerculate++;
+            if(numNoChangesPerculate == AGENT_PERC_LIMIT) {     // == because i only want this to happen on that iteration
                 free(fish);
                 fish = fetchNUniqueNodes(colouringGraph, numNodes, numFish);
             }
 
-            numNoChangesBreak--;
-            if(!numNoChangesBreak) {
+            numNoChangesBreak++;
+            if(numNoChangesBreak == AGENT_BREAK_LIMIT) {
                 printf("no changes after %d iterations\n", i);
                 break;
             }
         }
         else{
-            numNoChangesPerculate = 5;
-            numNoChangesBreak = 10;
+            numNoChangesPerculate = 0;
+            numNoChangesBreak = 0;
         }
     }
 
