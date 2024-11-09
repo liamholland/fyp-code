@@ -255,4 +255,14 @@ int nodeIsInConflict(node* node) {
     return 0;
 }
 
+int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour) {
+    int* colourTruthVector = (int*)malloc(sizeof(int) * maxColour);
+
+    for(int n = 0; n < numNodes; n++) {
+        colourTruthVector[graph[n]->colour] = 1;
+    }
+
+    return colourTruthVector;
+}
+
 #endif
