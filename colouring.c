@@ -59,6 +59,7 @@ int main(int argc, char const *argv[]) {
 
     node** graph;
     node** colouredGraph;
+    node** chromaticallyColouredGraph;
     for(int a = 0; a < autoRuns; a++) {
         //generate the graph
         switch (generator) {
@@ -81,16 +82,19 @@ int main(int argc, char const *argv[]) {
 
         //colour the graph
         // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
-        // colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
-        colouredGraph = backtrackingColour(graph, numNodes);
+        colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
+        chromaticallyColouredGraph = backtrackingColour(graph, numNodes);
 
         if(verbose) {
             printGraph(colouredGraph, numNodes);
+            printf("\n");
+            printGraph(chromaticallyColouredGraph, numNodes);
         }
 
         //free memory
         freeGraph(graph, numNodes);
         freeGraph(colouredGraph, numNodes);
+        freeGraph(chromaticallyColouredGraph, numNodes);
     }
 
     return 0;
