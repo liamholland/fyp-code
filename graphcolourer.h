@@ -101,18 +101,14 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
         for(int f = 0; f < numFish; f++) {
 
             //check for conflicts in neighbours
-            for(int nb = 0; nb < fish[f]->degree; nb++) {
-                if(fish[f]->neighbours[nb]->colour == fish[f]->colour) {
-                    fish[f]->colour = (fish[f]->colour + 1) % (fish[f]->degree + 1);
+            if(nodeIsInConflict(fish[f])) {
+                fish[f]->colour = (fish[f]->colour + 1) % (fish[f]->degree + 1);
 
-                    if(!fish[f]->colour) {
-                        fish[f]->colour++;
-                    }
-
-                    numChanges++;
-                    break;
+                if(!fish[f]->colour) {
+                    fish[f]->colour++;
                 }
 
+                numChanges++;
             }
 
             //the fish wanders in its locality
@@ -150,47 +146,6 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
 
     free(conflictsAtIterationI);
     free(fish); //hopefully to their natural habitat :)
-
-    return colouringGraph;
-}
-
-node** backtrackingColour(node** graph, int numNodes) {
-    node** colouringGraph = copyGraph(graph, numNodes);
-
-    int chromaticColour = numNodes;
-
-    for(int m = 1; m < numNodes + 1; m++) {
-
-        for(int n = 0; n < numNodes; n++) {
-
-            for(int k = 1; k < m + 1; k++) {
-
-                colouringGraph[n]->colour = k;
-
-                if(!nodeIsInConflict(colouringGraph[n])) {
-                    break;
-                }
-                else if(k == m) {
-                    if(colouringGraph[n - 1]->colour == m) {
-                        m++;
-                    }
-
-                    //looks like i dont need to backtrack for this implementation for it to work?
-                    // n -= 2; // 2 steps back 1 step forward (for loop over n)
-                }
-            }
-        }
-
-        if(findNumConflicts(colouringGraph, numNodes) == 0) {
-            chromaticColour = m;
-            break;
-        }
-        else {
-            resetGraphColours(colouringGraph, numNodes);
-        }
-    }
-
-    printf("chromatic colour: %d\n", chromaticColour);
 
     return colouringGraph;
 }

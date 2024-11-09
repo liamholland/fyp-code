@@ -3,6 +3,7 @@
 #include <string.h>
 #include "graphgenerator.h"
 #include "graphcolourer.h"
+#include "centralisedgraphcolouring.h"
 #include "node.h"
 #include "graphutil.h"
 
