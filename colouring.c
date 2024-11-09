@@ -10,7 +10,7 @@ int main(int argc, char const *argv[]) {
     srand((unsigned) time(NULL));
 
     int numNodes = 10;
-    char generator = 'o';
+    char generator = 'r';
     int verbose = 0;
     int autoRuns = 1;
 
@@ -81,7 +81,8 @@ int main(int argc, char const *argv[]) {
 
         //colour the graph
         // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
-        colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
+        // colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
+        colouredGraph = backtrackingColour(graph, numNodes);
 
         if(verbose) {
             printGraph(colouredGraph, numNodes);
