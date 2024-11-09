@@ -245,4 +245,14 @@ int appendToResults(int* conflictArray, int numIterations) {
     return 0;
 }
 
+int nodeIsInConflict(node* node) {
+    for(int nb = 0; nb < node->degree; nb++) {
+        if(node->colour == node->neighbours[nb]->colour && node->neighbours[nb]->colour > 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 #endif
