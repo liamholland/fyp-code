@@ -149,15 +149,13 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
     return colouringGraph;
 }
 
-// inspired by the centralised minimum colour approach which is inspired by backtracking
+// inspired by the centralised minimum (greedy) colour
 // gets much closer to the chromatic colour than shortsighted goldfish
 // applies the minimum colour possible to a node based on the colours of its neighbours
 // moves the agents based on two goals - move to the first uncoloured node you find in the neighbours,
 // or move to the node in the current nodes neighbours with the highest colour
 node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves) {
     node** colouringGraph = copyGraph(graph, numNodes);
-
-    // int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
 
     node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
 
@@ -195,7 +193,7 @@ node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int num
                 }
                 else {
                     if(agents[a]->degree == 0) {
-                        break;
+                        break;  //cant move the agent; on an orphan node
                     }
 
                     node* maxColourNode = agents[a]->neighbours[0];
@@ -209,8 +207,6 @@ node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int num
                 }
             }
         }
-
-        // conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
 
         if(!numChanges) {
             numNoChangesPerculate++;
@@ -234,10 +230,6 @@ node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int num
     printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
         numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
 
-    // write to csv file
-    // appendToResults(conflictsAtIterationI, i);
-
-    // free(conflictsAtIterationI);
     free(agents);
 
     return colouringGraph;

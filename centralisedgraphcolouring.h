@@ -2,9 +2,10 @@
 #include "node.h"
 #include "graphutil.h"
 
-// this is really an iterative implementation of the backtracking algorithm
-// except it does not do any backtracking
+// this is really an implementation of the greedy algorithm
 // it applies the minimum possible colour to each node
+// not guaranteed to find an optimal solution
+// good enough to find a benchmark
 node** minimumColour(node** graph, int numNodes) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
