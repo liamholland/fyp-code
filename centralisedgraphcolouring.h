@@ -2,7 +2,10 @@
 #include "node.h"
 #include "graphutil.h"
 
-node** backtrackingColour(node** graph, int numNodes) {
+// this is really an iterative implementation of the backtracking algorithm
+// except it does not do any backtracking
+// it applies the minimum possible colour to each node
+node** minimumColour(node** graph, int numNodes) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int chromaticColour = numNodes;
@@ -19,9 +22,10 @@ node** backtrackingColour(node** graph, int numNodes) {
                     break;
                 }
                 else if(k == m) {
-                    if(colouringGraph[n - 1]->colour == m) {
-                        m++;
-                    }
+                    m++;
+                    // if(colouringGraph[n - 1]->colour == m) {
+
+                    // }
 
                     //looks like i dont need to backtrack for this implementation for it to work?
                     // n -= 2; // 2 steps back 1 step forward (for loop over n)
@@ -38,7 +42,7 @@ node** backtrackingColour(node** graph, int numNodes) {
         }
     }
 
-    printf("chromatic colour: %d\n", chromaticColour);
+    printf("centralised colour: %d\n", chromaticColour);
 
     return colouringGraph;
 }

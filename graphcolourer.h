@@ -5,7 +5,7 @@
 #include "graphutil.h"
 
 #define AGENT_PERC_LIMIT 10
-#define AGENT_BREAK_LIMIT 30
+#define AGENT_BREAK_LIMIT 50
 
 // this literally just has each node choose a random colour between 1 and the max colour (== numNodes)
 // however, it only changes its colour if it is conflicting with its neighbours
@@ -76,7 +76,6 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
 
     //create an initial colouring
     for(int k = 0; k < numNodes; k++) {
-        // initColouring[k] = (rand() % numNodes) + 1; //random
         initColouring[k] = graph[k]->degree;    //degree of each node
     }
 
@@ -101,7 +100,7 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
         for(int f = 0; f < numFish; f++) {
 
             //check for conflicts in neighbours
-            if(nodeIsInConflict(fish[f])) {
+            if(!fish[f]->colour || nodeIsInConflict(fish[f])) {
                 fish[f]->colour = (fish[f]->colour + 1) % (fish[f]->degree + 1);
 
                 if(!fish[f]->colour) {
@@ -115,9 +114,9 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
             for(int m = 0; m < numMoves; m++) {
                 fish[f] = fish[f]->neighbours[rand() % fish[f]->degree];
             }
-
-            conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
         }
+        
+        conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
 
         if(!numChanges) {
             numNoChangesPerculate++;
@@ -146,6 +145,100 @@ node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations,
 
     free(conflictsAtIterationI);
     free(fish); //hopefully to their natural habitat :)
+
+    return colouringGraph;
+}
+
+// inspired by the centralised minimum colour approach which is inspired by backtracking
+// gets much closer to the chromatic colour than shortsighted goldfish
+// applies the minimum colour possible to a node based on the colours of its neighbours
+// moves the agents based on two goals - move to the first uncoloured node you find in the neighbours,
+// or move to the node in the current nodes neighbours with the highest colour
+node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves) {
+    node** colouringGraph = copyGraph(graph, numNodes);
+
+    // int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
+
+    node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
+
+    int numNoChangesPerculate = 0;    //if no agent makes a change in x iterations, we move them all around
+    int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
+
+    int i;
+    for(i = 0; i < maxIterations; i++) {
+        int numChanges = 0;
+
+        for(int a = 0; a < numAgents; a++) {
+
+            if(!agents[a]->colour || nodeIsInConflict(agents[a])) {
+                int* coloursInLocality = findWhichColoursInGraph(agents[a]->neighbours, agents[a]->degree, numNodes);
+
+                coloursInLocality[agents[a]->colour] = 1;
+
+                for(int c = 1; c < numNodes; c++) {
+                    if(!coloursInLocality[c]) {
+                        agents[a]->colour = c;
+                    }
+                }
+
+                numChanges++;
+            }
+
+            //move the agent
+            for(int m = 0; m < numMoves; m++) {
+                if(findNumUncolouredNodes(agents[a]->neighbours, agents[a]->degree) > 0) {
+                    for(int nb = 0; nb < agents[a]->degree; nb++) {
+                        if(!agents[a]->neighbours[nb]->colour) {
+                            agents[a] = agents[a]->neighbours[nb];
+                        }
+                    }
+                }
+                else {
+                    if(agents[a]->degree == 0) {
+                        break;
+                    }
+
+                    node* maxColourNode = agents[a]->neighbours[0];
+                    for(int nb = 0; nb < agents[a]->degree; nb++) {
+                        if(agents[a]->neighbours[nb]->colour > maxColourNode->colour) {
+                            maxColourNode = agents[a]->neighbours[nb];
+                        }
+                    }
+
+                    agents[a] = maxColourNode;
+                }
+            }
+        }
+
+        // conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
+
+        if(!numChanges) {
+            numNoChangesPerculate++;
+            if(numNoChangesPerculate == AGENT_PERC_LIMIT) {     // == because i only want this to happen on that iteration
+                free(agents);
+                agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
+            }
+
+            numNoChangesBreak++;
+            if(numNoChangesBreak == AGENT_BREAK_LIMIT) {
+                printf("no changes after %d iterations\n", i);
+                break;
+            }
+        }
+        else{
+            numNoChangesPerculate = 0;
+            numNoChangesBreak = 0;
+        }
+    }
+
+    printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
+        numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
+
+    // write to csv file
+    // appendToResults(conflictsAtIterationI, i);
+
+    // free(conflictsAtIterationI);
+    free(agents);
 
     return colouringGraph;
 }
