@@ -70,7 +70,7 @@ node** imFeelingLuckyColour(node** graph, int numNodes, int maxIterations) {
 // the agents (fish) move between the nodes blindly, making no distinction as to whether they have been there recently
 // if the fish lands on a node that is conflicting, try the next colour in the range 1..deg(n)
 // the nodes are initially coloured with the colour equalling their degree
-node** shortsightedGoldfishColour(node** graph, int numNodes, int maxIterations, int numFish, int numMoves) {
+node** colourblindGoldfishColour(node** graph, int numNodes, int maxIterations, int numFish, int numMoves) {
     node** colouringGraph = copyGraph(graph, numNodes);
     int* initColouring = (int*)malloc(sizeof(int) * numNodes);
 
@@ -233,4 +233,126 @@ node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int num
     free(agents);
 
     return colouringGraph;
+}
+
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int (*agentController)(node* agent, int numMoves, int numNodes)) {
+    node** colouringGraph = copyGraph(graph, numNodes);
+
+    int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
+
+    int numNoChangesPerculate = 0;    //if no agent makes a change in x iterations, we move them all around
+    int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
+
+    //pick some starting nodes for the "fish"
+    node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
+
+    //start the iterations
+    int i;
+    for(i = 0; i < maxIterations; i++) {
+        int numChanges = 0;
+
+        //each agent makes changes to the graph
+        for(int a = 0; a < numAgents; a++) {
+            int changes = agentController(agents[a], numMoves, numNodes);
+            numChanges += changes;
+        }
+        
+        conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
+
+        if(!numChanges) {
+            numNoChangesPerculate++;
+            if(numNoChangesPerculate == AGENT_PERC_LIMIT) {     // == because i only want this to happen on that iteration
+                free(agents);
+                agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
+            }
+
+            numNoChangesBreak++;
+            if(numNoChangesBreak == AGENT_BREAK_LIMIT) {
+                printf("no changes after %d iterations\n", i);
+                break;
+            }
+        }
+        else{
+            numNoChangesPerculate = 0;
+            numNoChangesBreak = 0;
+        }
+    }
+
+    printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
+        numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
+
+    // write to csv file
+    // appendToResults(conflictsAtIterationI, i);
+
+    free(conflictsAtIterationI);
+    free(agents);
+
+    return colouringGraph;
+}
+
+int colourblindFishAgent(node* fish, int numMoves, int numNodes) {
+    int numChanges = 0;
+    
+    //check for conflicts in neighbours
+    if(!fish->colour || nodeIsInConflict(fish)) {
+        fish->colour = (fish->colour + 1) % (fish->degree + 1);
+
+        if(!fish->colour) {
+            fish->colour++;
+        }
+
+        numChanges = 1;
+    }
+
+    //the fish wanders in its locality
+    for(int m = 0; m < numMoves; m++) {
+        fish = fish->neighbours[rand() % fish->degree];
+    }
+
+    return numChanges;
+}
+
+int smartAgent(node* agent, int numMoves, int numNodes) {
+    int numChanges = 0;
+    
+    if(!agent->colour || nodeIsInConflict(agent)) {
+        int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, numNodes);
+
+        coloursInLocality[agent->colour] = 1;
+
+        for(int c = 1; c < agent->colour; c++) {
+            if(!coloursInLocality[c]) {
+                agent->colour = c;
+                numChanges = 1;
+            }
+        }
+
+    }
+
+    //move the agent
+    for(int m = 0; m < numMoves; m++) {
+        if(findNumUncolouredNodes(agent->neighbours, agent->degree) > 0) {
+            for(int nb = 0; nb < agent->degree; nb++) {
+                if(!agent->neighbours[nb]->colour) {
+                    agent = agent->neighbours[nb];
+                }
+            }
+        }
+        else {
+            if(agent->degree == 0) {
+                break;  //cant move the agent; on an orphan node
+            }
+
+            node* maxColourNode = agent->neighbours[0];
+            for(int nb = 0; nb < agent->degree; nb++) {
+                if(agent->neighbours[nb]->colour > maxColourNode->colour) {
+                    maxColourNode = agent->neighbours[nb];
+                }
+            }
+
+            agent = maxColourNode;
+        }
+    }
+
+    return numChanges;
 }
