@@ -315,18 +315,17 @@ int colourblindFishAgent(node* fish, int numMoves, int numNodes) {
 int smartAgent(node* agent, int numMoves, int numNodes) {
     int numChanges = 0;
     
-    if(!agent->colour || nodeIsInConflict(agent)) {
-        int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, numNodes);
+    int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, numNodes);
 
-        coloursInLocality[agent->colour] = 1;
+    coloursInLocality[agent->colour] = 1;
 
-        for(int c = 1; c < agent->colour; c++) {
-            if(!coloursInLocality[c]) {
-                agent->colour = c;
-                numChanges = 1;
-            }
+    int max = agent->colour ? agent->colour : numNodes;
+
+    for(int c = 1; c < max; c++) {
+        if(!coloursInLocality[c]) {
+            agent->colour = c;
+            numChanges = 1;
         }
-
     }
 
     //move the agent
