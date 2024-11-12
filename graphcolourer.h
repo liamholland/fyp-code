@@ -238,7 +238,7 @@ node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int num
 node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int (*agentController)(node* agent, int numMoves, int numNodes)) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
-    int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
+    // int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
 
     int numNoChangesPerculate = 0;    //if no agent makes a change in x iterations, we move them all around
     int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
@@ -253,11 +253,10 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
-            int changes = agentController(agents[a], numMoves, numNodes);
-            numChanges += changes;
+            numChanges += agentController(agents[a], numMoves, numNodes);
         }
         
-        conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
+        // conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
 
         if(!numChanges) {
             numNoChangesPerculate++;
@@ -284,7 +283,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     // write to csv file
     // appendToResults(conflictsAtIterationI, i);
 
-    free(conflictsAtIterationI);
+    // free(conflictsAtIterationI);
     free(agents);
 
     return colouringGraph;
@@ -327,6 +326,8 @@ int smartAgent(node* agent, int numMoves, int numNodes) {
             numChanges = 1;
         }
     }
+
+    // free(coloursInLocality); //why does freeing this make the algorithm produce worse results? weird compilation?
 
     //move the agent
     for(int m = 0; m < numMoves; m++) {
