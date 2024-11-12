@@ -85,7 +85,7 @@ int main(int argc, char const *argv[]) {
         // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
         // colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
         // colouredGraph = agentMinimumColour(graph, numNodes, maxIterations, numAgents, numMoves);
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, &smartAgent);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, &randomKernel);
         chromaticallyColouredGraph = minimumColour(graph, numNodes);
 
         if(verbose) {

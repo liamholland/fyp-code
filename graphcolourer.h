@@ -238,7 +238,7 @@ node** agentMinimumColour(node** graph, int numNodes, int maxIterations, int num
 node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int (*agentController)(node* agent, int numMoves, int numNodes)) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
-    // int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
+    int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
 
     int numNoChangesPerculate = 0;    //if no agent makes a change in x iterations, we move them all around
     int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
@@ -256,7 +256,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
             numChanges += agentController(agents[a], numMoves, numNodes);
         }
         
-        // conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
+        conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
 
         if(!numChanges) {
             numNoChangesPerculate++;
@@ -281,9 +281,9 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
 
     // write to csv file
-    // appendToResults(conflictsAtIterationI, i);
+    appendToResults(conflictsAtIterationI, i);
 
-    // free(conflictsAtIterationI);
+    free(conflictsAtIterationI);
     free(agents);
 
     return colouringGraph;
@@ -352,6 +352,21 @@ int smartAgent(node* agent, int numMoves, int numNodes) {
 
             agent = maxColourNode;
         }
+    }
+
+    return numChanges;
+}
+
+int randomKernel(node* agent, int numMoves, int numNodes) {
+    int numChanges = 0;
+
+    if(nodeIsInConflict(agent) || !agent->colour) {
+        agent->colour = rand() % numNodes + 1;
+        numChanges = 1;
+    }
+
+    for(int m = 0; m < numMoves; m++) {
+        agent = agent->neighbours[rand() % agent->degree];
     }
 
     return numChanges;
