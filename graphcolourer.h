@@ -9,7 +9,7 @@
 node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int maxColour, int (*agentController)(node* agent, int numMoves, int numNodes), int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
-    int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
+    int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);
 
     int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
 
@@ -28,7 +28,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
         if(save) {
-            conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes) + findNumUncolouredNodes(colouringGraph, numNodes);
+            problemsAtIteration[i] = findNumConflicts(colouringGraph, numNodes) + findNumUncolouredNodes(colouringGraph, numNodes);
         }
 
         if(!numChanges) {
@@ -48,10 +48,10 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
     if(save) {
         // write to csv file
-        appendToResults(conflictsAtIterationI, i);
+        appendToResults(problemsAtIteration, i);
     }
 
-    free(conflictsAtIterationI);
+    free(problemsAtIteration);
 
     //TODO: update fetchNUnique Nodes
     //this "if" is here because freeing this pointer breaks the code if the pointer is the same as the original graph pointer
