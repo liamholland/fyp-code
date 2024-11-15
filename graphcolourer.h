@@ -6,7 +6,7 @@
 
 #define AGENT_BREAK_LIMIT 10
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int maxColour, int (*agentController)(node* agent, int numMoves, int numNodes), int save) {
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int (*agentController)(node* agent, int numMoves, int numNodes), int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);
@@ -16,6 +16,8 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     //pick some starting nodes for the "fish"
     node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
 
+    int numColours = minColour;
+
     //start the iterations
     int i;
     for(i = 0; i < maxIterations; i++) {
@@ -23,7 +25,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
-            numChanges += agentController(agents[a], numMoves, maxColour);
+            numChanges += agentController(agents[a], numMoves, numColours);
         }
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
@@ -33,9 +35,13 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
         if(!numChanges) {
             numNoChangesBreak++;
-            if(numNoChangesBreak == AGENT_BREAK_LIMIT) {
+            if(numNoChangesBreak == AGENT_BREAK_LIMIT && numColours >= maxColour) {
                 printf("no changes after %d iterations\n", i);
                 break;
+            }
+            else if(numNoChangesBreak == AGENT_BREAK_LIMIT) {
+                numColours++;
+                numNoChangesBreak = 0;
             }
         }
         else{
