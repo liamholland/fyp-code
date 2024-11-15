@@ -28,7 +28,7 @@ int main(int argc, char const *argv[]) {
     //bipartite generator
     int nodesInSetOne = 0;
 
-    //CONSIDER: so many string comparisons... no better way?
+    //CONSIDER: so many string comparisons; no better way?
     for(int i = 0; i < argc; i++) {
         if(!(*argv[i] == '-')) {
             continue;
@@ -43,29 +43,29 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-p")) {
             prob = atof(argv[i + 1]);
         }
+        else if(!strcmp(argv[i], "-C")) {
+            maxColour = atoi(argv[i + 1]) + 1;
+        }
+        else if(!strcmp(argv[i], "-S")) {
+            save = 1;
+        }
+        else if(!strcmp(argv[i], "-A")) {
+            autoRuns = atoi(argv[i + 1]);
+        }
         else if(!strcmp(argv[i], "-a")) {
             numAgents = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-m")) {
             numMoves = atoi(argv[i + 1]);
         }
-        else if(!strcmp(argv[i], "-C")) {
-            maxColour = atoi(argv[i + 1]) + 1;
-        }
-        else if(!strcmp(argv[i], "-A")) {
-            autoRuns = atoi(argv[i + 1]);
-        }
-        else if(!strcmp(argv[i], "-S")) {
-            save = 1;
-        }
         else if(!strcmp(argv[i], "-v")) {
             verbose = 1;
         }
-        else if(!strcmp(argv[i], "-s")) {
-            nodesInSetOne = atoi(argv[i + 1]);
-        }
         else if(!strcmp(argv[i], "-g")) {
             generator = *argv[i + 1];
+        }
+        else if(!strcmp(argv[i], "-s")) {
+            nodesInSetOne = atoi(argv[i + 1]);
         }
     }
 
