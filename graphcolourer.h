@@ -90,7 +90,7 @@ int smartAgent(node* agent, int numMoves, int numNodes) {
         }
     }
 
-    // free(coloursInLocality); //why does freeing this make the algorithm produce worse results? weird compilation?
+    free(coloursInLocality);
 
     //move the agent
     for(int m = 0; m < numMoves; m++) {
