@@ -29,23 +29,18 @@ int main(int argc, char const *argv[]) {
     int nodesInSetOne = 0;
 
     for(int i = 0; i < argc; i++) {
+        if(!(*argv[i] == '-')) {
+            continue;
+        }
+        
         if(!strcmp(argv[i], "-n")) {
             numNodes = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-M")) {
             maxIterations = atoi(argv[i + 1]);
         }
-        else if(!strcmp(argv[i], "-v")) {
-            verbose = 1;
-        }
         else if(!strcmp(argv[i], "-p")) {
             prob = atof(argv[i + 1]);
-        }
-        else if(!strcmp(argv[i], "-g")) {
-            generator = *argv[i + 1];
-        }
-        else if(!strcmp(argv[i], "-s")) {
-            nodesInSetOne = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-a")) {
             numAgents = atoi(argv[i + 1]);
@@ -56,6 +51,15 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-A")) {
             autoRuns = atoi(argv[i + 1]);
         }
+        else if(!strcmp(argv[i], "-v")) {
+            verbose = 1;
+        }
+        else if(!strcmp(argv[i], "-s")) {
+            nodesInSetOne = atoi(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-g")) {
+            generator = *argv[i + 1];
+        }
     }
 
     node** graph;
@@ -64,11 +68,11 @@ int main(int argc, char const *argv[]) {
     for(int a = 0; a < autoRuns; a++) {
         //generate the graph
         switch (generator) {
-        case 'o':
-            graph = generateRingGraph(numNodes);
-            break;
         case 'r':
             graph = generateRandomGraph(numNodes, prob);
+            break;
+        case 'o':
+            graph = generateRingGraph(numNodes);
             break;
         case 'b':
             graph = generateBipartiteGraph(
@@ -82,10 +86,7 @@ int main(int argc, char const *argv[]) {
         }
 
         //colour the graph
-        // node** colouredGraph = imFeelingLuckyColour(graph, numNodes, maxIterations);
-        // colouredGraph = shortsightedGoldfishColour(graph, numNodes, maxIterations, numAgents, numMoves);
-        // colouredGraph = agentMinimumColour(graph, numNodes, maxIterations, numAgents, numMoves);
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, &randomKernel);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, &smartAgent);
         chromaticallyColouredGraph = minimumColour(graph, numNodes);
 
         if(verbose) {
