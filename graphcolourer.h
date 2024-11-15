@@ -6,10 +6,10 @@
 
 #define AGENT_BREAK_LIMIT 10
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int maxColour, int (*agentController)(node* agent, int numMoves, int numNodes)) {
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int maxColour, int (*agentController)(node* agent, int numMoves, int numNodes), int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
-    // int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
+    int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
 
     int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
 
@@ -26,7 +26,10 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
             numChanges += agentController(agents[a], numMoves, maxColour);
         }
 
-        // conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
+        //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
+        if(save) {
+            conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes) + findNumUncolouredNodes(colouringGraph, numNodes);
+        }
 
         if(!numChanges) {
             numNoChangesBreak++;
@@ -43,10 +46,17 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
         numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
 
-    // write to csv file
-    // appendToResults(conflictsAtIterationI, i);
+    if(save) {
+        // write to csv file
+        appendToResults(conflictsAtIterationI, i);
+    }
 
-    // free(conflictsAtIterationI);
+    free(conflictsAtIterationI);
+
+    //TODO: update fetchNUnique Nodes
+    //this "if" is here because freeing this pointer breaks the code if the pointer is the same as the original graph pointer
+    //the pointers are the same if numNodes >= numAgents (see graphutil.h -> fetchNUniqueNodes)
+    //need to copy the pointer instead or just embrace the unoptimal solution
     if(numAgents < numNodes) {
         free(agents);
     }
