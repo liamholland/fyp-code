@@ -16,10 +16,11 @@ int main(int argc, char const *argv[]) {
     int autoRuns = 1;
     int maxIterations = 100;
     int save = 0;   //boolean flag to save results to a csv file
+    int maxColour = 0;
 
     //agent colour
-    int numAgents = 5;
-    int numMoves = 1;
+    int numAgents = 0;
+    int numMoves = 0;
 
     //random generator
     float prob = 0.5;
@@ -27,6 +28,7 @@ int main(int argc, char const *argv[]) {
     //bipartite generator
     int nodesInSetOne = 0;
 
+    //CONSIDER: so many string comparisons... no better way?
     for(int i = 0; i < argc; i++) {
         if(!(*argv[i] == '-')) {
             continue;
@@ -47,6 +49,9 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-m")) {
             numMoves = atoi(argv[i + 1]);
         }
+        else if(!strcmp(argv[i], "-C")) {
+            maxColour = atoi(argv[i + 1]) + 1;
+        }
         else if(!strcmp(argv[i], "-A")) {
             autoRuns = atoi(argv[i + 1]);
         }
@@ -64,33 +69,45 @@ int main(int argc, char const *argv[]) {
         }
     }
 
-    int maxColour = numNodes;
+    //set defaults that are based on number of nodes
 
+    if(!maxColour) {
+        maxColour = numNodes + 1;
+    }
+
+    if(!numAgents) {
+        numAgents = numNodes;
+    }
+
+    //graph variables
     node** graph;
     node** colouredGraph;
     node** benchmarkMinimumGraph;
+
+    //run main program loop
+    //remember default for this is to run once
     for(int a = 0; a < autoRuns; a++) {
         //generate the graph
         switch (generator) {
-        case 'r':
-            graph = generateRandomGraph(numNodes, prob);
-            break;
-        case 'o':
-            graph = generateRingGraph(numNodes);
-            break;
-        case 'b':
-            graph = generateBipartiteGraph(
-                nodesInSetOne ? nodesInSetOne : numNodes / 2,
-                nodesInSetOne ? numNodes - nodesInSetOne : numNodes - (numNodes / 2)
-            );
-            break;
-        default:
-            printf("invalid generator");
-            return 1;
+            case 'r':
+                graph = generateRandomGraph(numNodes, prob);
+                break;
+            case 'o':
+                graph = generateRingGraph(numNodes);
+                break;
+            case 'b':
+                graph = generateBipartiteGraph(
+                    nodesInSetOne ? nodesInSetOne : numNodes / 2,
+                    nodesInSetOne ? numNodes - nodesInSetOne : numNodes - (numNodes / 2)
+                );
+                break;
+            default:
+                printf("invalid generator");
+                return 1;
         }
 
         //colour the graph
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, maxColour + 1, &minimumAgent, save);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, maxColour, &minimumAgent, save);
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
 
         if(verbose) {
