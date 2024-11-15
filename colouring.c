@@ -15,6 +15,7 @@ int main(int argc, char const *argv[]) {
     int verbose = 0;
     int autoRuns = 1;
     int maxIterations = 100;
+    int save = 0;   //boolean flag to save results to a csv file
 
     //agent colour
     int numAgents = 5;
@@ -49,6 +50,9 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-A")) {
             autoRuns = atoi(argv[i + 1]);
         }
+        else if(!strcmp(argv[i], "-S")) {
+            save = 1;
+        }
         else if(!strcmp(argv[i], "-v")) {
             verbose = 1;
         }
@@ -60,7 +64,7 @@ int main(int argc, char const *argv[]) {
         }
     }
 
-    int maxColour = 0;
+    int maxColour = numNodes;
 
     node** graph;
     node** colouredGraph;
@@ -86,7 +90,7 @@ int main(int argc, char const *argv[]) {
         }
 
         //colour the graph
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, maxColour + 1, &minimumAgent);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, maxColour + 1, &minimumAgent, save);
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
 
         if(verbose) {
