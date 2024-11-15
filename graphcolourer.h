@@ -4,9 +4,9 @@
 #include "node.h"
 #include "graphutil.h"
 
-#define AGENT_BREAK_LIMIT 50
+#define AGENT_BREAK_LIMIT 10
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int (*agentController)(node* agent, int numMoves, int numNodes)) {
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int maxColour, int (*agentController)(node* agent, int numMoves, int numNodes)) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     // int* conflictsAtIterationI = (int*)malloc(sizeof(int) * maxIterations);
@@ -23,9 +23,9 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
-            numChanges += agentController(agents[a], numMoves, numNodes);
+            numChanges += agentController(agents[a], numMoves, maxColour);
         }
-        
+
         // conflictsAtIterationI[i] = findNumConflicts(colouringGraph, numNodes);
 
         if(!numChanges) {
@@ -47,12 +47,14 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     // appendToResults(conflictsAtIterationI, i);
 
     // free(conflictsAtIterationI);
-    // free(agents);
+    if(numAgents < numNodes) {
+        free(agents);
+    }
 
     return colouringGraph;
 }
 
-int colourblindFishAgent(node* fish, int numMoves, int numNodes) {
+int colourblindFishAgent(node* fish, int numMoves, int maxColour) {
     int numChanges = 0;
     
     //check for conflicts in neighbours
@@ -74,14 +76,14 @@ int colourblindFishAgent(node* fish, int numMoves, int numNodes) {
     return numChanges;
 }
 
-int smartAgent(node* agent, int numMoves, int numNodes) {
+int minimumAgent(node* agent, int numMoves, int maxColour) {
     int numChanges = 0;
     
-    int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, numNodes);
+    int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
 
     coloursInLocality[agent->colour] = 1;
 
-    int max = agent->colour ? agent->colour : numNodes;
+    int max = agent->colour ? agent->colour : maxColour;
 
     for(int c = 1; c < max; c++) {
         if(!coloursInLocality[c]) {
@@ -119,11 +121,11 @@ int smartAgent(node* agent, int numMoves, int numNodes) {
     return numChanges;
 }
 
-int randomKernel(node* agent, int numMoves, int numNodes) {
+int randomKernel(node* agent, int numMoves, int maxColour) {
     int numChanges = 0;
 
     if(nodeIsInConflict(agent) || !agent->colour) {
-        agent->colour = rand() % numNodes + 1;
+        agent->colour = rand() % maxColour + 1;
         numChanges = 1;
     }
 
