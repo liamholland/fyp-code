@@ -3,7 +3,7 @@
 #include "graphutil.h"
 
 // this is really an implementation of the greedy algorithm
-// it applies the minimum possible colour to each node
+// it applies the minimum possible colour to each node once
 // not guaranteed to find an optimal solution
 // good enough to find a benchmark
 node** minimumColour(node** graph, int numNodes) {
@@ -24,12 +24,6 @@ node** minimumColour(node** graph, int numNodes) {
                 }
                 else if(k == m) {
                     m++;
-                    // if(colouringGraph[n - 1]->colour == m) {
-
-                    // }
-
-                    //looks like i dont need to backtrack for this implementation for it to work?
-                    // n -= 2; // 2 steps back 1 step forward (for loop over n)
                 }
             }
         }
