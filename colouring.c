@@ -44,7 +44,7 @@ int main(int argc, char const *argv[]) {
             prob = atof(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-c")) {
-            minColour = atoi(argv[i + 1]) + 1;
+            minColour = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-S")) {
             save = 1;

@@ -4,9 +4,9 @@
 #include "node.h"
 #include "graphutil.h"
 
-#define AGENT_BREAK_LIMIT 10
+#define AGENT_BREAK_LIMIT 50
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int (*agentController)(node* agent, int numMoves, int numNodes), int save) {
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int (*agentController)(node** agent, int numMoves, int numNodes), int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);
@@ -25,7 +25,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
-            numChanges += agentController(agents[a], numMoves, numColours);
+            numChanges += agentController(&agents[a], numMoves, numColours);
         }
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
@@ -70,15 +70,15 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     return colouringGraph;
 }
 
-int colourblindFishAgent(node* fish, int numMoves, int maxColour) {
+int colourblindFishAgent(node** fish, int numMoves, int maxColour) {
     int numChanges = 0;
     
     //check for conflicts in neighbours
-    if(!fish->colour || nodeIsInConflict(fish)) {
-        fish->colour = (fish->colour + 1) % (fish->degree + 1);
+    if(!(*fish)->colour || nodeIsInConflict((*fish))) {
+        (*fish)->colour = ((*fish)->colour + 1) % ((*fish)->degree + 1);
 
-        if(!fish->colour) {
-            fish->colour++;
+        if(!(*fish)->colour) {
+            (*fish)->colour++;
         }
 
         numChanges = 1;
@@ -86,24 +86,24 @@ int colourblindFishAgent(node* fish, int numMoves, int maxColour) {
 
     //the fish wanders in its locality
     for(int m = 0; m < numMoves; m++) {
-        fish = fish->neighbours[rand() % fish->degree];
+        (*fish) = (*fish)->neighbours[rand() % (*fish)->degree];
     }
 
     return numChanges;
 }
 
-int minimumAgent(node* agent, int numMoves, int maxColour) {
+int minimumAgent(node** agent, int numMoves, int maxColour) {
     int numChanges = 0;
-    
-    int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
 
-    coloursInLocality[agent->colour] = 1;
+    int* coloursInLocality = findWhichColoursInGraph((*agent)->neighbours, (*agent)->degree, maxColour);
 
-    int max = agent->colour ? agent->colour : maxColour;
+    coloursInLocality[(*agent)->colour] = 1;
+
+    int max = (*agent)->colour ? (*agent)->colour : maxColour;
 
     for(int c = 1; c < max; c++) {
         if(!coloursInLocality[c]) {
-            agent->colour = c;
+            (*agent)->colour = c;
             numChanges = 1;
         }
     }
@@ -112,41 +112,41 @@ int minimumAgent(node* agent, int numMoves, int maxColour) {
 
     //move the agent
     for(int m = 0; m < numMoves; m++) {
-        if(agent->degree == 0) {
+        if((*agent)->degree == 0) {
             break;  //cant move the agent; on an orphan node
         }
-        else if(findNumUncolouredNodes(agent->neighbours, agent->degree) > 0) {
-            for(int nb = 0; nb < agent->degree; nb++) {
-                if(!agent->neighbours[nb]->colour) {
-                    agent = agent->neighbours[nb];
+        else if(findNumUncolouredNodes((*agent)->neighbours, (*agent)->degree) > 0) {
+            for(int nb = 0; nb < (*agent)->degree; nb++) {
+                if(!(*agent)->neighbours[nb]->colour) {
+                    (*agent) = (*agent)->neighbours[nb];
                 }
             }
         }
         else {
-            node* maxColourNode = agent->neighbours[0];
-            for(int nb = 0; nb < agent->degree; nb++) {
-                if(agent->neighbours[nb]->colour > maxColourNode->colour) {
-                    maxColourNode = agent->neighbours[nb];
+            node* maxColourNode = (*agent)->neighbours[0];
+            for(int nb = 0; nb < (*agent)->degree; nb++) {
+                if((*agent)->neighbours[nb]->colour > maxColourNode->colour) {
+                    maxColourNode = (*agent)->neighbours[nb];
                 }
             }
 
-            agent = maxColourNode;
+            (*agent) = maxColourNode;
         }
     }
 
     return numChanges;
 }
 
-int randomKernel(node* agent, int numMoves, int maxColour) {
+int randomKernel(node** agent, int numMoves, int maxColour) {
     int numChanges = 0;
 
-    if(nodeIsInConflict(agent) || !agent->colour) {
-        agent->colour = rand() % maxColour + 1;
+    if(nodeIsInConflict((*agent)) || !(*agent)->colour) {
+        (*agent)->colour = rand() % maxColour + 1;
         numChanges = 1;
     }
 
     for(int m = 0; m < numMoves; m++) {
-        agent = agent->neighbours[rand() % agent->degree];
+        (*agent) = (*agent)->neighbours[rand() % (*agent)->degree];
     }
 
     return numChanges;
