@@ -80,11 +80,7 @@ int applyColouring(node** graph, int* colouring, int numNodes) {
 }
 
 int resetGraphColours(node** graph, int numNodes) {
-    int* zeroVector = (int*)malloc(sizeof(int) * numNodes);
-
-    for(int i = 0; i < numNodes; i++) {
-        zeroVector[i] = 0;
-    }
+    int* zeroVector = (int*)calloc(numNodes, sizeof(int));
 
     applyColouring(graph, zeroVector, numNodes);
 
@@ -105,11 +101,7 @@ int* extractGraphColours(node** graph, int numNodes) {
 
 int findNumColoursUsed(node** graph, int numNodes, int maxColour) {
     int numColours = 0;
-    int* coloursSeen = (int*)malloc(sizeof(int) * maxColour);
-
-    for(int i = 0; i < maxColour; i++) {
-        coloursSeen[i] = 0;
-    }
+    int* coloursSeen = (int*)calloc(maxColour, sizeof(int));
 
     for(int n = 0; n < numNodes; n++) {
         int c = graph[n]->colour;
@@ -256,7 +248,7 @@ int nodeIsInConflict(node* node) {
 }
 
 int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour) {
-    int* colourTruthVector = (int*)malloc(sizeof(int) * maxColour);
+    int* colourTruthVector = (int*)calloc(maxColour, sizeof(int));
 
     for(int n = 0; n < numNodes; n++) {
         colourTruthVector[graph[n]->colour] = 1;
