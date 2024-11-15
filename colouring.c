@@ -16,7 +16,7 @@ int main(int argc, char const *argv[]) {
     int autoRuns = 1;
     int maxIterations = 100;
     int save = 0;   //boolean flag to save results to a csv file
-    int maxColour = 0;
+    int minColour = 0;
 
     //agent colour
     int numAgents = 0;
@@ -43,8 +43,8 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-p")) {
             prob = atof(argv[i + 1]);
         }
-        else if(!strcmp(argv[i], "-C")) {
-            maxColour = atoi(argv[i + 1]) + 1;
+        else if(!strcmp(argv[i], "-c")) {
+            minColour = atoi(argv[i + 1]) + 1;
         }
         else if(!strcmp(argv[i], "-S")) {
             save = 1;
@@ -71,8 +71,8 @@ int main(int argc, char const *argv[]) {
 
     //set defaults that are based on number of nodes
 
-    if(!maxColour) {
-        maxColour = numNodes + 1;
+    if(!minColour) {
+        minColour = numNodes + 1;
     }
 
     if(!numAgents) {
@@ -107,8 +107,9 @@ int main(int argc, char const *argv[]) {
         }
 
         //colour the graph
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, maxColour, &minimumAgent, save);
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
+        int maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
 
         if(verbose) {
             printGraph(colouredGraph, numNodes);
