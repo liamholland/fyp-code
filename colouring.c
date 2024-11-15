@@ -14,8 +14,6 @@ int main(int argc, char const *argv[]) {
     char generator = 'r';
     int verbose = 0;
     int autoRuns = 1;
-
-    //random colour
     int maxIterations = 100;
 
     //agent colour
@@ -62,9 +60,11 @@ int main(int argc, char const *argv[]) {
         }
     }
 
+    int maxColour = 0;
+
     node** graph;
     node** colouredGraph;
-    node** chromaticallyColouredGraph;
+    node** benchmarkMinimumGraph;
     for(int a = 0; a < autoRuns; a++) {
         //generate the graph
         switch (generator) {
@@ -86,19 +86,19 @@ int main(int argc, char const *argv[]) {
         }
 
         //colour the graph
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, &smartAgent);
-        chromaticallyColouredGraph = minimumColour(graph, numNodes);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, maxColour + 1, &minimumAgent);
+        benchmarkMinimumGraph = minimumColour(graph, numNodes);
 
         if(verbose) {
             printGraph(colouredGraph, numNodes);
             printf("\n");
-            printGraph(chromaticallyColouredGraph, numNodes);
+            printGraph(benchmarkMinimumGraph, numNodes);
         }
 
         //free memory
         freeGraph(graph, numNodes);
         freeGraph(colouredGraph, numNodes);
-        freeGraph(chromaticallyColouredGraph, numNodes);
+        freeGraph(benchmarkMinimumGraph, numNodes);
     }
 
     return 0;
