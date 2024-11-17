@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]) {
     char generator = 'r';
     int verbose = 0;
     int autoRuns = 1;
-    int maxIterations = 100;
+    int maxIterations = 50000;
     int save = 0;   //boolean flag to save results to a csv file
     int minColour = 0;
     int maxColour = 0;

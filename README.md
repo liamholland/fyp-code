@@ -37,7 +37,7 @@ This repository is the code for my **final year project**, dealing with **decent
 - clone the repo
 - compile `colouring.c` with gcc or whatever compiler you want to use
 ```
-g++ ./colouring -o ./colouring.exe
+g++ ./colouring.c -o ./colouring.exe
 ```
 
 ## Usage
@@ -48,37 +48,70 @@ usage: colouring.exe [options]
 options:
 -n [integer]      set the number of nodes in the graph
                     default is 10
+-M [integer]      set the max iterations
+                    default is 50000 (plenty)
+                    this limits the amount of time the agent algorithm can run for
+-c [integer]      colour lower bound
+                    if you set this parameter, the algorithm will try and colour the graph
+                    with that many colours
+                    if it fails to find a solution, it will increment the number of colours
+                    until it reaches the upper bound
+-C [integer]      colour upper bound
+                    the default is determined by a brute force centralised approach
+                    this paramter will have no effect if the lower bound is not also set
+                    can be used to ensure that the solution is optimal or to force conflicts
+-S                set the save mode on
+                    flag which sets whether the results are saved to a file called results.csv
+                    the default is false
+-A [integer]      number of automatic runs
+                    default is 1 (run the program once)
+                    increasing the number will run the main part of the program that number of times
+                    can be used to save multiple runs of the same settings to be averaged and graphed
+-a [integer]      number of agents
+                    sets the number of agents (active nodes) in the colouring algorithm
+                    the default is an agent at every vertex
+                    maximum is the number of nodes in the graph
+-m [integer]      number of agent moves
+                    sets the number of moves an agent makes on each "turn"
+                    the default is 0 (agents are stationary)
 -v                set verbose mode on
                     prints the graph when the colouring is complete
+                    also prints the centralised benchmark result
+                    not recommended if you have more than about 30 nodes or high value for -p
                     default is off
 -g [generator]    set the generator
                     sets the graph generator function to use
                     there are currently two different types of graphs you can use
-                    o: ring graph; undirected graph where each node has two neighbours (default)
-                    r: random graph; a graph where each edge has a p% chance of existing
+                    r: random graph; a graph where each edge has a p% chance of existing (default)
                       options:
                         -p [float]      probability (as a floating point number between 0 and 1)
                                           probability that each edge of the graph exists
                                           default is 0.5
+                    o: ring graph; undirected graph where each node has two neighbours
                     b: bipartite graph; a graph of two disjoint subsets
                       options:
                         -s [integer]    set one; the number of nodes in the first subset
                                           the default is to split the number of nodes in two
--m [integer]      set the max iteration on random colour
-                    default is 100
-                    random colour is the only colouring algorithm at the moment
 ```
 
 #### Example Usage
-**colour a ring graph with 51 nodes and 10000 iterations per run of random colour**
+**colour a ring graph with 51 nodes and 10000 iterations max**
 ```
-./colouring.exe -v -m 10000 -n 51
+./colouring.exe -n 51 -g o -M 10000
 ```
 **colour a random graph which has a probability of 30% that each edge exists**
 ```
-./colouring.exe -v -g r -p 0.3
+./colouring.exe -p 0.3
 ```
 **colour a bipartite graph with 2 nodes in the first set and 4 in the second**
 ```
-./colouring.exe -v -g b -n 6 -s 2
+./colouring.exe -g b -n 6 -s 2
+```
+**colour a connected random graph with 1001 nodes, starting with 5 colours and working up to 50 max**
+```
+./colouring.exe -n 1001 -p 1 -c 5 -C 50
+```
+**colour a random graph with 300 nodes and 70% probability for each edge, using 50 agents that move twice on each turn, save the results and run it on 10 different graphs**
+```
+./colouring.exe -n 300 -p 0.7 -a 50 -m 2 -A 10 -S
 ```
