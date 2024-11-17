@@ -5,13 +5,14 @@
 #include "graphutil.h"
 
 #define AGENT_BREAK_LIMIT 50
+#define COLOUR_INCREASE_LIMIT 20
 
 node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int (*agentController)(node** agent, int numMoves, int numNodes), int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);
 
-    int numNoChangesBreak = 0;      //if no agent makes a change in x iterations, the algorithm ends
+    int numNoChanges = 0;      //if no agent makes a change in x iterations, the algorithm ends
 
     //pick some starting nodes for the "fish"
     node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
@@ -34,18 +35,18 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         }
 
         if(!numChanges) {
-            numNoChangesBreak++;
-            if(numNoChangesBreak == AGENT_BREAK_LIMIT && numColours >= maxColour) {
-                printf("no changes after %d iterations\n", i);
-                break;
-            }
-            else if(numNoChangesBreak == AGENT_BREAK_LIMIT) {
+            numNoChanges++;
+            if(numNoChanges == COLOUR_INCREASE_LIMIT && numColours < maxColour) {
                 numColours++;
-                numNoChangesBreak = 0;
+                numNoChanges = 0;
+            }
+            else if(numNoChanges >= AGENT_BREAK_LIMIT) {
+                printf("ran for %d iterations\n", i);
+                break;
             }
         }
         else{
-            numNoChangesBreak = 0;
+            numNoChanges = 0;
         }
     }
 
