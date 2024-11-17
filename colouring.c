@@ -83,6 +83,8 @@ int main(int argc, char const *argv[]) {
         numAgents = numNodes;
     }
 
+    int useBenchmark = !maxColour ? 1 : 0;
+
     //graph variables
     node** graph;
     node** colouredGraph;
@@ -113,7 +115,7 @@ int main(int argc, char const *argv[]) {
         //colour the graph
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
         
-        if(!maxColour) {
+        if(useBenchmark) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
