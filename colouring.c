@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+#include "node.h"
 #include "graphgenerator.h"
 #include "graphcolourer.h"
 #include "centralisedgraphcolouring.h"
-#include "node.h"
 #include "graphutil.h"
 
 int main(int argc, char const *argv[]) {
