@@ -1,0 +1,2 @@
+makecolour: colouring.c graphcolourer.c graphutil.c graphcolourer.c centralisedgraphcolouring.c
+	g++ .\colouring.c .\graphgenerator.c .\graphutil.c .\graphcolourer.c .\centralisedgraphcolouring.c -o .\colouring.exe
