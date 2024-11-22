@@ -1,2 +1,6 @@
-makecolour: colouring.c graphcolourer.c graphutil.c graphcolourer.c centralisedgraphcolouring.c
-	g++ colouring.c graphgenerator.c graphutil.c graphcolourer.c centralisedgraphcolouring.c -o colouring.exe
+INCLUDE_DIR = include
+SRC_DIR = src
+EXE_NAME = colouring
+
+colouring: $(SRC_DIR)/*.c
+	g++ $(SRC_DIR)/*.c -I$(INCLUDE_DIR) -o $(EXE_NAME)

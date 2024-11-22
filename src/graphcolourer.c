@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "node.h"
+#include "graphcolourer.h"
 #include "graphutil.h"
 
 #define AGENT_BREAK_LIMIT 10

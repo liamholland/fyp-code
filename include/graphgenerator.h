@@ -1,6 +1,8 @@
 #ifndef GENERATOR
 #define GENERATOR
 
+#include "node.h"
+
 node** generateRingGraph(int numNodes);
 
 node** generateRandomGraph(int numNodes, float p);

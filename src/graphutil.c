@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "node.h"
 #include "graphutil.h"
 
 node** initialiseGraph(int numNodes, int degree) {

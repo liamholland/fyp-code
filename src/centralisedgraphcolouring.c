@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "node.h"
+#include "centralisedgraphcolouring.h"
 #include "graphutil.h"
 
 // this is really an implementation of the greedy algorithm
