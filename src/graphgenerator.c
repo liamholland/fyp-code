@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
-#include "node.h"
+#include "graphgenerator.h"
 #include "graphutil.h"
 
 // generate a graph represented as an array of nodes

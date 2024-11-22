@@ -1,6 +1,8 @@
 #ifndef UTIL
 #define UTIL
 
+#include "node.h"
+
 node** initialiseGraph(int numNodes, int degree);
 
 int printGraph(node** graph, int numNodes);
