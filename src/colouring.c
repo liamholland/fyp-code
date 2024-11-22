@@ -8,6 +8,10 @@
 #include "centralisedgraphcolouring.h"
 #include "graphutil.h"
 
+#define HELP_FILE_NAME "help.txt"
+
+int printHelp();
+
 int main(int argc, char const *argv[]) {
     srand((unsigned) time(NULL));
 
@@ -36,7 +40,11 @@ int main(int argc, char const *argv[]) {
             continue;
         }
         
-        if(!strcmp(argv[i], "-n")) {
+        if(!strcmp(argv[i], "-h")) {
+            printHelp();
+            return 0;
+        }
+        else if(!strcmp(argv[i], "-n")) {
             numNodes = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-M")) {
@@ -133,6 +141,21 @@ int main(int argc, char const *argv[]) {
         freeGraph(colouredGraph, numNodes);
         freeGraph(benchmarkMinimumGraph, numNodes);
     }
+
+    return 0;
+}
+
+int printHelp() {
+    FILE* help = fopen(HELP_FILE_NAME, "r");
+
+    char buffer[100];
+
+    while(!feof(help)) {
+        fgets(buffer, 1000, help);
+        printf("%s", buffer);
+    }
+
+    fclose(help);
 
     return 0;
 }

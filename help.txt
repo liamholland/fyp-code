@@ -1,0 +1,49 @@
+usage: colouring.exe [options]
+options:
+-h                print these instructions
+-n [integer]      set the number of nodes in the graph
+                    default is 10
+-M [integer]      set the max iterations
+                    default is 50000 (plenty)
+                    this limits the amount of time the agent algorithm can run for
+-c [integer]      colour lower bound
+                    if you set this parameter, the algorithm will try and colour the graph
+                    with that many colours
+                    if it fails to find a solution, it will increment the number of colours
+                    until it reaches the upper bound
+-C [integer]      colour upper bound
+                    the default is determined by a brute force centralised approach
+                    this paramter will have no effect if the lower bound is not also set
+                    can be used to ensure that the solution is optimal or to force conflicts
+-S                set the save mode on
+                    flag which sets whether the results are saved to a file called results.csv
+                    the default is false
+-A [integer]      number of automatic runs
+                    default is 1 (run the program once)
+                    increasing the number will run the program that number of times
+                    can be used to save multiple runs of the same settings
+-a [integer]      number of agents
+                    sets the number of agents (active nodes) in the colouring algorithm
+                    the default is an agent at every vertex
+                    maximum is the number of nodes in the graph
+-m [integer]      number of agent moves
+                    sets the number of moves an agent makes on each "turn"
+                    the default is 0 (agents are stationary)
+-v                set verbose mode on
+                    prints the graph when the colouring is complete
+                    also prints the centralised benchmark result
+                    not recommended if you have more than about 30 nodes or high value for -p
+                    default is off
+-g [generator]    set the generator
+                    sets the graph generator function to use
+                    there are currently two different types of graphs you can use
+                    r: random graph; each edge has a p% chance of existing (default)
+                      options:
+                        -p [float]      probability (as a floating point number between 0 and 1)
+                                          probability that each edge of the graph exists
+                                          default is 0.5
+                    o: ring graph; undirected graph where each node has two neighbours
+                    b: bipartite graph; a graph of two disjoint subsets
+                      options:
+                        -s [integer]    set one; the number of nodes in the first subset
+                                          the default is to split the number of nodes in two

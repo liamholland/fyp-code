@@ -32,13 +32,14 @@
 
 This repository is the code for my **final year project**, dealing with **decentralised approaches to graph colouring**.
 
-## Installation
+## Local Setup
 
 - clone the repo
-- compile `colouring.c` with gcc or whatever compiler you want to use
+- run make
 ```
-g++ ./colouring.c -o ./colouring.exe
+make
 ```
+- alternatively manually compile the src files with whatever compiler you prefer
 
 ## Usage
 
@@ -46,6 +47,7 @@ g++ ./colouring.c -o ./colouring.exe
 ```
 usage: colouring.exe [options]
 options:
+-h                print these instructions
 -n [integer]      set the number of nodes in the graph
                     default is 10
 -M [integer]      set the max iterations
@@ -65,8 +67,8 @@ options:
                     the default is false
 -A [integer]      number of automatic runs
                     default is 1 (run the program once)
-                    increasing the number will run the main part of the program that number of times
-                    can be used to save multiple runs of the same settings to be averaged and graphed
+                    increasing the number will run the program that number of times
+                    can be used to save multiple runs of the same settings
 -a [integer]      number of agents
                     sets the number of agents (active nodes) in the colouring algorithm
                     the default is an agent at every vertex
@@ -82,7 +84,7 @@ options:
 -g [generator]    set the generator
                     sets the graph generator function to use
                     there are currently two different types of graphs you can use
-                    r: random graph; a graph where each edge has a p% chance of existing (default)
+                    r: random graph; each edge has a p% chance of existing (default)
                       options:
                         -p [float]      probability (as a floating point number between 0 and 1)
                                           probability that each edge of the graph exists
