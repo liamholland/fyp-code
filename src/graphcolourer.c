@@ -71,7 +71,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     return colouringGraph;
 }
 
-int colourblindFishAgent(node** fishPointer, int numMoves, int maxColour) {
+int colourblindFishAgentIncrement(node** fishPointer, int numMoves, int maxColour) {
     int numChanges = 0;
     
     node* fish = *fishPointer;
@@ -82,6 +82,31 @@ int colourblindFishAgent(node** fishPointer, int numMoves, int maxColour) {
 
         if(!fish->colour) {
             fish->colour++;
+        }
+
+        numChanges = 1;
+    }
+
+    //the fish wanders in its locality
+    for(int m = 0; m < numMoves; m++) {
+        *fishPointer = fish->neighbours[rand() % fish->degree];
+        fish = *fishPointer;
+    }
+
+    return numChanges;
+}
+
+int colourblindFishAgentDecrement(node** fishPointer, int numMoves, int maxColour) {
+    int numChanges = 0;
+    
+    node* fish = *fishPointer;
+
+    //check for conflicts in neighbours
+    if(!fish->colour || nodeIsInConflict(fish)) {
+        fish->colour--;
+
+        if(fish->colour <= 0) {
+            fish->colour = fish->degree + 1;
         }
 
         numChanges = 1;
