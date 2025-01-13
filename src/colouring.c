@@ -132,9 +132,10 @@ int main(int argc, char const *argv[]) {
         colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
 
         if(verbose) {
-            // printGraphAsText(colouredGraph, numNodes);
-            // printf("\n");
-            // printGraphAsText(benchmarkMinimumGraph, numNodes);
+            //enter interactive traversal mode
+            printf("\n----------\nentered traversal mode\n----------\n");
+            printf("COMMANDS:\n");
+            printf("n: display next neighbour\nj[number]: jump to node (e.g. j5)\ne: exit program\n\n");
             traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1);
         }
 
