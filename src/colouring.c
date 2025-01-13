@@ -7,6 +7,7 @@
 #include "graphcolourer.h"
 #include "centralisedgraphcolouring.h"
 #include "graphutil.h"
+#include "visualisation.h"
 
 #define HELP_FILE_NAME "help.txt"
 
