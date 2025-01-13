@@ -3,17 +3,13 @@
 
 #include "node.h"
 
-int traverseGraph(node** graph, int numNodes, node* focusNode);
+int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour);
 
 int printBlankMargin(int width);
 
-int printNodeOrphan(node* main);
+int printNodeTwo(node* focusNode);
 
-int printNodeOne(node* main, node* other);
-
-int printNodeTwo(node* main, node* first, node* second);
-
-int printNodeThreeOrMore(node* main, node* first, node* middle, node* last);
+int printNodeThreeOrMore(node* focusNode, int middle);
 
 int parseVisualisationCommand();
 
