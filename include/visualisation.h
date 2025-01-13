@@ -1,7 +1,18 @@
 #ifndef VISUAL
 #define VISUAL
 
-//prints out a node and the three defined neighbours
-int printNode(int node, int start, int middle, int end);
+int printGraph(node** graph, int numNodes);
+
+int printBlankMargin(int width);
+
+int printNodeOrphan(node* main);
+
+int printNodeOne(node* main, node* other);
+
+int printNodeTwo(node* main, node* first, node* second);
+
+int printNodeThreeOrMore(node* main, node* first, node* middle, node* last);
+
+int parseVisualisationCommand();
 
 #endif
