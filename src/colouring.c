@@ -135,7 +135,7 @@ int main(int argc, char const *argv[]) {
             // printGraphAsText(colouredGraph, numNodes);
             // printf("\n");
             // printGraphAsText(benchmarkMinimumGraph, numNodes);
-            traverseGraph(colouredGraph, numNodes, colouredGraph[0]);
+            traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1);
         }
 
         //free memory
