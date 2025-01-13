@@ -2,37 +2,31 @@
 #include <math.h>
 #include <string.h>
 #include "visualisation.h"
-#include "node.h"
 
 //TODO: add colours to nodes
 
-//TODO: recursively traverse nodes, not the graph
-int printGraph(node** graph, int numNodes) {
-    switch (numNodes)
+int traverseGraph(node** graph, int numNodes, node* focusNode) {
+    switch (focusNode->degree)
     {
     case 0:
-        printf("ERROR: no nodes in graph\n");
-        return 1;
+        printf("%d o", focusNode->id);
+        break;
     case 1:
-        printNodeOrphan(graph[0]);
+        printf("%d o---o %d\n", focusNode->id, focusNode->neighbours[0]->id);
         break;
     case 2:
-        printNodeOne(graph[0], graph[1]);
-        break;
-    case 3:
-        printNodeTwo(graph[0], graph[1], graph[2]);
-        break;
-    case 4:
-        printNodeThreeOrMore(graph[0], graph[1], graph[2], graph[3]);
+        printNodeTwo(focusNode, focusNode->neighbours[0], focusNode->neighbours[1]);
         break;
     default:
-        printNodeThreeOrMore(graph[0], graph[1], graph[2], graph[numNodes - 1]);
+        printNodeThreeOrMore(focusNode, focusNode->neighbours[0], focusNode->neighbours[1], focusNode->neighbours[focusNode->degree - 1]);
         int input = parseVisualisationCommand();
-        if(input >= 0) {
-            printGraph(graph, numNodes);
+        if(input >= 0 && input < numNodes) {
+            traverseGraph(graph, numNodes, graph[input]);
         }
         break;
     }
+
+    return 0;
 }
 
 //CONSIDER: better encoding format for returns?
@@ -40,12 +34,12 @@ int parseVisualisationCommand() {
     char buffer[64];
     scanf_s("%s", buffer, sizeof(buffer));
 
-    if(buffer[0] == "e") {
-        return -1;
+    if(buffer[0] == 'e') {
+        return -1;  //exit
     }
-    else if(buffer[0] == "j") {
-        char jmpNode[64];
-        strncpy(jmpNode, buffer + 1, strlen(buffer));
+    else if(buffer[0] == 'j') {
+        char jmpNode[64];   //jump
+        strncpy(jmpNode, buffer + 1, strlen(buffer) - 1);
         return atoi(jmpNode);
     }
     else {
@@ -96,12 +90,11 @@ int printNodeThreeOrMore(node* main, node* first, node* middle, node* last) {
     //first connection
     if(middle->id - first->id > 1) {
         printBlankMargin(numNodeDigits);
-        printf(" /    .\n");
+        printf("   /--o %d\n", first->id);
         printBlankMargin(numNodeDigits);
         printf("  /   .\n");
-
         printBlankMargin(numNodeDigits);
-        printf("   /--o %d", first->id);
+        printf(" /    .\n");
     }
     else {
         printBlankMargin(numNodeDigits);
@@ -117,9 +110,8 @@ int printNodeThreeOrMore(node* main, node* first, node* middle, node* last) {
         printf(" \\    .\n");
         printBlankMargin(numNodeDigits);
         printf("  \\   .\n");
-
         printBlankMargin(numNodeDigits);
-        printf("   \\--o %d", last->id);
+        printf("   \\--o %d\n", last->id);
     }
     else {
         printBlankMargin(numNodeDigits);

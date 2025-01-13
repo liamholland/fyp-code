@@ -1,7 +1,9 @@
 #ifndef VISUAL
 #define VISUAL
 
-int printGraph(node** graph, int numNodes);
+#include "node.h"
+
+int traverseGraph(node** graph, int numNodes, node* focusNode);
 
 int printBlankMargin(int width);
 
