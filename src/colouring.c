@@ -132,9 +132,9 @@ int main(int argc, char const *argv[]) {
         colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
 
         if(verbose) {
-            printGraph(colouredGraph, numNodes);
+            printGraphAsText(colouredGraph, numNodes);
             printf("\n");
-            printGraph(benchmarkMinimumGraph, numNodes);
+            printGraphAsText(benchmarkMinimumGraph, numNodes);
         }
 
         //free memory

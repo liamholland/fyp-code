@@ -5,7 +5,7 @@
 
 node** initialiseGraph(int numNodes, int degree);
 
-int printGraph(node** graph, int numNodes);
+int printGraphAsText(node** graph, int numNodes);
 
 node** copyGraph(node** graph, int numNodes);
 
