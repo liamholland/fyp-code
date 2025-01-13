@@ -6,6 +6,8 @@
 //TODO: add colours to nodes
 
 int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour) {
+    printf("--- node %d ---\ndegree: %d; colour: %d\n\n", focusNode->id, focusNode->degree, focusNode->colour);
+
     switch (focusNode->degree)
     {
     case 0:
@@ -47,6 +49,7 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
 
 int parseVisualisationCommand() {
     char buffer[64];
+    printf(">> ");
     scanf_s("%s", buffer, sizeof(buffer));
 
     if(buffer[0] == 'e') {
