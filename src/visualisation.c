@@ -33,13 +33,18 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
     }
     else if(input == 2) {
         printf("\e[1;1H\e[2J"); //clear the screen
-        traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
+        if(nextNeighbour + 1 == focusNode->degree - 1) {
+            //focus on the last neighbour if there are no more to display
+            traverseGraph(graph, numNodes, focusNode->neighbours[focusNode->degree - 1], 1);
+        }
+        else {
+            traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
+        }
     }
 
     return 0;
 }
 
-//CONSIDER: better encoding format for returns?
 int parseVisualisationCommand() {
     char buffer[64];
     scanf_s("%s", buffer, sizeof(buffer));
@@ -48,14 +53,14 @@ int parseVisualisationCommand() {
         return 0;  //exit
     }
     else if(buffer[0] == 'j') {
-        char jmpNode[64];   //jump
-        strncpy(jmpNode, buffer + 1, strlen(buffer) - 1);
+        char jmpNode[64];
+        strncpy(jmpNode, buffer + 1, strlen(buffer) - 1);   //get a string slice
         int target = atoi(jmpNode);
         int encodedTarget = 0 - target - 1;
-        return encodedTarget;
+        return encodedTarget;   //jump to this node
     }
     else if(buffer[0] == 'n') {
-        return 2;   //go to next node
+        return 2;   //display next neighbour
     }
     else {
         printf("INVALID INPUT\n");
