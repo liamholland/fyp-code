@@ -4,6 +4,9 @@
 #include "visualisation.h"
 #include "node.h"
 
+//TODO: add colours to nodes
+
+//TODO: recursively traverse nodes, not the graph
 int printGraph(node** graph, int numNodes) {
     switch (numNodes)
     {
@@ -32,6 +35,7 @@ int printGraph(node** graph, int numNodes) {
     }
 }
 
+//CONSIDER: better encoding format for returns?
 int parseVisualisationCommand() {
     char buffer[64];
     scanf_s("%s", buffer, sizeof(buffer));
@@ -58,12 +62,14 @@ int printBlankMargin(int width) {
     return 0;
 }
 
+//TODO: incorporate this into main function
 int printNodeOrphan(node* main) {
     printf("%d o", main->id);
 
     return 0;
 }
 
+//TODO: incorporate this into main function
 int printNodeOne(node* main, node* other) {
     printf("%d o---o %d\n", main->id, other->id);
 
