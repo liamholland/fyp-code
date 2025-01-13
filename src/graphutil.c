@@ -22,7 +22,7 @@ node** initialiseGraph(int numNodes, int degree) {
 }
 
 // print each node in the graph
-int printGraph(node** graph, int numNodes) {
+int printGraphAsText(node** graph, int numNodes) {
     for(int i = 0; i < numNodes; i++) {
         printf("node: %d; colour: %d; degree: %d; neighbours: ", graph[i]->id, graph[i]->colour, graph[i]->degree);
         for(int nb = 0; nb < graph[i]->degree; nb++) {
