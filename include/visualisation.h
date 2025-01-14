@@ -5,6 +5,8 @@
 
 int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour);
 
+int normaliseColour(int colour);
+
 int printBlankMargin(int width);
 
 int printNodeTwo(node* focusNode);

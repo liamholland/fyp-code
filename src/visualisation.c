@@ -11,10 +11,15 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
     switch (focusNode->degree)
     {
     case 0:
-        printf("%d o\n", focusNode->id);
+        printf("%d \e[38;5;%dmo\e[0m\n", focusNode->id, normaliseColour(focusNode->colour));
         break;
     case 1:
-        printf("%d o---o %d\n", focusNode->id, focusNode->neighbours[0]->id);
+        printf("%d \e[38;5;%dmo\e[0m---\e[38;5;%dmo\e[0m %d\n", 
+            focusNode->id, 
+            normaliseColour(focusNode->colour), 
+            normaliseColour(focusNode->neighbours[0]->colour),
+            focusNode->neighbours[0]->id
+        );
         break;
     case 2:
         printNodeTwo(focusNode);
@@ -71,6 +76,11 @@ int parseVisualisationCommand() {
     }
 }
 
+int normaliseColour(int colour) {
+    int terminalColour = (colour % 215) + 16;
+    return terminalColour;
+}
+
 int printBlankMargin(int width) {
     for(int i = 0; i < width + 1; i++) {
         printf(" ");
@@ -84,10 +94,10 @@ int printNodeTwo(node* focusNode) {
     int numNodeDigits = focusNode->id > 0 ? floor(log10(focusNode->id)) : 1;
 
     printBlankMargin(numNodeDigits);
-    printf(" /--o %d\n", focusNode->neighbours[0]->id);
-    printf("%d o\n", focusNode->id);
+    printf(" /--\e[38;5;%dmo\e[0m %d\n", normaliseColour(focusNode->neighbours[0]->colour), focusNode->neighbours[0]->id);
+    printf("%d \e[38;5;%dmo\e[0m\n", focusNode->id, normaliseColour(focusNode->colour));
     printBlankMargin(numNodeDigits);
-    printf(" \\--o %d\n", focusNode->neighbours[1]->id);
+    printf(" \\--\e[38;5;%dmo\e[0m %d\n", normaliseColour(focusNode->neighbours[1]->colour), focusNode->neighbours[1]->id);
 
     return 0;
 }
@@ -99,7 +109,7 @@ int printNodeThreeOrMore(node* focusNode, int middle) {
     //first connection
     if(middle > 1) {
         printBlankMargin(numNodeDigits);
-        printf("   /--o %d\n", focusNode->neighbours[0]->id);
+        printf("   /--\e[38;5;%dmo\e[0m %d\n", normaliseColour(focusNode->neighbours[0]->colour) ,focusNode->neighbours[0]->id);
         printBlankMargin(numNodeDigits);
         printf("  /   .\n");
         printBlankMargin(numNodeDigits);
@@ -107,11 +117,16 @@ int printNodeThreeOrMore(node* focusNode, int middle) {
     }
     else {
         printBlankMargin(numNodeDigits);
-        printf(" /----o %d\n", focusNode->neighbours[0]->id);
+        printf(" /----\e[38;5;%dmo\e[0m %d\n", normaliseColour(focusNode->neighbours[0]->colour), focusNode->neighbours[0]->id);
     }
 
     //middle connection
-    printf("%d o-----o %d\n", focusNode->id, focusNode->neighbours[middle]->id);
+    printf("%d \e[38;5;%dmo\e[0m-----\e[38;5;%dmo\e[0m %d\n", 
+        focusNode->id, 
+        normaliseColour(focusNode->colour), 
+        normaliseColour(focusNode->neighbours[middle]->colour), 
+        focusNode->neighbours[middle]->id
+    );
 
     //last connection
     if(middle < focusNode->degree - 2) {
@@ -120,11 +135,11 @@ int printNodeThreeOrMore(node* focusNode, int middle) {
         printBlankMargin(numNodeDigits);
         printf("  \\   .\n");
         printBlankMargin(numNodeDigits);
-        printf("   \\--o %d\n", focusNode->neighbours[focusNode->degree - 1]->id);
+        printf("   \\--\e[38;5;%dmo\e[0m %d\n", normaliseColour(focusNode->neighbours[focusNode->degree - 1]->colour), focusNode->neighbours[focusNode->degree - 1]->id);
     }
     else {
         printBlankMargin(numNodeDigits);
-        printf(" \\----o %d\n", focusNode->neighbours[focusNode->degree - 1]->id);
+        printf(" \\----\e[38;5;%dmo\e[0m %d\n", normaliseColour(focusNode->neighbours[focusNode->degree - 1]->colour), focusNode->neighbours[focusNode->degree - 1]->id);
     }
 
     return 0;
