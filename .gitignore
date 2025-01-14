@@ -1,3 +1,6 @@
 *.exe
 
+# linux produces a non-exe file
+colouring
+
 .vscode/*
