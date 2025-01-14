@@ -154,7 +154,7 @@ int printHelp() {
     char buffer[100];
 
     while(!feof(help)) {
-        fgets(buffer, 1000, help);
+        fgets(buffer, 100, help);
         printf("%s", buffer);
     }
 

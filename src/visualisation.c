@@ -50,7 +50,7 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
 int parseVisualisationCommand() {
     char buffer[64];
     printf(">> ");
-    scanf_s("%s", buffer, sizeof(buffer));
+    scanf("%s", buffer);
 
     if(buffer[0] == 'e') {
         return 0;  //exit
