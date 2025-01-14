@@ -29,10 +29,10 @@ options:
 -m [integer]      number of agent moves
                     sets the number of moves an agent makes on each "turn"
                     the default is 0 (agents are stationary)
--v                set verbose mode on
+-v                set visualise mode on
                     prints the graph when the colouring is complete
-                    also prints the centralised benchmark result
-                    not recommended if you have more than about 30 nodes or high value for -p
+                    enters the user into an interactive traversal mode
+                    can be useful to help visualise graphs
                     default is off
 -g [generator]    set the generator
                     sets the graph generator function to use
