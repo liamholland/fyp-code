@@ -13,4 +13,6 @@ int minimumAgent(node** agentPointer, int numMoves, int maxColour);
 
 int randomKernel(node** agentPointer, int numMoves, int maxColour);
 
+int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour);
+
 #endif

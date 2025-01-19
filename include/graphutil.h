@@ -35,4 +35,6 @@ node** findAllConflictingNodesInGraph(node** graph, int numNodes);
 
 node** findConflictingNeighboursForNode(node* n);
 
+int removeEdge(node** nodeReference, node* neighbour);
+
 #endif
