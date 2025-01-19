@@ -33,4 +33,6 @@ int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour);
 
 node** findAllConflictingNodesInGraph(node** graph, int numNodes);
 
+node** findConflictingNeighboursForNode(node* n);
+
 #endif
