@@ -254,3 +254,35 @@ int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour) {
 
     return colourTruthVector;
 }
+
+node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
+    node** conflictingNodes = (node**)malloc(numNodes * sizeof(node*));
+
+    int numConflictingNodes = 0;
+
+    node** graphCopy = copyGraph(graph, numNodes);
+
+    for(int i = 0; i < numNodes; i++) {
+        if(nodeIsInConflict(graph[i])) {
+            conflictingNodes[numConflictingNodes++] = graph[i];
+            //delete node and conflicting neighbours from the graph copy
+        }
+    }
+
+    freeGraph(graphCopy, numNodes);
+
+    return conflictingNodes;
+}
+
+node** findConflictingNeighbours(node* n) {
+    node** conflictingNodes = (node**)malloc((n->degree + 1) * sizeof(node*));
+
+    int numConflictingNodes = 0;
+
+    for(int i = 0; i < n->degree; i++) {
+        if(n->colour == n->neighbours[i]->colour) {
+            conflictingNodes[numConflictingNodes] = (node*)malloc(sizeof(node));
+            memcpy(conflictingNodes[numConflictingNodes], n->neighbours[i], sizeof(node));
+        }
+    }
+}
