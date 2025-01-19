@@ -21,7 +21,6 @@ node** initialiseGraph(int numNodes, int degree) {
     return graph;
 }
 
-// print each node in the graph
 int printGraphAsText(node** graph, int numNodes) {
     for(int i = 0; i < numNodes; i++) {
         printf("node: %d; colour: %d; degree: %d; neighbours: ", graph[i]->id, graph[i]->colour, graph[i]->degree);
@@ -34,8 +33,6 @@ int printGraphAsText(node** graph, int numNodes) {
     return 0;
 }
 
-// copy a graph
-// all neighbour pointers are updated to point to the new block
 node** copyGraph(node** graph, int numNodes) {
     node** graphcpy = (node**)malloc(sizeof(node*) * numNodes);
 
@@ -57,7 +54,6 @@ node** copyGraph(node** graph, int numNodes) {
     return graphcpy;
 }
 
-// free all of the memory used by a graph
 int freeGraph(node** graph, int numNodes) {
     for(int n = 0; n < numNodes; n++) {
         free(graph[n]->neighbours); //dont have to free each member of neighbours since they are all in this array
@@ -148,10 +144,7 @@ node** fetchNUniqueNodes(node** fullGraph, int numNodes, int n) {
     
     node** nodes = (node**)malloc(sizeof(node*) * n);
 
-    int* selectedIndex = (int*)malloc(sizeof(int) * numNodes);
-    for(int i = 0; i < numNodes; i++) {
-        selectedIndex[i] = 0;
-    }
+    int* selectedIndex = (int*)calloc(numNodes, sizeof(int));
 
     //fetch random nodes
     for(int i = 0; i < n; i++) {
