@@ -309,6 +309,10 @@ int removeEdge(node** nodeReference, node* neighbour) {
                 (*nodeReference)->neighbours[j] = (*nodeReference)->neighbours[j + 1];
             }
 
+            (*nodeReference)->neighbours[(*nodeReference)->degree - 1] = NULL;
+            realloc((*nodeReference)->neighbours, sizeof(node*) * ((*nodeReference)->degree - 1));
+            (*nodeReference)->degree--;
+
             return 0;
         }
     }
