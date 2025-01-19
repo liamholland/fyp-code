@@ -31,4 +31,6 @@ int nodeIsInConflict(node* node);
 
 int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour);
 
+node** findAllConflictingNodesInGraph(node** graph, int numNodes);
+
 #endif

@@ -187,3 +187,18 @@ int randomKernel(node** agentPointer, int numMoves, int maxColour) {
 
     return numChanges;
 }
+
+int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
+    int numChanges = 0;
+
+    node* agent = *agentPointer;
+
+    if(!agent->colour) {
+        agent->colour = agent->degree;
+    }
+    else if(nodeIsInConflict(agent)) {
+
+    }
+
+    return numChanges;
+}
