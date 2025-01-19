@@ -263,10 +263,17 @@ node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
     node** graphCopy = copyGraph(graph, numNodes);
 
     for(int i = 0; i < numNodes; i++) {
-        if(nodeIsInConflict(graph[i])) {
-            conflictingNodes[numConflictingNodes++] = graph[i];
-            //delete node and conflicting neighbours from the graph copy
-        }
+        node** conflicts = findConflictingNeighboursForNode(graphCopy[i]);
+        
+        if(conflicts == NULL) continue;
+
+        int numConflicts = strlen(conflicts);   //pointers are a byte?
+
+        memcpy(conflictingNodes, conflicts, sizeof(node*) * numConflicts);
+
+        numConflictingNodes += numConflicts;
+
+        freeGraph(conflicts, numConflicts); //this should make the pointers null in the graph copy
     }
 
     freeGraph(graphCopy, numNodes);
@@ -274,15 +281,23 @@ node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
     return conflictingNodes;
 }
 
-node** findConflictingNeighbours(node* n) {
-    node** conflictingNodes = (node**)malloc((n->degree + 1) * sizeof(node*));
+node** findConflictingNeighboursForNode(node* n) {
+    node** conflictingNodes = (node**)malloc(n->degree * sizeof(node*));
 
     int numConflictingNodes = 0;
 
     for(int i = 0; i < n->degree; i++) {
         if(n->colour == n->neighbours[i]->colour) {
-            conflictingNodes[numConflictingNodes] = (node*)malloc(sizeof(node));
-            memcpy(conflictingNodes[numConflictingNodes], n->neighbours[i], sizeof(node));
+            conflictingNodes[numConflictingNodes++] = n->neighbours[i];
         }
     }
+
+    if(numConflictingNodes == 0) {
+        free(conflictingNodes);
+        return NULL;
+    }
+
+    realloc(conflictingNodes, numConflictingNodes * sizeof(numConflictingNodes));
+
+    return conflictingNodes;
 }
