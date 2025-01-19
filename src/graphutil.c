@@ -301,3 +301,17 @@ node** findConflictingNeighboursForNode(node* n) {
 
     return conflictingNodes;
 }
+
+int removeEdge(node** nodeReference, node* neighbour) {
+    for(int i = 0; i < (*nodeReference)->degree; i++) {
+        if((*nodeReference)->neighbours[i] == neighbour) {
+            for(int j = i; j < (*nodeReference)->degree; j++) {
+                (*nodeReference)->neighbours[j] = (*nodeReference)->neighbours[j + 1];
+            }
+
+            return 0;
+        }
+    }
+    
+    return 1;   //did not find the neighbour
+}
