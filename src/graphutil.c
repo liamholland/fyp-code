@@ -296,21 +296,21 @@ node** findConflictingNeighboursForNode(node* n) {
     return (node**)realloc(conflictingNodes, numConflictingNodes * sizeof(numConflictingNodes));
 }
 
-int removeEdge(node** nodeReference, node** neighbourReference) {
+int removeEdge(node* nodeReference, node* neighbourReference) {
     int foundNeighbour = 0;
 
-    for(int i = 0; i < (*nodeReference)->degree; i++) {
-        if((*nodeReference)->neighbours[i] == (*neighbourReference)) {
+    for(int i = 0; i < nodeReference->degree; i++) {
+        if(nodeReference->neighbours[i] == neighbourReference) {
             foundNeighbour = 1;
             
             //move each neighbour up one
-            for(int j = i; j < (*nodeReference)->degree; j++) {
-                (*nodeReference)->neighbours[j] = (*nodeReference)->neighbours[j + 1];
+            for(int j = i; j < nodeReference->degree; j++) {
+                nodeReference->neighbours[j] = nodeReference->neighbours[j + 1];
             }
 
-            (*nodeReference)->neighbours[(*nodeReference)->degree - 1] = NULL;  //remove the last pointer
-            (*nodeReference)->neighbours = (node**)realloc((*nodeReference)->neighbours, sizeof(node*) * ((*nodeReference)->degree - 1));   //reduce the memory in the struct
-            (*nodeReference)->degree--;
+            nodeReference->neighbours[nodeReference->degree - 1] = NULL;  //remove the last pointer
+            nodeReference->neighbours = (node**)realloc(nodeReference->neighbours, sizeof(node*) * (nodeReference->degree - 1));   //reduce the memory in the struct
+            nodeReference->degree--;
 
             break;
         }
@@ -320,18 +320,18 @@ int removeEdge(node** nodeReference, node** neighbourReference) {
         return 1;   //did not find the neighbour
     }
 
-    for(int i = 0; i < (*neighbourReference)->degree; i++) {
-        if((*neighbourReference)->neighbours[i] == (*nodeReference)) {
+    for(int i = 0; i < neighbourReference->degree; i++) {
+        if(neighbourReference->neighbours[i] == nodeReference) {
             foundNeighbour = 1;
             
             //move each neighbour up one
-            for(int j = i; j < (*neighbourReference)->degree; j++) {
-                (*neighbourReference)->neighbours[j] = (*neighbourReference)->neighbours[j + 1];
+            for(int j = i; j < neighbourReference->degree; j++) {
+                neighbourReference->neighbours[j] = neighbourReference->neighbours[j + 1];
             }
 
-            (*neighbourReference)->neighbours[(*neighbourReference)->degree - 1] = NULL;  //remove the last pointer
-            (*neighbourReference)->neighbours = (node**)realloc((*neighbourReference)->neighbours, sizeof(node*) * ((*neighbourReference)->degree - 1));   //reduce the memory in the struct
-            (*neighbourReference)->degree--;
+            neighbourReference->neighbours[neighbourReference->degree - 1] = NULL;  //remove the last pointer
+            neighbourReference->neighbours = (node**)realloc(neighbourReference->neighbours, sizeof(node*) * (neighbourReference->degree - 1));   //reduce the memory in the struct
+            neighbourReference->degree--;
 
             return 0;
         }

@@ -199,7 +199,7 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
     else if(nodeIsInConflict(agent)) {
         node** conflicts = findConflictingNeighboursForNode(agent);
 
-        removeEdge(agentPointer, &conflicts[0]); //remove the first conflict because why not
+        removeEdge(agent, conflicts[0]); //remove the first conflict because why not
 
         numChanges = 1;
 
