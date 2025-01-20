@@ -129,7 +129,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &edgeChopperKernel, save);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
 
         if(verbose) {
             //enter interactive traversal mode
