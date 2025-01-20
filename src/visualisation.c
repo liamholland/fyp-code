@@ -6,7 +6,6 @@
 
 int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour) {
     char buffer[8];
-    int numCutNodes = 0;
     int target;
 
     do {
@@ -22,9 +21,9 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
                 printf("\e[1;1H\e[2J"); //clear the screen
 
                 target = atoi(buffer + 1);
-                for(int n = 0; n < focusNode->degree; n++) {
-                    if(focusNode->neighbours[n]->id == target) {
-                        focusNode = focusNode->neighbours[n];
+                for(int n = 0; n < numNodes; n++) {
+                    if(graph[n]->id == target) {
+                        focusNode = graph[n];
                         break;
                     }
                 }
@@ -55,19 +54,15 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
                     nextNeighbour--;
                 }
                 break;
-            case 'r':   //will result in a rerun if < 0
-                return numNodes - numCutNodes;
+            case 'r':   //rerun
+                return -1;
             case 'c':   //cut
                 removeEdge(focusNode, graph[atoi(buffer + 1)]);
-                numCutNodes++;
-                printf("%d\n", numNodes);
                 break;
             default:
                 printf("INVALID INPUT\n");
                 return 1;
         }
-
-        printNode(focusNode, nextNeighbour);
     } while(1);
 }
 

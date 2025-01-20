@@ -132,11 +132,13 @@ int main(int argc, char const *argv[]) {
         colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
 
         if(verbose) {
+            autoRuns = 1;   //should only run once if viewing the graph
+
             //enter interactive traversal mode
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1) < 0) {
                 //run it again
-                agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
+                colouredGraph = agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
             }
         }
 
