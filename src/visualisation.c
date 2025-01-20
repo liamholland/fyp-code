@@ -30,15 +30,18 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
     }
 
     int input = parseVisualisationCommand();
-    if(input < 0) {
+    char buffer[64];
+    printf(">> ");
+    scanf("%s", buffer);
+    if(buffer[0] == 'e') {
+        return 0;  //exit
+    }
+    else if(buffer[0] == 'j') {
         printf("\e[1;1H\e[2J"); //clear the screen
         int targetNode = (input * -1) - 1;
-        traverseGraph(graph, numNodes, graph[targetNode], 1);
+        traverseGraph(graph, numNodes, graph[atoi(buffer + 1)], 1);
     }
-    else if(input == 1) {
-        printf("ERROR OCCURRED\n");
-    }
-    else if(input == 2) {
+    else if(buffer[0] == 'n') {
         printf("\e[1;1H\e[2J"); //clear the screen
         if(nextNeighbour + 1 == focusNode->degree - 1) {
             //focus on the last neighbour if there are no more to display
@@ -48,32 +51,12 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
             traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
         }
     }
-
-    return 0;
-}
-
-int parseVisualisationCommand() {
-    char buffer[64];
-    printf(">> ");
-    scanf("%s", buffer);
-
-    if(buffer[0] == 'e') {
-        return 0;  //exit
-    }
-    else if(buffer[0] == 'j') {
-        char jmpNode[64];
-        strncpy(jmpNode, buffer + 1, strlen(buffer) - 1);   //get a string slice
-        int target = atoi(jmpNode);
-        int encodedTarget = 0 - target - 1;
-        return encodedTarget;   //jump to this node
-    }
-    else if(buffer[0] == 'n') {
-        return 2;   //display next neighbour
-    }
     else {
         printf("INVALID INPUT\n");
         return 1;
     }
+
+    return 0;
 }
 
 int normaliseColour(int colour) {

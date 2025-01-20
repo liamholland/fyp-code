@@ -13,6 +13,4 @@ int printNodeTwo(node* focusNode);
 
 int printNodeThreeOrMore(node* focusNode, int middle);
 
-int parseVisualisationCommand();
-
 #endif
