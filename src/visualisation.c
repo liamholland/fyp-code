@@ -28,49 +28,43 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
             break;
     }
 
-    char buffer[64];
+    char buffer[8];
     printf(">> ");
     scanf("%s", buffer);
 
     //parse command
     switch (buffer[0]) {
         case 'e':
-            free(buffer);
             return 0;
         case 'j':
             printf("\e[1;1H\e[2J"); //clear the screen
-            traverseGraph(graph, numNodes, graph[atoi(buffer + 1)], 1);
-            break;
+            return traverseGraph(graph, numNodes, graph[atoi(buffer + 1)], 1);
         case 'n':
             printf("\e[1;1H\e[2J"); //clear the screen
 
             if(nextNeighbour + 1 == focusNode->degree - 1) {
                 //focus on the last neighbour if there are no more to display
-                traverseGraph(graph, numNodes, focusNode->neighbours[focusNode->degree - 1], 1);
+                return traverseGraph(graph, numNodes, focusNode->neighbours[focusNode->degree - 1], 1);
             }
             else {
-                traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
+                return traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
             }
-            break;
         case 'p':
             printf("\e[1;1H\e[2J"); //clear the screen
 
             if(nextNeighbour - 1 == 0) {
                 //focus on the last neighbour if there are no more to display
-                traverseGraph(graph, numNodes, focusNode->neighbours[0], 1);
+                return traverseGraph(graph, numNodes, focusNode->neighbours[0], 1);
             }
             else {
-                traverseGraph(graph, numNodes, focusNode, nextNeighbour - 1);
+                return traverseGraph(graph, numNodes, focusNode, nextNeighbour - 1);
             }
-            break;
+        case 'r':
+            return -1;
         default:
             printf("INVALID INPUT\n");
-            free(buffer);
             return 1;
     }
-
-    free(buffer);
-    return 0;
 }
 
 //normalised relative to the terminal ANSI 8-bit colours
@@ -91,7 +85,14 @@ int printBlankMargin(int width) {
 int printTraversalModeCommands() {
     printf("\n----------\ntraversal mode\n----------\n");
     printf("COMMANDS:\n");
-    printf("n: display next neighbour\np: display previous neighbour\nj[number]: jump to node (e.g. j5)\ne: exit program\n\n");
+    printf("\
+        n: display next neighbour\n\
+        p: display previous neighbour\n\
+        j[number]: jump to node (e.g. j5)\n\
+        r: rerun the program on the coloured graph\n\
+        e: exit program\n\
+        \n");
+    return 0;
 }
 
 int printNodeTwo(node* focusNode) {
