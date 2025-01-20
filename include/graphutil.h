@@ -74,6 +74,6 @@ node** findConflictingNeighboursForNode(node* n);
 
 //does what it says on the tin; removes the edge between the node
 //and its neighbour
-int removeEdge(node** nodeReference, node* neighbour);
+int removeEdge(node** nodeReference, node** neighbour);
 
 #endif
