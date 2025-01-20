@@ -5,50 +5,70 @@
 #include "visualisation.h"
 
 int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour) {
-    printf("--- node %d ---\ndegree: %d; colour: %d\n\n", focusNode->id, focusNode->degree, focusNode->colour);
-
-    printNode(focusNode, nextNeighbour);
-
     char buffer[8];
-    printf(">> ");
-    scanf("%s", buffer);
+    int numCutNodes = 0;
+    int target;
 
-    //parse command
-    switch (buffer[0]) {
-        case 'e':   //exit
-            return 0;
-        case 'j':   //jump
-            printf("\e[1;1H\e[2J"); //clear the screen
-            return traverseGraph(graph, numNodes, graph[atoi(buffer + 1)], 1);
-        case 'n':   //next
-            printf("\e[1;1H\e[2J"); //clear the screen
+    do {
+        printNode(focusNode, nextNeighbour);
 
-            if(nextNeighbour + 1 == focusNode->degree - 1) {
-                //focus on the last neighbour if there are no more to display
-                return traverseGraph(graph, numNodes, focusNode->neighbours[focusNode->degree - 1], 1);
-            }
-            else {
-                return traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
-            }
-        case 'p':   //previous
-            printf("\e[1;1H\e[2J"); //clear the screen
+        printf(">> ");
+        scanf("%s", buffer);
 
-            if(nextNeighbour - 1 == 0) {
-                //focus on the last neighbour if there are no more to display
-                return traverseGraph(graph, numNodes, focusNode->neighbours[0], 1);
-            }
-            else {
-                return traverseGraph(graph, numNodes, focusNode, nextNeighbour - 1);
-            }
-        case 'r':   //rerun
-            return -1;
-        case 'c':   //cut
-            removeEdge(focusNode, graph[atoi(buffer + 1)]);
-            return traverseGraph(graph, numNodes - 1, focusNode, 1);
-        default:
-            printf("INVALID INPUT\n");
-            return 1;
-    }
+        switch (buffer[0]) {
+            case 'e':
+                return 0;
+            case 'j':   //jump
+                printf("\e[1;1H\e[2J"); //clear the screen
+
+                target = atoi(buffer + 1);
+                for(int n = 0; n < focusNode->degree; n++) {
+                    if(focusNode->neighbours[n]->id == target) {
+                        focusNode = focusNode->neighbours[n];
+                        break;
+                    }
+                }
+
+                nextNeighbour = 1;
+                break;
+            case 'n':   //next
+                printf("\e[1;1H\e[2J"); //clear the screen
+
+                if(nextNeighbour + 1 == focusNode->degree - 1) {
+                    //focus on the last neighbour if there are no more to display
+                    focusNode = focusNode->neighbours[focusNode->degree - 1];
+                    nextNeighbour = 1;
+                }
+                else {
+                    nextNeighbour++;
+                }
+                break;
+            case 'p':   //previous
+                printf("\e[1;1H\e[2J"); //clear the screen
+
+                if(nextNeighbour - 1 == 0) {
+                    //focus on the last neighbour if there are no more to display
+                    focusNode = focusNode->neighbours[0]; 
+                    nextNeighbour = 1;
+                }
+                else {
+                    nextNeighbour--;
+                }
+                break;
+            case 'r':   //will result in a rerun if < 0
+                return numNodes - numCutNodes;
+            case 'c':   //cut
+                removeEdge(focusNode, graph[atoi(buffer + 1)]);
+                numCutNodes++;
+                printf("%d\n", numNodes);
+                break;
+            default:
+                printf("INVALID INPUT\n");
+                return 1;
+        }
+
+        printNode(focusNode, nextNeighbour);
+    } while(1);
 }
 
 //normalised relative to the terminal ANSI 8-bit colours
@@ -81,6 +101,8 @@ int printTraversalModeCommands() {
 }
 
 int printNode(node* focusNode, int nextNeighbour) {
+        printf("--- node %d ---\ndegree: %d; colour: %d\n\n", focusNode->id, focusNode->degree, focusNode->colour);
+
         switch (focusNode->degree) {
         case 0:
             printf("%d \e[38;5;%dmo\e[0m\n", focusNode->id, normaliseColour(focusNode->colour));
