@@ -134,7 +134,10 @@ int main(int argc, char const *argv[]) {
         if(verbose) {
             //enter interactive traversal mode
             printTraversalModeCommands();
-            traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1);
+            while(traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1) < 0) {
+                //run it again
+                agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
+            }
         }
 
         //free memory
