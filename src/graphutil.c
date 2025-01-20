@@ -368,7 +368,7 @@ node* findNodeWithHighestDegree(node** graph, int numNodes) {
 
         for(int n = 0; n < numContenders; n++) {
             if(highestDegreeContenders[n]->colour > highestColour) {
-                highestColour = highestDegreeContenders[n];
+                highestColour = highestDegreeContenders[n]->colour;
                 highestColourNode = highestDegreeContenders[n];
             }
         }
