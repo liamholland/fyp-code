@@ -35,6 +35,7 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
     //parse command
     switch (buffer[0]) {
         case 'e':
+            free(buffer);
             return 0;
         case 'j':
             printf("\e[1;1H\e[2J"); //clear the screen
@@ -64,9 +65,11 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
             break;
         default:
             printf("INVALID INPUT\n");
+            free(buffer);
             return 1;
     }
 
+    free(buffer);
     return 0;
 }
 
