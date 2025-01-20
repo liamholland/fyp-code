@@ -1,32 +1,13 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include "graphutil.h"
 #include "visualisation.h"
-
-//TODO: add colours to nodes
 
 int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour) {
     printf("--- node %d ---\ndegree: %d; colour: %d\n\n", focusNode->id, focusNode->degree, focusNode->colour);
 
-    switch (focusNode->degree) {
-        case 0:
-            printf("%d \e[38;5;%dmo\e[0m\n", focusNode->id, normaliseColour(focusNode->colour));
-            break;
-        case 1:
-            printf("%d \e[38;5;%dmo\e[0m---\e[38;5;%dmo\e[0m %d\n", 
-                focusNode->id, 
-                normaliseColour(focusNode->colour), 
-                normaliseColour(focusNode->neighbours[0]->colour),
-                focusNode->neighbours[0]->id
-            );
-            break;
-        case 2:
-            printNodeTwo(focusNode);
-            break;
-        default:
-            printNodeThreeOrMore(focusNode, nextNeighbour);
-            break;
-    }
+    printNode(focusNode, nextNeighbour);
 
     char buffer[8];
     printf(">> ");
@@ -34,12 +15,12 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
 
     //parse command
     switch (buffer[0]) {
-        case 'e':
+        case 'e':   //exit
             return 0;
-        case 'j':
+        case 'j':   //jump
             printf("\e[1;1H\e[2J"); //clear the screen
             return traverseGraph(graph, numNodes, graph[atoi(buffer + 1)], 1);
-        case 'n':
+        case 'n':   //next
             printf("\e[1;1H\e[2J"); //clear the screen
 
             if(nextNeighbour + 1 == focusNode->degree - 1) {
@@ -49,7 +30,7 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
             else {
                 return traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
             }
-        case 'p':
+        case 'p':   //previous
             printf("\e[1;1H\e[2J"); //clear the screen
 
             if(nextNeighbour - 1 == 0) {
@@ -59,8 +40,11 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
             else {
                 return traverseGraph(graph, numNodes, focusNode, nextNeighbour - 1);
             }
-        case 'r':
+        case 'r':   //rerun
             return -1;
+        case 'c':   //cut
+            removeEdge(focusNode, graph[atoi(buffer + 1)]);
+            return traverseGraph(graph, numNodes - 1, focusNode, 1);
         default:
             printf("INVALID INPUT\n");
             return 1;
@@ -89,9 +73,34 @@ int printTraversalModeCommands() {
         n: display next neighbour\n\
         p: display previous neighbour\n\
         j[number]: jump to node (e.g. j5)\n\
+        c[number]: cut the connection to neighbour (e.g. c5)\n\
         r: rerun the program on the coloured graph\n\
         e: exit program\n\
         \n");
+    return 0;
+}
+
+int printNode(node* focusNode, int nextNeighbour) {
+        switch (focusNode->degree) {
+        case 0:
+            printf("%d \e[38;5;%dmo\e[0m\n", focusNode->id, normaliseColour(focusNode->colour));
+            break;
+        case 1:
+            printf("%d \e[38;5;%dmo\e[0m---\e[38;5;%dmo\e[0m %d\n", 
+                focusNode->id, 
+                normaliseColour(focusNode->colour), 
+                normaliseColour(focusNode->neighbours[0]->colour),
+                focusNode->neighbours[0]->id
+            );
+            break;
+        case 2:
+            printNodeTwo(focusNode);
+            break;
+        default:
+            printNodeThreeOrMore(focusNode, nextNeighbour);
+            break;
+    }
+    
     return 0;
 }
 
