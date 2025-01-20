@@ -194,7 +194,7 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
     node* agent = *agentPointer;
 
     if(!agent->colour) {
-        agent->colour = agent->degree;  //something more interesting here maybe?
+        agent->colour = maxColour < agent->degree ? maxColour : agent->degree;  //something more interesting here maybe?
     }
     else if(nodeIsInConflict(agent)) {
         node** conflicts = findConflictingNeighboursForNode(agent);

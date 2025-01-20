@@ -3,8 +3,6 @@
 #include <string.h>
 #include "visualisation.h"
 
-//TODO: add colours to nodes
-
 int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour) {
     printf("--- node %d ---\ndegree: %d; colour: %d\n\n", focusNode->id, focusNode->degree, focusNode->colour);
 
