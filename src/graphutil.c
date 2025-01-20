@@ -62,6 +62,7 @@ int freeGraph(node** graph, int numNodes) {
     for(int n = 0; n < numNodes; n++) {
         free(graph[n]->neighbours); //dont have to free each member of neighbours since they are all in this array
         free(graph[n]);
+        graph[n] == NULL;
     }
 
     free(graph);
@@ -258,20 +259,22 @@ int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour) {
 node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
     node** conflictingNodes = (node**)malloc(numNodes * sizeof(node*));
 
-    int numConflictingNodes = 0;
+    int totalNumConflictingNodes = 0;
 
     node** graphCopy = copyGraph(graph, numNodes);
 
     for(int i = 0; i < numNodes; i++) {
+        if(graphCopy[i] == NULL) continue;
+
         node** conflicts = findConflictingNeighboursForNode(graphCopy[i]);
         
         if(conflicts == NULL) continue;
 
         int numConflicts = sizeof(conflicts) / sizeof(node*);
 
-        memcpy(conflictingNodes, conflicts, sizeof(node*) * numConflicts);
+        memcpy(conflictingNodes[totalNumConflictingNodes], conflicts, sizeof(node*) * numConflicts);
 
-        numConflictingNodes += numConflicts;
+        totalNumConflictingNodes += numConflicts;
 
         freeGraph(conflicts, numConflicts); //this should make the pointers null in the graph copy
     }
