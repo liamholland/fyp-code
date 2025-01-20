@@ -133,9 +133,7 @@ int main(int argc, char const *argv[]) {
 
         if(verbose) {
             //enter interactive traversal mode
-            printf("\n----------\nentered traversal mode\n----------\n");
-            printf("COMMANDS:\n");
-            printf("n: display next neighbour\nj[number]: jump to node (e.g. j5)\ne: exit program\n\n");
+            printTraversalModeCommands();
             traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1);
         }
 
