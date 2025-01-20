@@ -29,31 +29,31 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
         break;
     }
 
-    int input = parseVisualisationCommand();
     char buffer[64];
     printf(">> ");
     scanf("%s", buffer);
-    if(buffer[0] == 'e') {
-        return 0;  //exit
-    }
-    else if(buffer[0] == 'j') {
-        printf("\e[1;1H\e[2J"); //clear the screen
-        int targetNode = (input * -1) - 1;
-        traverseGraph(graph, numNodes, graph[atoi(buffer + 1)], 1);
-    }
-    else if(buffer[0] == 'n') {
-        printf("\e[1;1H\e[2J"); //clear the screen
-        if(nextNeighbour + 1 == focusNode->degree - 1) {
-            //focus on the last neighbour if there are no more to display
-            traverseGraph(graph, numNodes, focusNode->neighbours[focusNode->degree - 1], 1);
-        }
-        else {
-            traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
-        }
-    }
-    else {
-        printf("INVALID INPUT\n");
-        return 1;
+
+    //parse command
+    switch (buffer[0]) {
+        case 'e':
+            return 0;
+        case 'j':
+            printf("\e[1;1H\e[2J"); //clear the screen
+            traverseGraph(graph, numNodes, graph[atoi(buffer + 1)], 1);
+            break;
+        case 'n':
+            printf("\e[1;1H\e[2J"); //clear the screen
+            if(nextNeighbour + 1 == focusNode->degree - 1) {
+                //focus on the last neighbour if there are no more to display
+                traverseGraph(graph, numNodes, focusNode->neighbours[focusNode->degree - 1], 1);
+            }
+            else {
+                traverseGraph(graph, numNodes, focusNode, nextNeighbour + 1);
+            }
+            break;
+        default:
+            printf("INVALID INPUT\n");
+            return 1;
     }
 
     return 0;
