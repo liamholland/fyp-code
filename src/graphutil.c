@@ -58,6 +58,7 @@ int freeGraph(node** graph, int numNodes) {
     for(int n = 0; n < numNodes; n++) {
         free(graph[n]->neighbours); //dont have to free each member of neighbours since they are all in this array
         free(graph[n]);
+        graph[n] == NULL;
     }
 
     free(graph);
@@ -246,4 +247,69 @@ int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour) {
     }
 
     return colourTruthVector;
+}
+
+node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
+    node** conflictingNodes = (node**)malloc(numNodes * sizeof(node*));
+
+    int totalNumConflictingNodes = 0;
+
+    node** graphCopy = copyGraph(graph, numNodes);
+
+    for(int i = 0; i < numNodes; i++) {
+        if(graphCopy[i] == NULL) continue;
+
+        node** conflicts = findConflictingNeighboursForNode(graphCopy[i]);
+        
+        if(conflicts == NULL) continue;
+
+        int numConflicts = sizeof(conflicts) / sizeof(node*);
+
+        memcpy(conflictingNodes[totalNumConflictingNodes], conflicts, sizeof(node*) * numConflicts);
+
+        totalNumConflictingNodes += numConflicts;
+
+        freeGraph(conflicts, numConflicts); //this should make the pointers null in the graph copy
+    }
+
+    freeGraph(graphCopy, numNodes);
+
+    return conflictingNodes;
+}
+
+node** findConflictingNeighboursForNode(node* n) {
+    node** conflictingNodes = (node**)malloc(n->degree * sizeof(node*));
+
+    int numConflictingNodes = 0;
+
+    for(int i = 0; i < n->degree; i++) {
+        if(n->colour == n->neighbours[i]->colour) {
+            conflictingNodes[numConflictingNodes++] = n->neighbours[i];
+        }
+    }
+
+    if(numConflictingNodes == 0) {
+        free(conflictingNodes);
+        return NULL;
+    }
+
+    return (node**)realloc(conflictingNodes, numConflictingNodes * sizeof(numConflictingNodes));
+}
+
+int removeEdge(node** nodeReference, node* neighbour) {
+    for(int i = 0; i < (*nodeReference)->degree; i++) {
+        if((*nodeReference)->neighbours[i] == neighbour) {
+            for(int j = i; j < (*nodeReference)->degree; j++) {
+                (*nodeReference)->neighbours[j] = (*nodeReference)->neighbours[j + 1];
+            }
+
+            (*nodeReference)->neighbours[(*nodeReference)->degree - 1] = NULL;
+            (*nodeReference)->neighbours = (node**)realloc((*nodeReference)->neighbours, sizeof(node*) * ((*nodeReference)->degree - 1));
+            (*nodeReference)->degree--;
+
+            return 0;
+        }
+    }
+    
+    return 1;   //did not find the neighbour
 }

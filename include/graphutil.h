@@ -62,4 +62,10 @@ int nodeIsInConflict(node* node);
 //is present in the graph
 int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour);
 
+node** findAllConflictingNodesInGraph(node** graph, int numNodes);
+
+node** findConflictingNeighboursForNode(node* n);
+
+int removeEdge(node** nodeReference, node* neighbour);
+
 #endif
