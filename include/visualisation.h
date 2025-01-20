@@ -9,6 +9,8 @@ int normaliseColour(int colour);
 
 int printBlankMargin(int width);
 
+int printTraversalModeCommands();
+
 int printNodeTwo(node* focusNode);
 
 int printNodeThreeOrMore(node* focusNode, int middle);
