@@ -73,6 +73,8 @@ int traverseGraph(node** graph, int numNodes, node* focusNode, int nextNeighbour
     return 0;
 }
 
+//normalised relative to the terminal ANSI 8-bit colours
+//https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
 int normaliseColour(int colour) {
     int terminalColour = (colour % 215) + 16;
     return terminalColour;
