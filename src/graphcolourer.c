@@ -202,6 +202,8 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
         removeEdge(agentPointer, conflicts[0]); //remove the first conflict because why not
 
         numChanges = 1;
+
+        free(conflicts);
     }
 
     //move the agent

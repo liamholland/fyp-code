@@ -267,7 +267,7 @@ node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
         
         if(conflicts == NULL) continue;
 
-        int numConflicts = strlen(conflicts);   //pointers are a byte?
+        int numConflicts = sizeof(conflicts) / sizeof(node*);
 
         memcpy(conflictingNodes, conflicts, sizeof(node*) * numConflicts);
 
@@ -297,9 +297,7 @@ node** findConflictingNeighboursForNode(node* n) {
         return NULL;
     }
 
-    realloc(conflictingNodes, numConflictingNodes * sizeof(numConflictingNodes));
-
-    return conflictingNodes;
+    return (node**)realloc(conflictingNodes, numConflictingNodes * sizeof(numConflictingNodes));
 }
 
 int removeEdge(node** nodeReference, node* neighbour) {
@@ -310,7 +308,7 @@ int removeEdge(node** nodeReference, node* neighbour) {
             }
 
             (*nodeReference)->neighbours[(*nodeReference)->degree - 1] = NULL;
-            realloc((*nodeReference)->neighbours, sizeof(node*) * ((*nodeReference)->degree - 1));
+            (*nodeReference)->neighbours = (node**)realloc((*nodeReference)->neighbours, sizeof(node*) * ((*nodeReference)->degree - 1));
             (*nodeReference)->degree--;
 
             return 0;
