@@ -304,7 +304,7 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
             foundNeighbour = 1;
             
             //move each neighbour up one
-            for(int j = i; j < nodeReference->degree; j++) {
+            for(int j = i; j < nodeReference->degree - 1; j++) {
                 nodeReference->neighbours[j] = nodeReference->neighbours[j + 1];
             }
 
@@ -322,10 +322,8 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
 
     for(int i = 0; i < neighbourReference->degree; i++) {
         if(neighbourReference->neighbours[i] == nodeReference) {
-            foundNeighbour = 1;
-            
             //move each neighbour up one
-            for(int j = i; j < neighbourReference->degree; j++) {
+            for(int j = i; j < neighbourReference->degree - 1; j++) {
                 neighbourReference->neighbours[j] = neighbourReference->neighbours[j + 1];
             }
 
@@ -338,6 +336,42 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
     }
 
     return 1;
+}
+
+int makeNodeOrpan(node* targetNode) {
+    for(int n = 0; n < targetNode->degree; n++) {
+        removeEdge(targetNode, targetNode->neighbours[n]);
+    }
+
+    return 0;
+}
+
+int removeNode(node*** graphReference, int numNodes, node* targetNode) {
+    makeNodeOrpan(targetNode);
+
+    node** graph = *graphReference;
+
+    //find the nodes position in the array
+    //cant rely on id since other nodes might have been removed
+    int n;
+    for(n = 0; n < numNodes; n++) {
+        if(graph[n] == targetNode) break;
+    }
+
+    //free the memory
+    free(targetNode->neighbours);
+    free(targetNode);
+    targetNode = NULL;
+
+    //move all of the nodes up one
+    for(int i = n; n < numNodes - 1; i++) {
+        graph[i] = graph[i + 1];
+    }
+
+    //reallocate memory
+    (*graphReference) = (node**)realloc(*graphReference, sizeof(node*) * (numNodes - 1));
+
+    return 0;
 }
 
 node* findNodeWithHighestDegree(node** graph, int numNodes) {
