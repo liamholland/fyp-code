@@ -132,14 +132,14 @@ int main(int argc, char const *argv[]) {
         colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
 
         if(verbose) {
-            //get the highest degree node
-            node* highestDegreeNode = findNodeWithHighestDegree(colouredGraph, numNodes);
+            autoRuns = 1;   //should only run once if viewing the graph
 
-            //enter interactive traversal mode at that point
-            printf("\n----------\nentered traversal mode\n----------\n");
-            printf("COMMANDS:\n");
-            printf("n: display next neighbour\nj[number]: jump to node (e.g. j5)\ne: exit program\n\n");
-            traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1);
+            //enter interactive traversal mode
+            printTraversalModeCommands();
+            while(traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1) < 0) {
+                //run it again
+                colouredGraph = agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
+            }
         }
 
         //free memory
