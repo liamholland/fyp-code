@@ -134,9 +134,12 @@ int main(int argc, char const *argv[]) {
         if(verbose) {
             autoRuns = 1;   //should only run once if viewing the graph
 
+            //find the highest degree node
+            node* highestDegreeNode = findNodeWithHighestDegree(colouredGraph, numNodes);
+
             //enter interactive traversal mode
             printTraversalModeCommands();
-            while(traverseGraph(colouredGraph, numNodes, colouredGraph[0], 1) < 0) {
+            while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
                 colouredGraph = agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
             }
