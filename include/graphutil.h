@@ -76,6 +76,16 @@ node** findConflictingNeighboursForNode(node* n);
 //and its neighbour
 int removeEdge(node* nodeReference, node* neighbour);
 
+//removes edges between the target node and all of its neighbours
+//basically a convenience function; the amount of reallocation going
+//on here guarantees that it is not optimal
+int makeNodeOrpan(node* targetNode);
+
+//yes that really is a `node***`
+//removes the node and frees all of its memory, then reallocates the memory
+//associated with the array, hence the pass by reference for the pointer
+int removeNode(node*** graphReference, int numNodes, node* targetNode);
+
 //this function will return a pointer to the node with the highest degree
 //in the case of a tie, the contender with the "largest colour" (least optimised)
 //will be returned 
