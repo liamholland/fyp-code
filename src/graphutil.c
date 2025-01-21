@@ -339,3 +339,46 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
 
     return 1;
 }
+
+node* findNodeWithHighestDegree(node** graph, int numNodes) {
+    int highestDegree = 0;
+    node** highestDegreeContenders = (node**)malloc(sizeof(node*) * numNodes);
+    int numContenders = 0;
+
+    for(int n = 0; n < numNodes; n++) {
+        if(graph[n]->degree > highestDegree) {
+            highestDegree = graph[n]->degree;
+            numContenders = 1;
+            highestDegreeContenders[0] = graph[n];
+        }
+        else if(graph[n]->degree == highestDegree) {
+            highestDegreeContenders[numContenders++] = graph[n];
+        }
+    }
+
+    if(numContenders == 0) {
+        free(highestDegreeContenders);
+        return graph[0];    //all nodes are orphans
+    }
+    
+    //in the case of a tie, return the node with the highest colour
+    if(numContenders > 1) {
+        int highestColour = -1; //worst case, the first contender will be returned
+        node* highestColourNode;
+
+        for(int n = 0; n < numContenders; n++) {
+            if(highestDegreeContenders[n]->colour > highestColour) {
+                highestColour = highestDegreeContenders[n]->colour;
+                highestColourNode = highestDegreeContenders[n];
+            }
+        }
+
+        free(highestDegreeContenders);
+        return highestColourNode;
+    }
+
+    //only one contender
+    node* highestDegreeNode = highestDegreeContenders[0];
+    free(highestDegreeContenders);
+    return highestDegreeNode;
+}

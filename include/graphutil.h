@@ -76,4 +76,9 @@ node** findConflictingNeighboursForNode(node* n);
 //and its neighbour
 int removeEdge(node* nodeReference, node* neighbour);
 
+//this function will return a pointer to the node with the highest degree
+//in the case of a tie, the contender with the "largest colour" (least optimised)
+//will be returned 
+node* findNodeWithHighestDegree(node** graph, int numNodes);
+
 #endif
