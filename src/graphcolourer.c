@@ -7,7 +7,8 @@
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int (*agentController)(node** agent, int numMoves, int numNodes), int save) {
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, 
+    int maxColour, int (*agentController)(node** agent, int numMoves, int numNodes), int (*dynamicKernel)(node** agent), int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);
@@ -27,6 +28,9 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
+            if(dynamicKernel != NULL) {
+                dynamicKernel(agents[a]);
+            }
         }
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?

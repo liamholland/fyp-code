@@ -129,7 +129,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, NULL, save);
 
         if(verbose) {
             autoRuns = 1;   //should only run once if viewing the graph
@@ -141,7 +141,7 @@ int main(int argc, char const *argv[]) {
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                colouredGraph = agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, save);
+                colouredGraph = agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, NULL, save);
             }
         }
 
