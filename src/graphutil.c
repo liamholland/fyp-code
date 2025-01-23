@@ -341,10 +341,10 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
 }
 
 int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo) {
-    nodeOne->neighbours = (node**)realloc(nodeOne->neighbours, ++(nodeOne->degree));
+    nodeOne->neighbours = (node**)realloc(nodeOne->neighbours, sizeof(node*) * ++(nodeOne->degree));
     nodeOne->neighbours[nodeOne->degree - 1] = nodeTwo;
     
-    nodeTwo->neighbours = (node**)realloc(nodeTwo->neighbours, ++(nodeTwo->degree));
+    nodeTwo->neighbours = (node**)realloc(nodeTwo->neighbours, sizeof(node*) * ++(nodeTwo->degree));
     nodeTwo->neighbours[nodeTwo->degree - 1] = nodeOne;
 
     return 0;
