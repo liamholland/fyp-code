@@ -76,9 +76,7 @@ node** findConflictingNeighboursForNode(node* n);
 //and its neighbour
 int removeEdge(node* nodeReference, node* neighbour);
 
-/// @brief adds an edge between two nodes
-/// @param nodeOne first node
-/// @param nodeTwo second node
+//adds an edge between the two provided nodes
 int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo);
 
 //this function will return a pointer to the node with the highest degree
