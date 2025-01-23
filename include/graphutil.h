@@ -86,6 +86,9 @@ int makeNodeOrpan(node* targetNode);
 //associated with the array, hence the pass by reference for the pointer
 int removeNode(node*** graphReference, int numNodes, node* targetNode);
 
+//adds an edge between the two provided nodes
+int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo);
+
 //this function will return a pointer to the node with the highest degree
 //in the case of a tie, the contender with the "largest colour" (least optimised)
 //will be returned 

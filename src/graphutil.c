@@ -374,6 +374,16 @@ int removeNode(node*** graphReference, int numNodes, node* targetNode) {
     return 0;
 }
 
+int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo) {
+    nodeOne->neighbours = (node**)realloc(nodeOne->neighbours, sizeof(node*) * ++(nodeOne->degree));
+    nodeOne->neighbours[nodeOne->degree - 1] = nodeTwo;
+    
+    nodeTwo->neighbours = (node**)realloc(nodeTwo->neighbours, sizeof(node*) * ++(nodeTwo->degree));
+    nodeTwo->neighbours[nodeTwo->degree - 1] = nodeOne;
+
+    return 0;
+}
+
 node* findNodeWithHighestDegree(node** graph, int numNodes) {
     int highestDegree = 0;
     node** highestDegreeContenders = (node**)malloc(sizeof(node*) * numNodes);
