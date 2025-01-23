@@ -18,10 +18,10 @@ int possiblyRemoveNodeKernel(node**, node* agent) {
     return 0;
 }
 
-int duplicateTheGraph(node** graph, node* agent) {
+int doubleGraphSizeKernel(node** graph, node* agent) {
     node** secondGraph = copyGraph(graph, sizeof(graph) / sizeof(node*));
 
-    //connect the graphs together in some way
+    addEdgeBetweenNodes(graph[0], secondGraph[0]);
 
     return 0;
 }
