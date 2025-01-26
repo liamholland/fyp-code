@@ -8,15 +8,18 @@ int possiblyRemoveEdgeKernel(node** graph, int numNodes, node* agent) {
         removeEdge(agent, agent->neighbours[rand() % agent->degree]);
     }
 
-    return numNodes;
+    return 0;
 }
 
 int possiblyRemoveNodeKernel(node** graph, int numNodes, node* agent) {
-    if(rand() % 100 == 0) {
-        removeNode(&graph, sizeof(graph) / sizeof(node*), agent);
+    if(rand() % 1000 == 0) {
+        printf("removing node %d\n", agent->id);
+        removeNode(&graph, numNodes, agent);
+        printf("removed node\n");
+        return -1;
     }
 
-    return numNodes;
+    return 0;
 }
 
 int doubled = 0;
@@ -33,10 +36,9 @@ int doubleGraphSizeKernel(node** graph, int numNodes, node* agent) {
         addEdgeBetweenNodes(graph[0], secondGraph[0]);
 
         doubled = 1;
-        numNodes *= 2;
 
-        printf("made dynamic change\n");
+        return numNodes;
     }
 
-    return numNodes;
+    return 0;
 }

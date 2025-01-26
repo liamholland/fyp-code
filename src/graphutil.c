@@ -339,15 +339,39 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
 }
 
 int makeNodeOrpan(node* targetNode) {
+    //for each neighbour
     for(int n = 0; n < targetNode->degree; n++) {
-        removeEdge(targetNode, targetNode->neighbours[n]);
+        //remove targetNode reference from the neighbour
+        node* neighbour = targetNode->neighbours[n];
+
+        for(int i = 0; i < neighbour->degree; i++) {
+            if(neighbour->neighbours[i] == targetNode) {
+                for(int j = i; j < neighbour->degree - 1; j++) {
+                    neighbour->neighbours[j] = neighbour->neighbours[j + 1];
+                }
+
+                neighbour->neighbours[neighbour->degree - 1] = NULL;
+                neighbour->neighbours = (node**)realloc(neighbour->neighbours, sizeof(node*) * (neighbour->degree - 1));
+                neighbour->degree--;
+            }
+        }
     }
+
+    //remove all neighbours from targetNode
+    for(int n = 0; n < targetNode->degree; n++) {
+        targetNode->neighbours[n] = NULL;
+    }
+
+    targetNode->neighbours = NULL;
+    free(targetNode->neighbours);
 
     return 0;
 }
 
 int removeNode(node*** graphReference, int numNodes, node* targetNode) {
     makeNodeOrpan(targetNode);
+
+    printf("made node orphan\n");
 
     node** graph = *graphReference;
 
@@ -363,13 +387,19 @@ int removeNode(node*** graphReference, int numNodes, node* targetNode) {
     free(targetNode);
     targetNode = NULL;
 
+    printf("freed memory\n");
+
     //move all of the nodes up one
-    for(int i = n; n < numNodes - 1; i++) {
+    for(int i = n; i < numNodes - 1; i++) {
         graph[i] = graph[i + 1];
     }
 
+    printf("reassigned nodes\n");
+
     //reallocate memory
     (*graphReference) = (node**)realloc(*graphReference, sizeof(node*) * (numNodes - 1));
+
+    printf("reallocated memory\n");
 
     return 0;
 }

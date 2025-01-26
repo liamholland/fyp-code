@@ -16,7 +16,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
 
     int numNoChanges = 0;      //if no agent makes a change in x iterations, the algorithm ends
 
-    //pick some starting nodes for the "fish"
+    //pick some starting nodes for the agents
     node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
 
     int numColours = minColour;
@@ -30,7 +30,9 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
             if(dynamicKernel != NULL) {
-                numNodes = dynamicKernel(colouringGraph, numNodes, agents[a]);
+                int diff = dynamicKernel(agents, numAgents, agents[a]);
+                numAgents += diff;
+                numNodes += diff;
             }
         }
 
