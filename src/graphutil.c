@@ -371,8 +371,6 @@ int makeNodeOrpan(node* targetNode) {
 int removeNode(node*** graphReference, int numNodes, node* targetNode) {
     makeNodeOrpan(targetNode);
 
-    printf("made node orphan\n");
-
     node** graph = *graphReference;
 
     //find the nodes position in the array
@@ -387,19 +385,13 @@ int removeNode(node*** graphReference, int numNodes, node* targetNode) {
     free(targetNode);
     targetNode = NULL;
 
-    printf("freed memory\n");
-
     //move all of the nodes up one
     for(int i = n; i < numNodes - 1; i++) {
         graph[i] = graph[i + 1];
     }
 
-    printf("reassigned nodes\n");
-
     //reallocate memory
     (*graphReference) = (node**)realloc(*graphReference, sizeof(node*) * (numNodes - 1));
-
-    printf("reallocated memory\n");
 
     return 0;
 }

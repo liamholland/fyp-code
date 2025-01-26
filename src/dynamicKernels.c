@@ -13,9 +13,7 @@ int possiblyRemoveEdgeKernel(node** graph, int numNodes, node* agent) {
 
 int possiblyRemoveNodeKernel(node** graph, int numNodes, node* agent) {
     if(rand() % 1000 == 0) {
-        printf("removing node %d\n", agent->id);
         removeNode(&graph, numNodes, agent);
-        printf("removed node\n");
         return -1;
     }
 
