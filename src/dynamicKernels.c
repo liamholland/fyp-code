@@ -13,8 +13,6 @@ int possiblyRemoveEdgeKernel(node*** graphReference, int* numNodes, node* agent,
 
 int possiblyRemoveNodeKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents) {
     if(rand() % 1000 == 0) {
-        removeNode(graphReference, *numNodes, agent);
-
         node** graph = *graphReference;
         node** agents = *agentsReference;
 
@@ -22,14 +20,19 @@ int possiblyRemoveNodeKernel(node*** graphReference, int* numNodes, node* agent,
         if(graph != agents) {
             for(int i = 0; i < *numAgents; i++) {
                 if(agents[i] == agent) {
-                    for(int j = i; j < *numAgents - 1; j++) {
+                    for(int j = i; j < (*numAgents - 1); j++) {
                         agents[j] = agents[j + 1];
                     }
 
-                    (*agentsReference) = (node**)realloc(*agentsReference, sizeof(node*) * (*numAgents - 1));
+                    agents[*numAgents - 1] = NULL;
+                    *agentsReference = (node**)realloc(*agentsReference, sizeof(node*) * (*numAgents - 1));
+
+                    break;
                 }
             }
         }
+
+        removeNode(graphReference, *numNodes, agent);
 
         *numNodes = *numNodes - 1;
         *numAgents = *numAgents - 1;

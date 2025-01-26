@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "graphcolourer.h"
 #include "graphutil.h"
 
@@ -26,13 +27,19 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     for(i = 0; i < maxIterations; i++) {
         int numChanges = 0;
 
+        node** agentsCopy = (node**)malloc(sizeof(node*) * numAgents);
+        memcpy(agentsCopy, agents, sizeof(node*) * numAgents);
+
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
             if(dynamicKernel != NULL) {
-                dynamicKernel(&colouringGraph, &numNodes, agents[a], &agents, &numAgents);
+                dynamicKernel(&colouringGraph, &numNodes, agents[a], &agentsCopy, &numAgents);
             }
         }
+
+        free(agents);
+        agents = agentsCopy;
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
         if(save) {
@@ -54,8 +61,6 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
             numNoChanges = 0;
         }
     }
-
-    printf("done\n");
 
     printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
         numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));

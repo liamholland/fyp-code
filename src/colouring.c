@@ -125,7 +125,7 @@ int main(int argc, char const *argv[]) {
 
 
         int (*agentController) (node**, int, int) = &minimumAgent;
-        int (*dynamicKernel) (node***, int*, node*, node***, int*) = &possiblyRemoveEdgeKernel;
+        int (*dynamicKernel) (node***, int*, node*, node***, int*) = &possiblyRemoveNodeKernel;
 
         //colour the graph
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
