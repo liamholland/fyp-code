@@ -20,10 +20,6 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     //pick some starting nodes for the agents
     node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
 
-    for(int a = 0; a < numAgents; a++) {
-        printf("%d\n", agents[a]->id);
-    }
-
     int numColours = minColour;
 
     //start the iterations
