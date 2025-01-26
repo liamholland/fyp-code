@@ -369,6 +369,10 @@ int makeNodeOrpan(node* targetNode) {
 }
 
 int removeNode(node*** graphReference, int numNodes, node* targetNode) {
+    if(targetNode == NULL) {
+        return 1;
+    }
+    
     makeNodeOrpan(targetNode);
 
     node** graph = *graphReference;

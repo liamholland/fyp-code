@@ -8,7 +8,7 @@
 #define COLOUR_INCREASE_LIMIT 2
 
 node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
-    int (*agentController)(node** agent, int numMoves, int numNodes), int (*dynamicKernel)(node** graph, int numNodes, node* agent), int save)
+    int (*agentController)(node**, int, int), int (*dynamicKernel)(node***, int*, node*, node***, int*), int save)
 {
     node** colouringGraph = copyGraph(graph, numNodes);
 
@@ -30,9 +30,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
             if(dynamicKernel != NULL) {
-                int diff = dynamicKernel(agents, numAgents, agents[a]);
-                numAgents += diff;
-                numNodes += diff;
+                dynamicKernel(&colouringGraph, &numNodes, agents[a], &agents, &numAgents);
             }
         }
 
@@ -56,6 +54,8 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
             numNoChanges = 0;
         }
     }
+
+    printf("done\n");
 
     printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
         numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));

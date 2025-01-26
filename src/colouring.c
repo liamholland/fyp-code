@@ -123,6 +123,10 @@ int main(int argc, char const *argv[]) {
                 return 1;
         }
 
+
+        int (*agentController) (node**, int, int) = &minimumAgent;
+        int (*dynamicKernel) (node***, int*, node*, node***, int*) = &possiblyRemoveEdgeKernel;
+
         //colour the graph
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
         
@@ -130,7 +134,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, &possiblyRemoveNodeKernel, save);
+        colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
 
         if(verbose) {
             autoRuns = 1;   //should only run once if viewing the graph
@@ -142,7 +146,7 @@ int main(int argc, char const *argv[]) {
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                colouredGraph = agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, &minimumAgent, &possiblyRemoveNodeKernel, save);
+                colouredGraph = agentColour(colouredGraph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
             }
         }
 
