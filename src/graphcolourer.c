@@ -7,8 +7,9 @@
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, 
-    int maxColour, int (*agentController)(node** agent, int numMoves, int numNodes), int (*dynamicKernel)(node** graph, node* agent), int save) {
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
+    int (*agentController)(node** agent, int numMoves, int numNodes), int (*dynamicKernel)(node** graph, int numNodes, node* agent), int save)
+{
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);

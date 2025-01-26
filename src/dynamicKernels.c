@@ -6,7 +6,6 @@
 int possiblyRemoveEdgeKernel(node** graph, int numNodes, node* agent) {
     if(agent->degree > 0 && rand() % 1000 == 0) {
         removeEdge(agent, agent->neighbours[rand() % agent->degree]);
-        printf("removed edge from agent %d\n", agent->id);
     }
 
     return numNodes;
