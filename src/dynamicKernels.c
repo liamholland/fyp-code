@@ -3,26 +3,26 @@
 #include "graphutil.h"
 #include "dynamicKernels.h"
 
-int possiblyRemoveEdgeKernel(node** graph, node* agent) {
-    if(agent->degree > 0 && rand() % 10 == 0) {
+int possiblyRemoveEdgeKernel(node** graph, int numNodes, node* agent) {
+    if(agent->degree > 0 && rand() % 1000 == 0) {
         removeEdge(agent, agent->neighbours[rand() % agent->degree]);
+        printf("removed edge from agent %d\n", agent->id);
     }
 
-    return 0;
+    return numNodes;
 }
 
-int possiblyRemoveNodeKernel(node** graph, node* agent) {
+int possiblyRemoveNodeKernel(node** graph, int numNodes, node* agent) {
     if(rand() % 100 == 0) {
         removeNode(&graph, sizeof(graph) / sizeof(node*), agent);
     }
 
-    return 0;
+    return numNodes;
 }
 
 int doubled = 0;
 
-int doubleGraphSizeKernel(node** graph, node* agent) {
-    int numNodes = sizeof(graph) / sizeof(node*);
+int doubleGraphSizeKernel(node** graph, int numNodes, node* agent) {
     if(!doubled && rand() % 1000 == 0) {
         node** secondGraph = copyGraph(graph, numNodes);
 

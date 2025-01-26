@@ -29,11 +29,9 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
             if(dynamicKernel != NULL) {
-                numNodes = dynamicKernel(colouringGraph, agents[a]);
+                numNodes = dynamicKernel(colouringGraph, numNodes, agents[a]);
             }
         }
-
-        printf("completed agent iterations\n");
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
         if(save) {
