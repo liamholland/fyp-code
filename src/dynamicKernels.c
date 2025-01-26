@@ -13,31 +13,36 @@ int possiblyRemoveEdgeKernel(node*** graphReference, int* numNodes, node* agent,
 
 int possiblyRemoveNodeKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents) {
     if(rand() % 1000 == 0) {
-        node** graph = *graphReference;
+
         node** agents = *agentsReference;
 
         //remove the pointer from the agents array if necessary
-        if(graph != agents) {
-            for(int i = 0; i < *numAgents; i++) {
-                if(agents[i] == agent) {
-                    for(int j = i; j < (*numAgents - 1); j++) {
-                        agents[j] = agents[j + 1];
-                    }
+        if(*graphReference != agents) {
+            removeNode(graphReference, *numNodes, agent);
 
-                    agents[*numAgents - 1] = NULL;
-                    *agentsReference = (node**)realloc(*agentsReference, sizeof(node*) * (*numAgents - 1));
-
-                    break;
+            //multiple agents may have moved onto the node
+            int countValidAgents = 0;
+            node** remainingAgents = (node**)malloc(sizeof(node*) * (*numAgents));
+            for(int a = 0; a < *numAgents; a++) {
+                if(agents[a] != agent) {
+                    remainingAgents[countValidAgents++] = agents[a];
                 }
             }
+
+            remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
+            free(agents);
+            *agentsReference = remainingAgents;
+            *numAgents = countValidAgents;
+        }
+        else {
+            removeNode(graphReference, *numNodes, agent);
+            *agentsReference = *graphReference;
+            *numAgents -= 1;    //will only remove 1 agent in this case
         }
 
-        removeNode(graphReference, *numNodes, agent);
-
-        *numNodes = *numNodes - 1;
-        *numAgents = *numAgents - 1;
+        //will only ever remove one node at a time
+        *numNodes -= 1;
     }
-
 
     return 0;
 }

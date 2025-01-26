@@ -352,7 +352,7 @@ int makeNodeOrpan(node* targetNode) {
 
                 neighbour->neighbours[neighbour->degree - 1] = NULL;
                 neighbour->neighbours = (node**)realloc(neighbour->neighbours, sizeof(node*) * (neighbour->degree - 1));
-                neighbour->degree--;
+                neighbour->degree -= 1;
 
                 break;
             }

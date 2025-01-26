@@ -20,6 +20,10 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     //pick some starting nodes for the agents
     node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
 
+    for(int a = 0; a < numAgents; a++) {
+        printf("%d\n", agents[a]->id);
+    }
+
     int numColours = minColour;
 
     //start the iterations
@@ -27,19 +31,16 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     for(i = 0; i < maxIterations; i++) {
         int numChanges = 0;
 
-        node** agentsCopy = (node**)malloc(sizeof(node*) * numAgents);
-        memcpy(agentsCopy, agents, sizeof(node*) * numAgents);
-
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
-            if(dynamicKernel != NULL) {
-                dynamicKernel(&colouringGraph, &numNodes, agents[a], &agentsCopy, &numAgents);
-            }
         }
 
-        free(agents);
-        agents = agentsCopy;
+        if(dynamicKernel != NULL) {
+            for(int a = 0; a < numAgents; a++) {
+                dynamicKernel(&colouringGraph, &numNodes, agents[a], &agents, &numAgents);
+            }
+        }
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
         if(save) {
