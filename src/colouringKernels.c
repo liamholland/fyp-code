@@ -174,11 +174,9 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
 
     //colour the node
     if(agent == badActor) {
-        for(int c = max - 1; c > 0; c--) {
-            if(!colours[c]) {
-                agent->colour = c;
-                numChanges = 1;
-            }
+        if(agent->colour < maxColour) {
+            agent->colour = maxColour;
+            numChanges = 1;
         }
     }
     else {
@@ -191,6 +189,45 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     }
 
     free(colours);
+
+    //move the agent
+    for(int m = 0; m < numMoves; m++) {
+        if(agent->degree == 0) {
+            break;  //cant move the agent; on an orphan node
+        }
+        else if(findNumUncolouredNodes(agent->neighbours, agent->degree) > 0) {
+            for(int nb = 0; nb < agent->degree; nb++) {
+                if(!agent->neighbours[nb]->colour) {
+                    *agentPointer = agent->neighbours[nb];
+                    agent = *agentPointer;
+                    break;
+                }
+            }
+        }
+        else if(agent == badActor) {
+            node* minColourNode = agent->neighbours[0];
+            for(int nb = 0; nb < agent->degree; nb++) {
+                if(agent->neighbours[nb]->colour < minColourNode->colour) {
+                    minColourNode = agent->neighbours[nb];
+                }
+            }
+
+            *agentPointer = minColourNode;
+            agent = *agentPointer;
+        }
+        else {
+            node* maxColourNode = agent->neighbours[0];
+            for(int nb = 0; nb < agent->degree; nb++) {
+                if(agent->neighbours[nb]->colour > maxColourNode->colour) {
+                    maxColourNode = agent->neighbours[nb];
+                }
+            }
+
+            *agentPointer = maxColourNode;
+            agent = *agentPointer;
+        }
+    }
+
 
     return numChanges;
 }

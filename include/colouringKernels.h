@@ -29,4 +29,6 @@ int randomKernel(node** agentPointer, int numMoves, int maxColour);
 //MOVES:        moves the agent to a random neighbour
 int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour);
 
+int amongUsKernel(node** agentPointer, int numMoves, int maxColour);
+
 #endif
