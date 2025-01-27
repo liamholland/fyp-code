@@ -172,29 +172,26 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         badActorSelected = 1;
     }
 
-    int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
-
-    coloursInLocality[agent->colour] = 1;
-
-    int max = agent->colour ? agent->colour : maxColour;
-
     //colour the node
     if(agent == badActor) {
         //set the colour to the most common among its neighbours
-        for(int n = 0; n < agent->degree; n++) {
-
-        }
+        agent->colour = findMostCommonColourInGraph(agent->neighbours, agent->degree, maxColour);
     }
     else {
+        int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
+        coloursInLocality[agent->colour] = 1;
+        int max = agent->colour ? agent->colour : maxColour;
+
         for(int c = 1; c < max; c++) {
             if(!coloursInLocality[c]) {
                 agent->colour = c;
                 numChanges = 1;
             }
         }
+
+        free(coloursInLocality);
     }
 
-    free(coloursInLocality);
 
     //move the agent(?)
     for(int m = 0; m < numMoves; m++) {
