@@ -146,14 +146,21 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
     return numChanges;
 }
 
+// ##### AMONG US KERNEL #####
+
+//functional variables
 node* badActor;
 int badActorSelected = 0;   //boolean flag(?)
+
+//implementation variables
+int kernalCallNumber = 0;   //keeps track of the number of times the kernal has been incremented
 
 int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //if the agent is the bad actor, it should pick the least optimal colour
     //if it is a normal node, it should do a normal colouring
     //normal nodes can also vote for the neighbour they believe is the bad actor
     //if the normal nodes manage to identify the bad actor, they can remove it
+    kernalCallNumber++;
 
     int numChanges = 0;
 
@@ -189,7 +196,7 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
 
     free(coloursInLocality);
 
-    //move the agent
+    //move the agent(?)
     for(int m = 0; m < numMoves; m++) {
         if(agent->degree == 0) {
             break;  //cant move the agent; on an orphan node

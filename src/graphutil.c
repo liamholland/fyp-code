@@ -473,3 +473,26 @@ int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointe
 
     return 0;
 }
+
+int* findColourFrequencies(node** graph, int numNodes, int maxColour) {
+    int* colourFreqVector = (int*)calloc(maxColour, sizeof(int));
+
+    for(int n = 0; n < numNodes; n++) {
+        colourFreqVector[graph[n]->colour]++;
+    }
+
+    return colourFreqVector;
+}
+
+int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
+    int* colourFreqVector = findColourFrequencies(graph, numNodes, maxColour);
+
+    int mostCommonColour = 0;
+    for(int i = 0; i < maxColour; i++) {
+        if(colourFreqVector[i] > mostCommonColour) {
+            mostCommonColour = i;
+        }
+    }
+
+    return mostCommonColour;
+}

@@ -97,4 +97,12 @@ node* findNodeWithHighestDegree(node** graph, int numNodes);
 //the provided pointer from the list
 int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength);
 
+//returns a vector of numbers representing how many times each colour
+//appeared at in the graph
+int* findColourFrequencies(node** graph, int numNodes, int maxColour);
+
+//extension of findColourFrequencies which extracts the highest value in the graph
+//will return the smallest colour if there is a tie
+int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour);
+
 #endif
