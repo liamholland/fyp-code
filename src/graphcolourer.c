@@ -68,14 +68,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     }
 
     free(problemsAtIteration);
-
-    //TODO: update fetchNUnique Nodes
-    //this "if" is here because freeing this pointer breaks the code if the pointer is the same as the original graph pointer
-    //the pointers are the same if numNodes >= numAgents (see graphutil.h -> fetchNUniqueNodes)
-    //need to copy the pointer instead or just embrace the unoptimal solution
-    if(numAgents < numNodes) {
-        free(agents);
-    }
+    free(agents);
 
     return colouringGraph;
 }

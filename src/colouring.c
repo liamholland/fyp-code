@@ -136,6 +136,9 @@ int main(int argc, char const *argv[]) {
 
         colouredGraph = agentColour(graph, numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
 
+        //measure the graph after colouring
+        numNodes = sizeof(colouredGraph) / sizeof(node*);
+
         if(verbose) {
             autoRuns = 1;   //should only run once if viewing the graph
 

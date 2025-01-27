@@ -17,28 +17,21 @@ int possiblyRemoveNodeKernel(node*** graphReference, int* numNodes, node* agent,
         node** agents = *agentsReference;
 
         //remove the pointer from the agents array if necessary
-        if(*graphReference != agents) {
-            removeNode(graphReference, *numNodes, agent);
+        removeNode(graphReference, *numNodes, agent);
 
-            //multiple agents may have moved onto the node
-            int countValidAgents = 0;
-            node** remainingAgents = (node**)malloc(sizeof(node*) * (*numAgents));
-            for(int a = 0; a < *numAgents; a++) {
-                if(agents[a] != agent) {
-                    remainingAgents[countValidAgents++] = agents[a];
-                }
+        //multiple agents may have moved onto the node
+        int countValidAgents = 0;
+        node** remainingAgents = (node**)malloc(sizeof(node*) * (*numAgents));
+        for(int a = 0; a < *numAgents; a++) {
+            if(agents[a] != agent) {
+                remainingAgents[countValidAgents++] = agents[a];
             }
+        }
 
-            remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
-            free(agents);
-            *agentsReference = remainingAgents;
-            *numAgents = countValidAgents;
-        }
-        else {
-            removeNode(graphReference, *numNodes, agent);
-            *agentsReference = *graphReference;
-            *numAgents -= 1;    //will only remove 1 agent in this case
-        }
+        remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
+        free(agents);
+        *agentsReference = remainingAgents;
+        *numAgents = countValidAgents;
 
         //will only ever remove one node at a time
         *numNodes -= 1;

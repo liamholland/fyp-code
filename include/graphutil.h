@@ -45,8 +45,7 @@ int findNumConflicts(node** graph, int numNodes);
 int findNumUncolouredNodes(node** graph, int numNodes);
 
 //picks n unique nodes from the graph
-//an n greater than or equal to the number of nodes will return
-//the pointer to the full graph
+//n is capped to the size of the graph (numNodes)
 node** fetchNUniqueNodes(node** fullGraph, int numNodes, int n);
 
 //appends an array of number of conflicts at iteration i to a csv file

@@ -138,10 +138,10 @@ int findNumUncolouredNodes(node** graph, int numNodes) {
 }
 
 node** fetchNUniqueNodes(node** fullGraph, int numNodes, int n) {
-    if(n >= numNodes) {
-        return fullGraph;
+    if(n > numNodes) {
+        n = numNodes;   //cannot create more agents than nodes
     }
-    
+
     node** nodes = (node**)malloc(sizeof(node*) * n);
 
     int* selectedIndex = (int*)calloc(numNodes, sizeof(int));
