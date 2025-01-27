@@ -165,29 +165,29 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         badActorSelected = 1;
     }
 
-    int* colours = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
+    int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
 
-    colours[agent->colour] = 1;
+    coloursInLocality[agent->colour] = 1;
 
     int max = agent->colour ? agent->colour : maxColour;
 
     //colour the node
     if(agent == badActor) {
-        if(agent->colour < maxColour) {
-            agent->colour = maxColour;
-            numChanges = 1;
+        //set the colour to the most common among its neighbours
+        for(int n = 0; n < agent->degree; n++) {
+
         }
     }
     else {
         for(int c = 1; c < max; c++) {
-            if(!colours[c]) {
+            if(!coloursInLocality[c]) {
                 agent->colour = c;
                 numChanges = 1;
             }
         }
     }
 
-    free(colours);
+    free(coloursInLocality);
 
     //move the agent
     for(int m = 0; m < numMoves; m++) {
@@ -236,6 +236,9 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //if the collective is confident in their choice of imposter
     //makeNodeOrphan(badActor)
     //can pair this with a remove orphan dynamic kernel to remove the voted nodes from the graph entirely
+    //vote every maxColour iterations?
+    //vote on an array of pointers that represent nodes (remove the ability for agents to move for now)
+    //  or maybe only the bad actor can/cannot move
 
     return numChanges;
 }
