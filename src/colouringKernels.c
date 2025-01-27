@@ -148,6 +148,7 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
 
 node* badActor;
 int badActorSelected = 0;   //boolean flag(?)
+node** badActorVotes;
 
 int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //if the agent is the bad actor, it should pick the least optimal colour
@@ -155,5 +156,41 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //normal nodes can also vote for the neighbour they believe is the bad actor
     //if the normal nodes manage to identify the bad actor, they can remove it
 
-    return 0;
+    int numChanges = 0;
+
+    node* agent = *agentPointer;
+
+    //select the bad actor
+    if(!badActorSelected && rand() % 100 == 0) {
+        badActor = agent;
+        badActorSelected = 1;
+    }
+
+    int* colours = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
+
+    colours[agent->colour] = 1;
+
+    int max = agent->colour ? agent->colour : maxColour;
+
+    //colour the node
+    if(agent == badActor) {
+        for(int c = max - 1; c > 0; c--) {
+            if(!colours[c]) {
+                agent->colour = c;
+                numChanges = 1;
+            }
+        }
+    }
+    else {
+        for(int c = 1; c < max; c++) {
+            if(!colours[c]) {
+                agent->colour = c;
+                numChanges = 1;
+            }
+        }
+    }
+
+    free(colours);
+
+    return numChanges;
 }
