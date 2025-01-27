@@ -199,6 +199,11 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
                 if(!agent->neighbours[nb]->colour) {
                     *agentPointer = agent->neighbours[nb];
                     agent = *agentPointer;
+
+                    if(agent = badActor) {
+                        badActor = agent;
+                    }
+
                     break;
                 }
             }
@@ -213,6 +218,7 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
 
             *agentPointer = minColourNode;
             agent = *agentPointer;
+            badActor = agent;
         }
         else {
             node* maxColourNode = agent->neighbours[0];
@@ -229,6 +235,7 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
 
     //if the collective is confident in their choice of imposter
     //makeNodeOrphan(badActor)
+    //can pair this with a remove orphan dynamic kernel to remove the voted nodes from the graph entirely
 
     return numChanges;
 }
