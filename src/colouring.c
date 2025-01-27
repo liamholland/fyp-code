@@ -9,6 +9,7 @@
 #include "graphutil.h"
 #include "visualisation.h"
 #include "dynamicKernels.h"
+#include "colouringKernels.h"
 
 #define HELP_FILE_NAME "help.txt"
 
