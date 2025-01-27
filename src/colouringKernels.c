@@ -145,3 +145,15 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
 
     return numChanges;
 }
+
+node* badActor;
+int badActorSelected = 0;   //boolean flag(?)
+
+int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
+    //if the agent is the bad actor, it should pick the least optimal colour
+    //if it is a normal node, it should do a normal colouring
+    //normal nodes can also vote for the neighbour they believe is the bad actor
+    //if the normal nodes manage to identify the bad actor, they can remove it
+
+    return 0;
+}
