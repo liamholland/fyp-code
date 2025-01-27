@@ -93,4 +93,8 @@ int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo);
 //will be returned 
 node* findNodeWithHighestDegree(node** graph, int numNodes);
 
+//this function modifies the provided list and list length in order to remove
+//the provided pointer from the list
+int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength);
+
 #endif

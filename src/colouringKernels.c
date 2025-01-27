@@ -148,7 +148,6 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
 
 node* badActor;
 int badActorSelected = 0;   //boolean flag(?)
-node** badActorVotes;
 
 int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //if the agent is the bad actor, it should pick the least optimal colour
@@ -228,6 +227,8 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         }
     }
 
+    //if the collective is confident in their choice of imposter
+    //makeNodeOrphan(badActor)
 
     return numChanges;
 }

@@ -454,3 +454,22 @@ node* findNodeWithHighestDegree(node** graph, int numNodes) {
     free(highestDegreeContenders);
     return highestDegreeNode;
 }
+
+int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength) {
+    node** list = *nodeList;
+    
+    int countValidAgents = 0;
+    node** remainingAgents = (node**)malloc(sizeof(node*) * (*listLength));
+    for(int n = 0; n < *listLength; n++) {
+        if(list[n] != targetPointer) {
+            remainingAgents[countValidAgents++] = list[n];
+        }
+    }
+
+    remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
+    free(list);
+    *nodeList = remainingAgents;
+    *listLength = countValidAgents;
+
+    return 0;
+}
