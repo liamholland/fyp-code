@@ -153,8 +153,14 @@ node* badActor;
 int badActorSelected = 0;   //boolean flag(?)
 
 //implementation variables
-int kernalCallNumber = 0;   //keeps track of the number of times the kernal has been incremented
-node** badActorVotes;
+typedef struct voteStruct {
+    node* nodePointer;
+    int count;
+} vote;
+
+int kernelCallNumber = 0;   //keeps track of the number of times the kernal has been incremented
+vote* badActorVotes;
+int numVotes = 0;
 
 int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //if the agent is the bad actor, it should pick the least optimal colour
@@ -162,7 +168,7 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //normal nodes can also vote for the neighbour they believe is the bad actor
     //if the normal nodes manage to identify the bad actor, they can remove it
 
-    kernalCallNumber++;
+    kernelCallNumber++;
 
     int numChanges = 0;
 
@@ -185,13 +191,21 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     else {
         //vote for the bad actor
         if(nodeIsInConflict(agent)) {
-            badActorVotes = (node**)realloc(badActorVotes, sizeof(node*) * kernalCallNumber);
-
             node** conflictingNodes = findAllConflictingNodesInGraph(agent->neighbours, agent->degree);
-
-            badActorVotes[kernalCallNumber] = conflictingNodes[0];  //there should only be one conflicting node anyway
-
+            node* nodeVote = conflictingNodes[0];
             free(conflictingNodes);
+
+            int voted = 0;
+            for(int i = 0; i < numVotes; numVotes++) {
+                if(badActorVotes[i].nodePointer = nodeVote) {
+                    badActorVotes[i].count++;
+                    voted = 1;
+                }
+            }
+
+            if(!voted) {
+                badActorVotes = (vote*)realloc(badActorVotes, sizeof(vote) * ++numVotes);
+            }
         }
 
         //colour the node
@@ -210,14 +224,27 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     }
 
     //tally vote results
-    if(kernalCallNumber >= maxColour) {
+    if(kernelCallNumber >= maxColour) {
         //loop over the array, keeping track of whether a pointer has been seen before with a truth vector
         //when we encounter a new pointer, iterate over the entire array to count how many times it appears
         //or create a vote struct, which has the pointer value and the count
         //then just loop over it twice-ish
 
+        vote* mostVotes;
+        for(int i = 0; i < numVotes; i++) {
+            if(mostVotes == NULL || badActorVotes[i].count > mostVotes->count) {
+                mostVotes = &badActorVotes[i];
+            }
+        }
+
+        //make the voted node an orphan
+        if(mostVotes->count > 0) {
+            makeNodeOrpan(mostVotes->nodePointer);
+        }
+
         //reset
-        kernalCallNumber = 0;
+        kernelCallNumber = 0;
+        numVotes = 0;
         free(badActorVotes);
         badActorVotes = NULL;
     }
