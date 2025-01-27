@@ -1,20 +1,23 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "graphcolourer.h"
 #include "graphutil.h"
 
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int (*agentController)(node** agent, int numMoves, int numNodes), int save) {
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
+    int (*agentController)(node**, int, int), int (*dynamicKernel)(node***, int*, node*, node***, int*), int save)
+{
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);
 
     int numNoChanges = 0;      //if no agent makes a change in x iterations, the algorithm ends
 
-    //pick some starting nodes for the "fish"
+    //pick some starting nodes for the agents
     node** agents = fetchNUniqueNodes(colouringGraph, numNodes, numAgents);
 
     int numColours = minColour;
@@ -27,6 +30,12 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
+        }
+
+        if(dynamicKernel != NULL) {
+            for(int a = 0; a < numAgents; a++) {
+                dynamicKernel(&colouringGraph, &numNodes, agents[a], &agents, &numAgents);
+            }
         }
 
         //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
@@ -59,14 +68,7 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
     }
 
     free(problemsAtIteration);
-
-    //TODO: update fetchNUnique Nodes
-    //this "if" is here because freeing this pointer breaks the code if the pointer is the same as the original graph pointer
-    //the pointers are the same if numNodes >= numAgents (see graphutil.h -> fetchNUniqueNodes)
-    //need to copy the pointer instead or just embrace the unoptimal solution
-    if(numAgents < numNodes) {
-        free(agents);
-    }
+    free(agents);
 
     return colouringGraph;
 }

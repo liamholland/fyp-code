@@ -3,7 +3,9 @@
 
 #include "node.h"
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int (*agentController)(node** agent, int numMoves, int numNodes), int save);
+node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
+    int (*agentController)(node** agent, int numMoves, int numNodes),
+    int (*dynamicKernel)(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents), int save);
 
 int colourblindFishAgentIncrement(node** fishPointer, int numMoves, int maxColour);
 
