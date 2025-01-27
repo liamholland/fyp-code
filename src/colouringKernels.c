@@ -204,7 +204,13 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
             }
 
             if(!voted) {
+                //create a new pointer to vote for
+                struct voteStruct newVote;
+                newVote.count = 1;
+                newVote.nodePointer = nodeVote;
+
                 badActorVotes = (vote*)realloc(badActorVotes, sizeof(vote) * ++numVotes);
+                badActorVotes[numVotes - 1] = newVote;
             }
         }
 
@@ -238,7 +244,7 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         }
 
         //make the voted node an orphan
-        if(mostVotes->count > 0) {
+        if(mostVotes->count > 1) {
             makeNodeOrpan(mostVotes->nodePointer);
         }
 
