@@ -154,12 +154,14 @@ int badActorSelected = 0;   //boolean flag(?)
 
 //implementation variables
 int kernalCallNumber = 0;   //keeps track of the number of times the kernal has been incremented
+node** badActorVotes;
 
 int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //if the agent is the bad actor, it should pick the least optimal colour
     //if it is a normal node, it should do a normal colouring
     //normal nodes can also vote for the neighbour they believe is the bad actor
     //if the normal nodes manage to identify the bad actor, they can remove it
+
     kernalCallNumber++;
 
     int numChanges = 0;
@@ -172,12 +174,27 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         badActorSelected = 1;
     }
 
-    //colour the node
     if(agent == badActor) {
         //set the colour to the most common among its neighbours
-        agent->colour = findMostCommonColourInGraph(agent->neighbours, agent->degree, maxColour);
+        int mostCommon = findMostCommonColourInGraph(agent->neighbours, agent->degree, maxColour);
+        if(mostCommon != agent->colour) {
+            agent->colour = mostCommon;
+            numChanges = 1;
+        }
     }
     else {
+        //vote for the bad actor
+        if(nodeIsInConflict(agent)) {
+            badActorVotes = (node**)realloc(badActorVotes, sizeof(node*) * kernalCallNumber);
+
+            node** conflictingNodes = findAllConflictingNodesInGraph(agent->neighbours, agent->degree);
+
+            badActorVotes[kernalCallNumber] = conflictingNodes[0];  //there should only be one conflicting node anyway
+
+            free(conflictingNodes);
+        }
+
+        //colour the node
         int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
         coloursInLocality[agent->colour] = 1;
         int max = agent->colour ? agent->colour : maxColour;
@@ -192,6 +209,18 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         free(coloursInLocality);
     }
 
+    //tally vote results
+    if(kernalCallNumber >= maxColour) {
+        //loop over the array, keeping track of whether a pointer has been seen before with a truth vector
+        //when we encounter a new pointer, iterate over the entire array to count how many times it appears
+        //or create a vote struct, which has the pointer value and the count
+        //then just loop over it twice-ish
+
+        //reset
+        kernalCallNumber = 0;
+        free(badActorVotes);
+        badActorVotes = NULL;
+    }
 
     //move the agent(?)
     for(int m = 0; m < numMoves; m++) {

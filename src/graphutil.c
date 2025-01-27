@@ -494,5 +494,7 @@ int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
         }
     }
 
+    free(colourFreqVector);
+
     return mostCommonColour;
 }
