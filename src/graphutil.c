@@ -305,6 +305,7 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
             
             //move each neighbour up one
             for(int j = i; j < nodeReference->degree - 1; j++) {
+            for(int j = i; j < nodeReference->degree - 1; j++) {
                 nodeReference->neighbours[j] = nodeReference->neighbours[j + 1];
             }
 
@@ -323,6 +324,7 @@ int removeEdge(node* nodeReference, node* neighbourReference) {
     for(int i = 0; i < neighbourReference->degree; i++) {
         if(neighbourReference->neighbours[i] == nodeReference) {
             //move each neighbour up one
+            for(int j = i; j < neighbourReference->degree - 1; j++) {
             for(int j = i; j < neighbourReference->degree - 1; j++) {
                 neighbourReference->neighbours[j] = neighbourReference->neighbours[j + 1];
             }
