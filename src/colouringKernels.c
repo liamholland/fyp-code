@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "graphutil.h"
 #include "colouringKernels.h"
 
@@ -180,7 +181,7 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         badActorSelected = 1;
     }
 
-    if(agent == badActor) {
+    if(agent == badActor && agent->degree > 0) {
         //set the colour to the most common among its neighbours
         int mostCommon = findMostCommonColourInGraph(agent->neighbours, agent->degree, maxColour);
         if(mostCommon != agent->colour) {
@@ -191,12 +192,12 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     else {
         //vote for the bad actor
         if(nodeIsInConflict(agent)) {
-            node** conflictingNodes = findAllConflictingNodesInGraph(agent->neighbours, agent->degree);
+            node** conflictingNodes = findConflictingNeighboursForNode(agent);
             node* nodeVote = conflictingNodes[0];
             free(conflictingNodes);
 
             int voted = 0;
-            for(int i = 0; i < numVotes; numVotes++) {
+            for(int i = 0; i < numVotes; i++) {
                 if(badActorVotes[i].nodePointer = nodeVote) {
                     badActorVotes[i].count++;
                     voted = 1;
@@ -230,22 +231,31 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     }
 
     //tally vote results
-    if(kernelCallNumber >= maxColour) {
+    if(numVotes > 0 && kernelCallNumber >= maxColour) {
         //loop over the array, keeping track of whether a pointer has been seen before with a truth vector
         //when we encounter a new pointer, iterate over the entire array to count how many times it appears
         //or create a vote struct, which has the pointer value and the count
         //then just loop over it twice-ish
 
-        vote* mostVotes;
+        vote* mostVotes = NULL;
         for(int i = 0; i < numVotes; i++) {
             if(mostVotes == NULL || badActorVotes[i].count > mostVotes->count) {
                 mostVotes = &badActorVotes[i];
             }
         }
 
+        printf("selected most votes: %d\n", mostVotes->count);
+
         //make the voted node an orphan
         if(mostVotes->count > 1) {
             makeNodeOrpan(mostVotes->nodePointer);
+
+            if(mostVotes->nodePointer == badActor) {
+                printf("the collective identified the imposter\n");
+            }
+            else{
+                printf("incorrect vote made\n");
+            }
         }
 
         //reset

@@ -365,6 +365,7 @@ int makeNodeOrpan(node* targetNode) {
     }
 
     targetNode->neighbours = NULL;
+    targetNode->degree = 0;
     free(targetNode->neighbours);
 
     return 0;
