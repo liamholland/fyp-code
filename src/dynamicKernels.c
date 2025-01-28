@@ -35,6 +35,7 @@ int removeOrphanNodesKernel(node*** graphReference, int* numNodes, node* agent, 
 
 int removeNodeIfThereAreTooManyConflictsKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents) {
     int numConflictingNeighbours = findNumberOfConflictsForNode(agent);
+    int numChanges = 0;
 
     if(agent->colour && numConflictingNeighbours > (int)(agent->degree * 0.66)) {
         printf("removed node %d\n", agent->id);
@@ -45,5 +46,5 @@ int removeNodeIfThereAreTooManyConflictsKernel(node*** graphReference, int* numN
         removeAllInstancesOfNodePointerFromList(agentsReference, agent, numAgents);
     }
     
-    return 0;
+    return numChanges;
 }
