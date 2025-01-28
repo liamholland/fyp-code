@@ -32,3 +32,22 @@ int removeOrphanNodesKernel(node*** graphReference, int* numNodes, node* agent, 
 
     return 0;
 }
+
+
+int firstRound = 0; //counter to determine if we have already done a round of agents
+
+int removeNodeIfThereAreTooManyConflictsKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents) {
+    if(++firstRound > *numAgents) {
+        node** conflictingNeighbours = findConflictingNeighboursForNode(agent);
+        int numConflictingNeighbours = sizeof(conflictingNeighbours) / sizeof(node*);
+
+        if(numConflictingNeighbours > (agent->degree / 2)) {
+            removeNode(graphReference, *numNodes, agent);
+            *numNodes -= 1;
+
+            removeAllInstancesOfNodePointerFromList(agentsReference, agent, numAgents);
+        }
+    }
+    
+    return 0;
+}

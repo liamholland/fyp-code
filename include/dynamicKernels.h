@@ -9,4 +9,6 @@ int possiblyRemoveNodeKernel(node*** graphReference, int* numNodes, node* agent,
 
 int removeOrphanNodesKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents);
 
+int removeNodeIfThereAreTooManyConflictsKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents);
+
 #endif

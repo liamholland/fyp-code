@@ -94,7 +94,8 @@ int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo);
 node* findNodeWithHighestDegree(node** graph, int numNodes);
 
 //this function modifies the provided list and list length in order to remove
-//the provided pointer from the list
+//the provided pointer from the list.
+//the list length is modified because there could be any number of items removed
 int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength);
 
 //returns a vector of numbers representing how many times each colour
