@@ -365,6 +365,7 @@ int makeNodeOrpan(node* targetNode) {
     }
 
     targetNode->neighbours = NULL;
+    targetNode->degree = 0;
     free(targetNode->neighbours);
 
     return 0;
@@ -453,4 +454,48 @@ node* findNodeWithHighestDegree(node** graph, int numNodes) {
     node* highestDegreeNode = highestDegreeContenders[0];
     free(highestDegreeContenders);
     return highestDegreeNode;
+}
+
+int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength) {
+    node** list = *nodeList;
+    
+    int countValidAgents = 0;
+    node** remainingAgents = (node**)malloc(sizeof(node*) * (*listLength));
+    for(int n = 0; n < *listLength; n++) {
+        if(list[n] != targetPointer) {
+            remainingAgents[countValidAgents++] = list[n];
+        }
+    }
+
+    remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
+    free(list);
+    *nodeList = remainingAgents;
+    *listLength = countValidAgents;
+
+    return 0;
+}
+
+int* findColourFrequencies(node** graph, int numNodes, int maxColour) {
+    int* colourFreqVector = (int*)calloc(maxColour, sizeof(int));
+
+    for(int n = 0; n < numNodes; n++) {
+        colourFreqVector[graph[n]->colour]++;
+    }
+
+    return colourFreqVector;
+}
+
+int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
+    int* colourFreqVector = findColourFrequencies(graph, numNodes, maxColour);
+
+    int mostCommonColour = 0;
+    for(int i = 0; i < maxColour; i++) {
+        if(colourFreqVector[i] > mostCommonColour) {
+            mostCommonColour = i;
+        }
+    }
+
+    free(colourFreqVector);
+
+    return mostCommonColour;
 }
