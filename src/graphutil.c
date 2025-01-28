@@ -263,7 +263,7 @@ node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
         
         if(conflicts == NULL) continue;
 
-        int numConflicts = sizeof(conflicts) / sizeof(node*);
+        int numConflicts = findNumberOfConflictsForNode(graphCopy[i]);
 
         memcpy(conflictingNodes[totalNumConflictingNodes], conflicts, sizeof(node*) * numConflicts);
 
@@ -293,7 +293,19 @@ node** findConflictingNeighboursForNode(node* n) {
         return NULL;
     }
 
-    return (node**)realloc(conflictingNodes, numConflictingNodes * sizeof(numConflictingNodes));
+    return (node**)realloc(conflictingNodes, numConflictingNodes * sizeof(node*));
+}
+
+int findNumberOfConflictsForNode(node* n) {
+    int numConflictingNodes = 0;
+
+    for(int i = 0; i < n->degree; i++) {
+        if(n->colour == n->neighbours[i]->colour) {
+            numConflictingNodes++;
+        }
+    }
+
+    return numConflictingNodes;
 }
 
 int removeEdge(node* nodeReference, node* neighbourReference) {

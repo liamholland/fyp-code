@@ -73,6 +73,11 @@ int minimumAgent(node** agentPointer, int numMoves, int maxColour) {
 
     free(coloursInLocality);
 
+    if(!agent->colour) {
+        agent->colour = max;
+        numChanges = 1;
+    }
+
     //move the agent
     for(int m = 0; m < numMoves; m++) {
         if(agent->degree == 0) {
