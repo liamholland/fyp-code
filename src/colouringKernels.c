@@ -8,9 +8,11 @@ int colourblindFishAgentIncrement(node** fishPointer, int numMoves, int maxColou
     
     node* fish = *fishPointer;
 
+    int max = maxColour < fish->degree ? maxColour : fish->degree;
+
     //check for conflicts in neighbours
     if(!fish->colour || nodeIsInConflict(fish)) {
-        fish->colour = (fish->colour + 1) % (fish->degree + 1);
+        fish->colour = (fish->colour + 1) % (max + 1);
 
         if(!fish->colour) {
             fish->colour++;
@@ -33,12 +35,14 @@ int colourblindFishAgentDecrement(node** fishPointer, int numMoves, int maxColou
     
     node* fish = *fishPointer;
 
+    int max = maxColour < fish->degree ? maxColour : fish->degree;
+
     //check for conflicts in neighbours
     if(!fish->colour || nodeIsInConflict(fish)) {
         fish->colour--;
 
         if(fish->colour <= 0) {
-            fish->colour = fish->degree + 1;
+            fish->colour = max + 1;
         }
 
         numChanges = 1;
