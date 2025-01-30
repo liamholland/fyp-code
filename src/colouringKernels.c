@@ -162,6 +162,7 @@ typedef struct voteStruct {
 int kernelCallNumber = 0;   //keeps track of the number of times the kernal has been incremented
 vote* badActorVotes;
 int numVotes = 0;
+int maxID = 0;
 
 int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     //if the agent is the bad actor, it should pick the least optimal colour
@@ -230,8 +231,12 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         free(coloursInLocality);
     }
 
+    if(agent->id > maxID) {
+        maxID = agent->id;
+    }
+
     //tally vote results
-    if(numVotes > 0 && kernelCallNumber >= maxColour) {
+    if(numVotes > 0 && agent->id < maxID) {
         //loop over the array, keeping track of whether a pointer has been seen before with a truth vector
         //when we encounter a new pointer, iterate over the entire array to count how many times it appears
         //or create a vote struct, which has the pointer value and the count
@@ -261,6 +266,7 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         //reset
         kernelCallNumber = 0;
         numVotes = 0;
+        maxID = 0;
         free(badActorVotes);
         badActorVotes = NULL;
     }
