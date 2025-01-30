@@ -8,9 +8,11 @@
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
 
-node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
+node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
     int (*agentController)(node**, int, int), int (*dynamicKernel)(node***, int*, node*, node***, int*), int save)
 {
+    int numNodes = *numNodesPtr;
+
     node** colouringGraph = copyGraph(graph, numNodes);
 
     int* problemsAtIteration = (int*)malloc(sizeof(int) * maxIterations);
@@ -59,8 +61,18 @@ node** agentColour(node** graph, int numNodes, int maxIterations, int numAgents,
         }
     }
 
-    printf("number of agents: %d; number of colours: %d; number of conflicts: %d; number of missed nodes: %d\n", 
-        numAgents, findNumColoursUsed(colouringGraph, numNodes, numNodes), findNumConflicts(colouringGraph, numNodes), findNumUncolouredNodes(colouringGraph, numNodes));
+
+    printf("number of nodes at start: %d\nnumber of nodes now: %d\nnumber of agents: %d\nnumber of colours: %d\nnumber of conflicts: %d\nnumber of missed nodes: %d\n", 
+        *numNodesPtr,
+        numNodes,
+        numAgents,
+        findNumColoursUsed(colouringGraph, numNodes, numNodes),
+        findNumConflicts(colouringGraph, numNodes),
+        findNumUncolouredNodes(colouringGraph, numNodes)
+    );
+
+    //update original value of numNodes
+    *numNodesPtr = numNodes;
 
     if(save) {
         // write to csv file
