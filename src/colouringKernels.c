@@ -42,7 +42,7 @@ int colourblindFishAgentDecrement(node** fishPointer, int numMoves, int maxColou
         fish->colour--;
 
         if(fish->colour <= 0) {
-            fish->colour = max + 1;
+            fish->colour = max;
         }
 
         numChanges = 1;
