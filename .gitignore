@@ -4,3 +4,6 @@
 colouring
 
 .vscode/*
+
+#results files
+*.csv

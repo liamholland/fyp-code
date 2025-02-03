@@ -15,4 +15,8 @@ int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int num
 //adds a newline character to the file
 int addBufferRowToResultsFile(int numRows);
 
+//adds column headers to the results file
+//if you do not want the description, pass `NULL`
+int addHeadersToResultsFile(char* optionalDescription);
+
 #endif

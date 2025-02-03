@@ -103,6 +103,12 @@ int main(int argc, char const *argv[]) {
     node** colouredGraph;
     node** benchmarkMinimumGraph;
 
+    if(save) {
+        char description[100];
+        snprintf(description, 100, "generator: %c; probability: %.3f;", generator, prob);
+        addHeadersToResultsFile(description);
+    }
+
     //run main program loop
     //remember default for this is to run once
     for(int a = 0; a < autoRuns; a++) {
@@ -160,6 +166,7 @@ int main(int argc, char const *argv[]) {
 
     if(save) {
         addBufferColumnToConflictsFile(2);
+        addBufferRowToResultsFile(2);
     }
 
     return 0;

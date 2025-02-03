@@ -22,7 +22,7 @@ int appendToResults(int* conflictArray, int numIterations) {
     while(fgets(line, 1024, results)) {
         
         //stop the write if a line exceeds the buffer size
-        if(strchr(line, "\n") == NULL) {
+        if(strchr(line, '\n') == NULL) {
             printf("line length has exceeded buffer size; aborting write\n");
             fclose(results);
             fclose(temp);
@@ -149,7 +149,7 @@ int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int num
         numMissedNodes
     );
 
-    fclose(RESULTS_SAVE_FILE_NAME);
+    fclose(results);
 
     return 0;
 }
@@ -160,6 +160,20 @@ int addBufferRowToResultsFile(int numRows) {
     for(int i = 0; i < numRows; i++) {
         fprintf(results, "\n");
     }
+
+    fclose(results);
+
+    return 0;
+}
+
+int addHeadersToResultsFile(char* optionalDescription) {
+    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+
+    if(optionalDescription != NULL) {
+        fprintf(results, "%s\n", optionalDescription);
+    }
+
+    fprintf(results, "benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes\n");
 
     fclose(results);
 
