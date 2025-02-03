@@ -93,6 +93,8 @@ int addBufferColumnToResults(int numColumns) {
         return 1;
     }
 
+    //construct a string of columns
+
     char columns[11];
     for(int i = 0; i < numColumns; i++) {
         columns[i] = ',';
@@ -105,8 +107,8 @@ int addBufferColumnToResults(int numColumns) {
         //remove newline from end of line
         line[strcspn(line, "\n")] = '\0';
 
-        //rewrite the line with an extra column
-        fprintf(temp, "%s%s\n", line);
+        //rewrite the line with extra columns
+        fprintf(temp, "%s%s\n", line, columns);
     }
 
     fclose(results);

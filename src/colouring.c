@@ -156,10 +156,10 @@ int main(int argc, char const *argv[]) {
         freeGraph(graph, numNodes);
         freeGraph(colouredGraph, numNodes);
         freeGraph(benchmarkMinimumGraph, numNodes);
+    }
 
-        if(save) {
-            addBufferColumnToResults(2);
-        }
+    if(save) {
+        addBufferColumnToResults(2);
     }
 
     return 0;
