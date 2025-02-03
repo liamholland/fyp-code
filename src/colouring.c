@@ -105,7 +105,7 @@ int main(int argc, char const *argv[]) {
 
     if(save) {
         char description[100];
-        snprintf(description, 100, "generator: %c; probability: %.3f;", generator, prob);
+        snprintf(description, 100, "generator: %c; no. nodes: %d; probability: %.3f;", generator, numNodes, prob);
         addHeadersToResultsFile(description);
     }
 
@@ -132,7 +132,7 @@ int main(int argc, char const *argv[]) {
         }
 
 
-        int (*agentController) (node**, int, int) = &randomKernel;
+        int (*agentController) (node**, int, int) = &colourblindFishAgentDecrement;
         int (*dynamicKernel) (node***, int*, node*, node***, int*) = NULL;
 
         //colour the graph
