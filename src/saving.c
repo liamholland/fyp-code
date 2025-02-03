@@ -3,14 +3,15 @@
 #include <string.h>
 #include "saving.h"
 
-#define SAVE_FILE_NAME "results.csv"
+#define CONFLICTS_SAVE_FILE_NAME "conflicts.csv"
+#define RESULTS_SAVE_FILE_NAME "results.csv"
 
 int appendToResults(int* conflictArray, int numIterations) {
-    FILE* results = fopen(SAVE_FILE_NAME, "r");
+    FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
     FILE* temp = fopen("temp.csv", "w");
 
     if(results == NULL) {
-        results = fopen(SAVE_FILE_NAME, "w+");
+        results = fopen(CONFLICTS_SAVE_FILE_NAME, "w+");
     }
 
     //write the new data
@@ -85,19 +86,19 @@ int appendToResults(int* conflictArray, int numIterations) {
 
     fclose(temp);
 
-    remove(SAVE_FILE_NAME);
-    rename("temp.csv", SAVE_FILE_NAME);
+    remove(CONFLICTS_SAVE_FILE_NAME);
+    rename("temp.csv", CONFLICTS_SAVE_FILE_NAME);
 
     return 0;
 }
 
-int addBufferColumnToResults(int numColumns) {
+int addBufferColumnToConflictsFile(int numColumns) {
     if(numColumns > 10) {
         printf("why would you even want more than 10 empty columns\n");
         return 1;
     }
     
-    FILE* results = fopen(SAVE_FILE_NAME, "r");
+    FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
     FILE* temp = fopen("temp.csv", "w");
 
     if(results == NULL) {
@@ -126,8 +127,42 @@ int addBufferColumnToResults(int numColumns) {
     fclose(results);
     fclose(temp);
 
-    remove(SAVE_FILE_NAME);
-    rename("temp.csv", SAVE_FILE_NAME);
+    remove(CONFLICTS_SAVE_FILE_NAME);
+    rename("temp.csv", CONFLICTS_SAVE_FILE_NAME);
+
+    return 0;
+}
+
+int saveColouringData(char* description, int benchmark, int numNodesStart, int numNodesEnd,
+    int numiterations, int numAgents, int numColours, int finalNumConflicts, int numMissedNodes)
+{
+    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+
+    fprintf(results, "%s,%d,%d,%d,%d,%d,%d,%d,%d\n",
+        description,
+        benchmark,
+        numNodesStart,
+        numNodesEnd,
+        numiterations,
+        numAgents,
+        numColours,
+        finalNumConflicts,
+        numMissedNodes
+    );
+
+    fclose(RESULTS_SAVE_FILE_NAME);
+
+    return 0;
+}
+
+int addBufferRowToResultsFile(int numRows) {
+    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+
+    for(int i = 0; i < numRows; i++) {
+        fprintf(results, "\n");
+    }
+
+    fclose(results);
 
     return 0;
 }
