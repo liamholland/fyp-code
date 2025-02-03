@@ -45,45 +45,45 @@ int appendToResults(int* conflictArray, int numIterations) {
         lineNum++;
     }
 
-    //count the number of columns in the old file
+    if(lineNum < numIterations) {
+        //count the number of columns in the old file
+        rewind(results);
+        fgets(line, 1024, results); //get the first line of the file again
+        int numCols = 0;
+        for(int i = 0; i < strlen(line); i++) {
+            if(line[i] == ',') {
+                numCols++;
+            }
+        }
 
-    rewind(results);
-    fgets(line, 1024, results); //get the first line of the file again
-    int numCols = 0;
-    for(int i = 0; i < strlen(line); i++) {
-        if(line[i] == ',') {
-            numCols++;
+        //construct a string of ',' characters, to fill in empty space
+        //this covers the case of the new data being longer than any of the old data
+
+        char* emptyColString;
+        if(numCols > 0) {
+            //construct the empty col string
+            emptyColString = (char*)malloc(sizeof(char) * (numCols + 1));
+            for(int i = 0; i < numCols; i++) {
+                emptyColString[i] = ',';
+            }
+
+            emptyColString[numCols] = '\0';
+        }
+
+        //append any leftover data in the new array
+
+        while (lineNum < numIterations) {
+            if(numCols > 0) {
+                fprintf(temp, "%s,%d\n", emptyColString, conflictArray[lineNum]);
+            }
+            else {
+                fprintf(temp, "%d\n", conflictArray[lineNum]);
+            }
+            lineNum++;
         }
     }
 
     fclose(results);
-
-    //construct a string of ',' characters, to fill in empty space
-    //this covers the case of the new data being longer than any of the old data
-
-    char* emptyColString;
-    if(numCols > 0) {
-        //construct the empty col string
-        emptyColString = (char*)malloc(sizeof(char) * (numCols + 1));
-        for(int i = 0; i < numCols; i++) {
-            emptyColString[i] = ',';
-        }
-
-        emptyColString[numCols] = '\0';
-    }
-
-    //append any leftover data in the new array
-
-    while (lineNum < numIterations) {
-        if(numCols > 0) {
-            fprintf(temp, "%s,%d\n", emptyColString, conflictArray[lineNum]);
-        }
-        else {
-            fprintf(temp, "%d\n", conflictArray[lineNum]);
-        }
-        lineNum++;
-    }
-
     fclose(temp);
 
     remove(CONFLICTS_SAVE_FILE_NAME);

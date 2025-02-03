@@ -132,7 +132,7 @@ int main(int argc, char const *argv[]) {
         }
 
 
-        int (*agentController) (node**, int, int) = &randomKernel;
+        int (*agentController) (node**, int, int) = &colourblindFishAgentDecrement;
         int (*dynamicKernel) (node***, int*, node*, node***, int*) = NULL;
 
         //colour the graph
