@@ -19,6 +19,18 @@ int appendToResults(int* conflictArray, int numIterations) {
     int lineNum = 0;
 
     while(fgets(line, 1024, results)) {
+        
+        //stop the write if a line exceeds the buffer size
+        if(strchr(line, "\n") == NULL) {
+            printf("line length has exceeded buffer size; aborting write\n");
+            fclose(results);
+            fclose(temp);
+
+            remove("temp.csv"); //we conserve the previously saved data
+
+            return 1;
+        }
+
         //remove newline from end of line
         line[strcspn(line, "\n")] = '\0';
 
