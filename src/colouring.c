@@ -10,6 +10,7 @@
 #include "visualisation.h"
 #include "dynamicKernels.h"
 #include "colouringKernels.h"
+#include "saving.h"
 
 #define HELP_FILE_NAME "help.txt"
 
@@ -125,7 +126,7 @@ int main(int argc, char const *argv[]) {
         }
 
 
-        int (*agentController) (node**, int, int) = &colourblindFishAgentDecrement;
+        int (*agentController) (node**, int, int) = &randomKernel;
         int (*dynamicKernel) (node***, int*, node*, node***, int*) = NULL;
 
         //colour the graph
@@ -155,6 +156,10 @@ int main(int argc, char const *argv[]) {
         freeGraph(graph, numNodes);
         freeGraph(colouredGraph, numNodes);
         freeGraph(benchmarkMinimumGraph, numNodes);
+
+        if(save) {
+            addBufferColumnToResults(2);
+        }
     }
 
     return 0;
