@@ -134,11 +134,11 @@ int addBufferColumnToConflictsFile(int numColumns) {
 }
 
 int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int numiterations, 
-    int numAgents, int numColours, int finalNumConflicts, int numMissedNodes)
+    int numAgents, int numColours, int finalNumConflicts, int numMissedNodes, double time)
 {
     FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
 
-    fprintf(results, "%d,%d,%d,%d,%d,%d,%d,%d\n",
+    fprintf(results, "%d,%d,%d,%d,%d,%d,%d,%d,%.4f\n",
         benchmark,
         numNodesStart,
         numNodesEnd,
@@ -146,7 +146,8 @@ int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int num
         numAgents,
         numColours,
         finalNumConflicts,
-        numMissedNodes
+        numMissedNodes,
+        time
     );
 
     fclose(results);
@@ -173,7 +174,7 @@ int addHeadersToResultsFile(char* optionalDescription) {
         fprintf(results, "%s\n", optionalDescription);
     }
 
-    fprintf(results, "benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes\n");
+    fprintf(results, "benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)\n");
 
     fclose(results);
 

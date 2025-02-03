@@ -82,14 +82,14 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     int numMissedNodes = findNumUncolouredNodes(colouringGraph, numNodes);
 
     printf(
-        "number of nodes at start: %d\nnumber of nodes now: %d\nnumber of agents: %d\nnumber of colours: %d\nnumber of conflicts: %d\nnumber of missed nodes: %d\ntime: %.3f seconds\n\n", 
+        "number of nodes at start: %d\nnumber of nodes now: %d\nnumber of agents: %d\nnumber of colours: %d\nnumber of conflicts: %d\nnumber of missed nodes: %d\ntime: %.4f seconds\n\n", 
         *numNodesPtr, numNodes, numAgents, finalNumColours, numConflicts, numMissedNodes, time
     );
 
     if(save) {
         // write to csv file
         appendToResults(problemsAtIteration, i);
-        saveColouringData(maxColour, *numNodesPtr, numNodes, i, numAgents, finalNumColours, numConflicts, numMissedNodes);
+        saveColouringData(maxColour, *numNodesPtr, numNodes, i, numAgents, finalNumColours, numConflicts, numMissedNodes, time);
     }
 
     //update original value of numNodes

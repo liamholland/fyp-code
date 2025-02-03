@@ -10,7 +10,7 @@ int addBufferColumnToConflictsFile(int numColumns);
 
 //saves micellaneous data about the colouring run to a csv file
 int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int numiterations, 
-    int numAgents, int numColours, int finalNumConflicts, int numMissedNodes);
+    int numAgents, int numColours, int finalNumConflicts, int numMissedNodes, double time);
 
 //adds a newline character to the file
 int addBufferRowToResultsFile(int numRows);
