@@ -48,10 +48,6 @@ int findNumUncolouredNodes(node** graph, int numNodes);
 //n is capped to the size of the graph (numNodes)
 node** fetchNUniqueNodes(node** fullGraph, int numNodes, int n);
 
-//appends an array of number of conflicts at iteration i to a csv file
-//will create a file called "results.csv" if one does not already exist
-int appendToResults(int* conflictArray, int numIterations);
-
 //returns a boolean value indicating whether or not the given
 //node is in conflict
 //provides no information about the nature of the conflict

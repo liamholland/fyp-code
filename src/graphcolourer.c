@@ -4,6 +4,7 @@
 #include <string.h>
 #include "graphcolourer.h"
 #include "graphutil.h"
+#include "saving.h"
 
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
