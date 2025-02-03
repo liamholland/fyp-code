@@ -25,6 +25,11 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
 
     int numColours = minColour;
 
+    //start the timer
+    clock_t start = clock();
+
+    double ioTime = 0.0;    //time used to account for io operations
+
     //start the iterations
     int i;
     for(i = 0; i < maxIterations; i++) {
@@ -41,9 +46,15 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
             }
         }
 
-        //CONSIDER: this is pretty slow; should i include this every iteration or maybe every nth iteration?
         if(save) {
+            clock_t problemsStart = clock();
+
+            //this is not really "io", but it falls into the "io" category imo
+            //either way it takes a really long time
             problemsAtIteration[i] = findNumConflicts(colouringGraph, numNodes) + findNumUncolouredNodes(colouringGraph, numNodes);
+
+            clock_t problemsEnd = clock();
+            ioTime += (double)(problemsEnd - problemsStart) / CLOCKS_PER_SEC;
         }
 
         if(!numChanges) {
@@ -62,17 +73,17 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
         }
     }
 
+    clock_t end = clock();
+    double overallTime = (double)(end - start) / CLOCKS_PER_SEC;
+    double time = overallTime - ioTime; //subtract the time spent counting conflicts
+
     int finalNumColours = findNumColoursUsed(colouringGraph, numNodes, numNodes); 
     int numConflicts = findNumConflicts(colouringGraph, numNodes);
     int numMissedNodes = findNumUncolouredNodes(colouringGraph, numNodes);
 
-    printf("number of nodes at start: %d\nnumber of nodes now: %d\nnumber of agents: %d\nnumber of colours: %d\nnumber of conflicts: %d\nnumber of missed nodes: %d\n", 
-        *numNodesPtr,
-        numNodes,
-        numAgents,
-        finalNumColours,
-        numConflicts,
-        numMissedNodes
+    printf(
+        "number of nodes at start: %d\nnumber of nodes now: %d\nnumber of agents: %d\nnumber of colours: %d\nnumber of conflicts: %d\nnumber of missed nodes: %d\ntime: %.3f seconds\n\n", 
+        *numNodesPtr, numNodes, numAgents, finalNumColours, numConflicts, numMissedNodes, time
     );
 
     if(save) {
