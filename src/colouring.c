@@ -159,7 +159,7 @@ int main(int argc, char const *argv[]) {
     }
 
     if(save) {
-        addBufferColumnToResults(2);
+        addBufferColumnToConflictsFile(2);
     }
 
     return 0;
