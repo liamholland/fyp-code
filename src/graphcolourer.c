@@ -62,7 +62,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
         }
     }
 
-    int numColours = findNumColoursUsed(colouringGraph, numNodes, numNodes); 
+    int finalNumColours = findNumColoursUsed(colouringGraph, numNodes, numNodes); 
     int numConflicts = findNumConflicts(colouringGraph, numNodes);
     int numMissedNodes = findNumUncolouredNodes(colouringGraph, numNodes);
 
@@ -70,7 +70,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
         *numNodesPtr,
         numNodes,
         numAgents,
-        numColours,
+        finalNumColours,
         numConflicts,
         numMissedNodes
     );
@@ -78,7 +78,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     if(save) {
         // write to csv file
         appendToResults(problemsAtIteration, i);
-        saveColouringData(maxColour, *numNodesPtr, numNodes, i, numAgents, numColours, numConflicts, numMissedNodes);
+        saveColouringData(maxColour, *numNodesPtr, numNodes, i, numAgents, finalNumColours, numConflicts, numMissedNodes);
     }
 
     //update original value of numNodes
