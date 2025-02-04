@@ -58,6 +58,28 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-p")) {
             prob = atof(argv[i + 1]);
         }
+        else if(!strcmp(argv[i], "-k")) {
+            switch ((int)argv[i+ 1]) {
+                case 'r':
+                    agentController = &randomKernel;
+                    break;
+                case 'd':
+                    agentController = &colourblindFishAgentDecrement;
+                    break;
+                case 'i':
+                    agentController = &colourblindFishAgentIncrement;
+                    break;
+                case 'a':
+                    agentController = &amongUsKernel;
+                    break;
+                case 'm':
+                    agentController = &minimumAgent;
+                    break;
+                default:
+                    printf("unknown kernel code; using default (m)\n");
+                    break;
+            }
+        }
         else if(!strcmp(argv[i], "-c")) {
             minColour = atoi(argv[i + 1]);
         }
