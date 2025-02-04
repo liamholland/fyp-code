@@ -77,7 +77,7 @@ int main(int argc, char const *argv[]) {
             dKernelCode = *argv[i + 1];  
         }
         else if(!strcmp(argv[i], "-C")) {
-            maxColour = atoi(argv[i + 1]);
+            maxColour = atoi(argv[i + 1]) - 1;
         }
         else if(!strcmp(argv[i], "-a")) {
             numAgents = atoi(argv[i + 1]);

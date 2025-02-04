@@ -7,14 +7,4 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     int (*agentController)(node** agent, int numMoves, int numNodes),
     int (*dynamicKernel)(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents), int save);
 
-int colourblindFishAgentIncrement(node** fishPointer, int numMoves, int maxColour);
-
-int colourblindFishAgentDecrement(node** fishPointer, int numMoves, int maxColour);
-
-int minimumAgent(node** agentPointer, int numMoves, int maxColour);
-
-int randomKernel(node** agentPointer, int numMoves, int maxColour);
-
-int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour);
-
 #endif
