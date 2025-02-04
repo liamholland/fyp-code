@@ -39,8 +39,8 @@ int main(int argc, char const *argv[]) {
     int nodesInSetOne = 0;
 
     //kernels
-    int (*agentController) (node**, int, int) = &minimumAgent;
-    int (*dynamicKernel) (node***, int*, node*, node***, int*) = NULL;
+    char cKernelCode = 'm';
+    char dKernelCode = 'x';
 
     //CONSIDER: so many string comparisons; no better way?
     for(int i = 0; i < argc; i++) {
@@ -59,26 +59,7 @@ int main(int argc, char const *argv[]) {
             prob = atof(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-k")) {
-            switch ((int)argv[i+ 1]) {
-                case 'r':
-                    agentController = &randomKernel;
-                    break;
-                case 'd':
-                    agentController = &colourblindFishAgentDecrement;
-                    break;
-                case 'i':
-                    agentController = &colourblindFishAgentIncrement;
-                    break;
-                case 'a':
-                    agentController = &amongUsKernel;
-                    break;
-                case 'm':
-                    agentController = &minimumAgent;
-                    break;
-                default:
-                    printf("unknown kernel code; using default (m)\n");
-                    break;
-            }
+            cKernelCode = *argv[i + 1];
         }
         else if(!strcmp(argv[i], "-c")) {
             minColour = atoi(argv[i + 1]);
@@ -91,6 +72,9 @@ int main(int argc, char const *argv[]) {
         }
         else if(!strcmp(argv[i], "-A")) {
             autoRuns = atoi(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-d")) {
+            dKernelCode = *argv[i + 1];  
         }
         else if(!strcmp(argv[i], "-C")) {
             maxColour = atoi(argv[i + 1]);
@@ -123,6 +107,49 @@ int main(int argc, char const *argv[]) {
     }
 
     int useBenchmark = !maxColour ? 1 : 0;
+
+    //set colouring kernel
+    int (*agentController) (node**, int, int);
+    switch (cKernelCode) {
+        case 'r':
+            agentController = &randomKernel;
+            break;
+        case 'd':
+            agentController = &colourblindFishAgentDecrement;
+            break;
+        case 'i':
+            agentController = &colourblindFishAgentIncrement;
+            break;
+        case 'a':
+            agentController = &amongUsKernel;
+            break;
+        case 'm':
+            agentController = &minimumAgent;
+            break;
+        default:
+            printf("invalid colouring kernel\n");
+            return 1;
+    }
+
+    //set the dynamic kernel
+    int (*dynamicKernel) (node***, int*, node*, node***, int*);
+    switch (dKernelCode) {
+        case 'e':
+            dynamicKernel = &possiblyRemoveEdgeKernel;
+            break;
+        case 'n':
+            dynamicKernel = &possiblyRemoveNodeKernel;
+            break;
+        case 'o':
+            dynamicKernel = &removeOrphanNodesKernel;
+            break;
+        case 'x':
+            dynamicKernel = NULL;
+            break;
+        default:
+            printf("invalid dynamic kernel\n");
+            return 1;
+    }
 
     //graph variables
     node** graph;
