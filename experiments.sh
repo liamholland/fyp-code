@@ -31,7 +31,7 @@ for k in 5 10 25 50 100 200 250
 do
     for p in $(seq 0.1 0.1 1)
     do
-        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -S -M $MAXIMUM_ITERATIONS -k r
+        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k r
     done
 done
 
@@ -40,7 +40,7 @@ for k in 5 10 25 50 100 200 250
 do
     for p in $(seq 0.1 0.1 1)
     do
-        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -S -M $MAXIMUM_ITERATIONS -k d
+        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k d
     done
 done
 
@@ -49,7 +49,7 @@ for k in 5 10 25 50 100 200 250
 do
     for p in $(seq 0.1 0.1 1)
     do
-        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -S -M $MAXIMUM_ITERATIONS -k i
+        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k i
     done
 done
 
