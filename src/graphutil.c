@@ -433,3 +433,13 @@ int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
 
     return mostCommonColour;
 }
+
+node* findNodeWithIdInGraph(node** graph, int numNodes, int id) {
+    for(int n = 0; n < numNodes; n++) {
+        if(graph[n]->id == id) {
+            return graph[n];
+        }
+    }
+
+    return NULL;
+}

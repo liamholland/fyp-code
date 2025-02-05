@@ -101,11 +101,21 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     return colouringGraph;
 }
 
-node** pathColour(node** graph, int numNodes, int (*agentController)(node**, int, int), int minColour, int maxColour, int save) {
+node** pathColour(node** graph, int numNodes, node* startingNode, int (*agentController)(node**, int, int), int minColour, int maxColour, int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
+
+    //find the starting point in the new graph
+    node* copyStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, startingNode->id); 
+
+    if(copyStartingNode == NULL) {
+        printf("failed to find starting node in graph copy; aborting\n");
+        return NULL;
+    }
 
     //some sort of dynamic data structure
     //probably a queue
+    node** colouringQueue = (node**)malloc(sizeof(node*) * numNodes);
+    int queueLength = 0;
 
     //check the next node in the list
     //try to colour it
@@ -114,7 +124,10 @@ node** pathColour(node** graph, int numNodes, int (*agentController)(node**, int
 
     //repeat the process until the queue is empty
 
+    free(colouringQueue);
+
     //print the new data, the number of updated nodes
 
     //return the new coloured graph
+    return colouringGraph;
 }

@@ -7,6 +7,6 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     int (*agentController)(node** agent, int numMoves, int numNodes),
     int (*dynamicKernel)(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents), int save);
 
-node** pathColour(node** graph, int numNodes, int (*agentController)(node**, int, int), int minColour, int maxColour, int save);
+node** pathColour(node** graph, int numNodes, node* startingNode, int (*agentController)(node**, int, int), int minColour, int maxColour, int save);
 
 #endif

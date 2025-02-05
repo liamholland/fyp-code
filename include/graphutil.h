@@ -101,4 +101,8 @@ int* findColourFrequencies(node** graph, int numNodes, int maxColour);
 //will return the smallest colour if there is a tie
 int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour);
 
+//returns a pointer to the node with the specified id in the graph
+//returns NULL if the provided id was not found
+node* findNodeWithIdInGraph(node** graph, int numNodes, int id);
+
 #endif
