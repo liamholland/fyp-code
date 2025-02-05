@@ -202,6 +202,7 @@ int main(int argc, char const *argv[]) {
 
             //enter interactive traversal mode
             printTraversalModeCommands();
+            //TODO: hard to see changes when you only see the non-recoloured graph
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
                 // colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
