@@ -435,9 +435,7 @@ int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
 }
 
 node* findNodeWithIdInGraph(node** graph, int numNodes, int id) {
-    printf("numNodes: %d\n", numNodes);
     for(int n = 0; n < numNodes; n++) {
-        printf("%d ", n);
         if(graph[n]->id == id) {
             return graph[n];
         }

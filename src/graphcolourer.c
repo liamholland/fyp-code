@@ -105,7 +105,7 @@ node** pathColour(node** graph, int numNodes, node* startingNode, int (*agentCon
     node** colouringGraph = copyGraph(graph, numNodes);
 
     //find the starting point in the new graph
-    node* copyStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, startingNode->id); 
+    node* copyStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, startingNode->id);
 
     if(copyStartingNode == NULL) {
         printf("failed to find starting node in graph copy; aborting\n");
