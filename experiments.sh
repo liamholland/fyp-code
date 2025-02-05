@@ -6,59 +6,49 @@ MAXIMUM_ITERATIONS=10000
 # UNLIMITED NUMBER OF COLOURS
 
 # random kernel
-# for p in $(seq 0.1 0.1 1)
-# do
-#     ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -S -M $MAXIMUM_ITERATIONS -k r
-# done
+for p in $(seq 0.1 0.1 1)
+do
+    ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -S -M $MAXIMUM_ITERATIONS -k r
+done
 
-# # decrementing kernel
-# for p in $(seq 0.1 0.1 1)
-# do
-#     ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -S -M $MAXIMUM_ITERATIONS -k d
-# done
+# decrementing kernel
+for p in $(seq 0.1 0.1 1)
+do
+    ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -S -M $MAXIMUM_ITERATIONS -k d
+done
 
-# # incrementing kernel
-# for p in $(seq 0.1 0.1 1)
-# do
-#     ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -S -M $MAXIMUM_ITERATIONS -k i
-# done
+# incrementing kernel
+for p in $(seq 0.1 0.1 1)
+do
+    ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -S -M $MAXIMUM_ITERATIONS -k i
+done
 
 
-# # INCREASING LIMITS
+# INCREASING LIMITS
 
-# # random kernel
-# for k in 5 10 25 50 100 200 250
-# do
-#     for p in $(seq 0.1 0.1 1)
-#     do
-#         ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k r
-#     done
-# done
-
-# # decrementing kernel
-# for k in 5 10 25 50 100 200 250
-# do
-#     for p in $(seq 0.1 0.1 1)
-#     do
-#         ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k d
-#     done
-# done
-
-# # incrementing kernel
-# for k in 5 10 25 50 100 200 250
-# do
-#     for p in $(seq 0.1 0.1 1)
-#     do
-#         ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k i
-#     done
-# done
-
-#minimum kernel
+# random kernel
 for k in 5 10 25 50 100 200 250
 do
     for p in $(seq 0.1 0.1 1)
     do
-        echo "$p $k"
-        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k m
+        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k r
+    done
+done
+
+# decrementing kernel
+for k in 5 10 25 50 100 200 250
+do
+    for p in $(seq 0.1 0.1 1)
+    do
+        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k d
+    done
+done
+
+# incrementing kernel
+for k in 5 10 25 50 100 200 250
+do
+    for p in $(seq 0.1 0.1 1)
+    do
+        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c $k -C $k -S -M $MAXIMUM_ITERATIONS -k i
     done
 done
