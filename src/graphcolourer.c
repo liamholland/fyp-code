@@ -100,3 +100,21 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
 
     return colouringGraph;
 }
+
+node** pathColour(node** graph, int numNodes, int (*agentController)(node**, int, int), int minColour, int maxColour, int save) {
+    node** colouringGraph = copyGraph(graph, numNodes);
+
+    //some sort of dynamic data structure
+    //probably a queue
+
+    //check the next node in the list
+    //try to colour it
+    //if numChanges > 1, add its neighbours to the queue
+    //remove the node from the queue
+
+    //repeat the process until the queue is empty
+
+    //print the new data, the number of updated nodes
+
+    //return the new coloured graph
+}
