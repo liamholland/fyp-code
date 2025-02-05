@@ -115,18 +115,47 @@ node** pathColour(node** graph, int numNodes, node* startingNode, int (*agentCon
     //some sort of dynamic data structure
     //probably a queue
     node** colouringQueue = (node**)malloc(sizeof(node*) * numNodes);
-    int queueLength = 0;
+    colouringQueue[0] = copyStartingNode;
+    int queueLength = 1;
 
     //check the next node in the list
     //try to colour it
     //if numChanges > 1, add its neighbours to the queue
     //remove the node from the queue
 
+    int numUpdates = 0;
+
+    while(queueLength > 0) {
+        printf("queue length: %d\n", queueLength);
+
+        int numChanges = agentController(&colouringQueue[0], 0, maxColour);
+
+        if(numChanges > 0) {
+            numUpdates++;
+
+            //add neighbours to queue if they are not already there
+            for(int nb = 0; nb < colouringQueue[0]->degree; nb++) {
+                for(int q = 0; q < queueLength; q++) {
+                    if(colouringQueue[q] == colouringQueue[0]->neighbours[nb]) continue;
+                }
+                colouringQueue[queueLength++] = colouringQueue[0]->neighbours[nb];
+            }
+        }
+
+        //shift queue up one
+        for(int n = 0; n < queueLength - 1; n++) {
+            colouringQueue[n] = colouringQueue[n + 1];
+        }
+
+        colouringQueue[--queueLength] = NULL;   //decrement queue length
+    }
+
     //repeat the process until the queue is empty
 
     free(colouringQueue);
 
     //print the new data, the number of updated nodes
+    printf("number of updates: %d\n\n", numUpdates);
 
     //return the new coloured graph
     return colouringGraph;

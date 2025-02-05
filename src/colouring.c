@@ -204,7 +204,10 @@ int main(int argc, char const *argv[]) {
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
+                // colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
+                node** traversedGraph = pathColour(colouredGraph, numNodes, colouredGraph[0], agentController, minColour, numNodes, 0);
+                printf("new number of colours: %d\n", findNumColoursUsed(traversedGraph, numNodes, maxColour));
+                free(traversedGraph);
             }
         }
 
