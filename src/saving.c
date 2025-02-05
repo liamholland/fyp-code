@@ -6,6 +6,8 @@
 #define CONFLICTS_SAVE_FILE_NAME "conflicts.csv"
 #define RESULTS_SAVE_FILE_NAME "results.csv"
 
+#define LINE_BUFFER_SIZE 5012
+
 int appendToResults(int* conflictArray, int numIterations) {
     FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
     FILE* temp = fopen("temp.csv", "w");
@@ -16,10 +18,10 @@ int appendToResults(int* conflictArray, int numIterations) {
 
     //write the new data
 
-    char line[1024];
+    char line[LINE_BUFFER_SIZE];
     int lineNum = 0;
 
-    while(fgets(line, 1024, results)) {
+    while(fgets(line, LINE_BUFFER_SIZE, results)) {
         
         //stop the write if a line exceeds the buffer size
         if(strchr(line, '\n') == NULL) {
@@ -48,7 +50,7 @@ int appendToResults(int* conflictArray, int numIterations) {
     if(lineNum < numIterations) {
         //count the number of columns in the old file
         rewind(results);
-        fgets(line, 1024, results); //get the first line of the file again
+        fgets(line, LINE_BUFFER_SIZE, results); //get the first line of the file again
         int numCols = 0;
         for(int i = 0; i < strlen(line); i++) {
             if(line[i] == ',') {

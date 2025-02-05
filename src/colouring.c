@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]) {
 
     int numNodes = 10;
     char generator = 'r';
-    int verbose = 0;
+    int visualise = 0;
     int autoRuns = 1;
     int maxIterations = 50000;
     int save = 0;   //boolean flag to save results to a csv file
@@ -38,6 +38,10 @@ int main(int argc, char const *argv[]) {
     //bipartite generator
     int nodesInSetOne = 0;
 
+    //kernels
+    char cKernelCode = 'm';
+    char dKernelCode = 'x';
+
     //CONSIDER: so many string comparisons; no better way?
     for(int i = 0; i < argc; i++) {
         if(!(*argv[i] == '-')) {
@@ -51,23 +55,29 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-n")) {
             numNodes = atoi(argv[i + 1]);
         }
-        else if(!strcmp(argv[i], "-M")) {
-            maxIterations = atoi(argv[i + 1]);
-        }
         else if(!strcmp(argv[i], "-p")) {
             prob = atof(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-k")) {
+            cKernelCode = *argv[i + 1];
         }
         else if(!strcmp(argv[i], "-c")) {
             minColour = atoi(argv[i + 1]);
         }
-        else if(!strcmp(argv[i], "-C")) {
-            maxColour = atoi(argv[i + 1]);
+        else if(!strcmp(argv[i], "-M")) {
+            maxIterations = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-S")) {
             save = 1;
         }
         else if(!strcmp(argv[i], "-A")) {
             autoRuns = atoi(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-d")) {
+            dKernelCode = *argv[i + 1];  
+        }
+        else if(!strcmp(argv[i], "-C")) {
+            maxColour = atoi(argv[i + 1]) - 1;
         }
         else if(!strcmp(argv[i], "-a")) {
             numAgents = atoi(argv[i + 1]);
@@ -76,7 +86,7 @@ int main(int argc, char const *argv[]) {
             numMoves = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-v")) {
-            verbose = 1;
+            visualise = 1;
         }
         else if(!strcmp(argv[i], "-g")) {
             generator = *argv[i + 1];
@@ -98,6 +108,49 @@ int main(int argc, char const *argv[]) {
 
     int useBenchmark = !maxColour ? 1 : 0;
 
+    //set colouring kernel
+    int (*agentController) (node**, int, int);
+    switch (cKernelCode) {
+        case 'r':
+            agentController = &randomKernel;
+            break;
+        case 'd':
+            agentController = &colourblindFishAgentDecrement;
+            break;
+        case 'i':
+            agentController = &colourblindFishAgentIncrement;
+            break;
+        case 'a':
+            agentController = &amongUsKernel;
+            break;
+        case 'm':
+            agentController = &minimumAgent;
+            break;
+        default:
+            printf("invalid colouring kernel\n");
+            return 1;
+    }
+
+    //set the dynamic kernel
+    int (*dynamicKernel) (node***, int*, node*, node***, int*);
+    switch (dKernelCode) {
+        case 'e':
+            dynamicKernel = &possiblyRemoveEdgeKernel;
+            break;
+        case 'n':
+            dynamicKernel = &possiblyRemoveNodeKernel;
+            break;
+        case 'o':
+            dynamicKernel = &removeOrphanNodesKernel;
+            break;
+        case 'x':
+            dynamicKernel = NULL;
+            break;
+        default:
+            printf("invalid dynamic kernel\n");
+            return 1;
+    }
+
     //graph variables
     node** graph;
     node** colouredGraph;
@@ -105,7 +158,8 @@ int main(int argc, char const *argv[]) {
 
     if(save) {
         char description[100];
-        snprintf(description, 100, "generator: %c; no. nodes: %d; probability: %.3f;", generator, numNodes, prob);
+        snprintf(description, 100, "generator: %c; coloring kernel: %c; dynamic kernel: %c; no. nodes: %d; probability: %.3f;",
+            generator, cKernelCode, dKernelCode, numNodes, prob);
         addHeadersToResultsFile(description);
     }
 
@@ -131,10 +185,6 @@ int main(int argc, char const *argv[]) {
                 return 1;
         }
 
-
-        int (*agentController) (node**, int, int) = &colourblindFishAgentDecrement;
-        int (*dynamicKernel) (node***, int*, node*, node***, int*) = NULL;
-
         //colour the graph
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
         
@@ -144,7 +194,7 @@ int main(int argc, char const *argv[]) {
 
         colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
 
-        if(verbose) {
+        if(visualise) {
             autoRuns = 1;   //should only run once if viewing the graph
 
             //find the highest degree node

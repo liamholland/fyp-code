@@ -84,16 +84,31 @@ options:
 -g [generator]    set the generator
                     sets the graph generator function to use
                     there are currently two different types of graphs you can use
-                    r: random graph; each edge has a p% chance of existing (default)
-                      options:
-                        -p [float]      probability (as a floating point number between 0 and 1)
-                                          probability that each edge of the graph exists
-                                          default is 0.5
-                    o: ring graph; undirected graph where each node has two neighbours
-                    b: bipartite graph; a graph of two disjoint subsets
-                      options:
-                        -s [integer]    set one; the number of nodes in the first subset
-                                          the default is to split the number of nodes in two
+                      r: random graph; each edge has a p% chance of existing (default)
+                        options:
+                          -p [float]      probability (as a floating point number between 0 and 1)
+                                            probability that each edge of the graph exists
+                                            default is 0.5
+                      o: ring graph; undirected graph where each node has two neighbours
+                      b: bipartite graph; a graph of two disjoint subsets
+                        options:
+                          -s [integer]    set one; the number of nodes in the first subset
+                                            the default is to split the number of nodes in two
+-k [kernel]       set the colouring kernel
+                    sets the kernel used to colour the nodes
+                    options include:
+                      m: local minimum (default); applies the local minimum colour
+                      r: random kernel; picks a colour between 1 and max if in conflict
+                      d: colour-blind decrement; decrements colour if in conflict
+                      i: colour-blind increment; increments colour if in conflict
+                    a: amongus kernel; introduces a bad actor (colours with m)
+-d [kernel]       set the dynamic kernel
+                    sets the kernel used to modify the topology of the graph
+                    options include:
+                      x: no dynamic kernel (default)
+                      e: possibly remove edge
+                      n: possibly remove node
+                      o: remove orphan nodes
 ```
 
 #### Example Usage
