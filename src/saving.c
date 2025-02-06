@@ -8,6 +8,12 @@
 
 #define LINE_BUFFER_SIZE 5012
 
+#define FULL_FILE_NAME_LENGTH 30
+
+//variables to allow for custom file names
+char conflictsFullName[FULL_FILE_NAME_LENGTH] = CONFLICTS_SAVE_FILE_NAME;
+char resultsFullName[FULL_FILE_NAME_LENGTH] = RESULTS_SAVE_FILE_NAME;
+
 int appendToResults(int* conflictArray, int numIterations) {
     FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
     FILE* temp = fopen("temp.csv", "w");
@@ -179,6 +185,34 @@ int addHeadersToResultsFile(char* optionalDescription) {
     fprintf(results, "benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)\n");
 
     fclose(results);
+
+    return 0;
+}
+
+int setFileNamePrepend(char* name) {
+    if(name == NULL) {
+        printf("no name provided\n");
+        return 1;
+    }
+
+    int nameLength = strlen(name);
+    int conflictsLength = strlen(CONFLICTS_SAVE_FILE_NAME);
+    int resultsLength = strlen(RESULTS_SAVE_FILE_NAME);
+
+    if(nameLength > FULL_FILE_NAME_LENGTH - conflictsLength) {
+        printf("provided name too long\n");
+        return 1;
+    }
+
+    //create conflicts name
+    memcpy(conflictsFullName, name, nameLength);
+    memcpy(conflictsFullName + nameLength, name, conflictsLength);
+    printf("%s\n", conflictsFullName);
+
+    //create results name
+    memcpy(resultsFullName, name, nameLength);
+    memcpy(resultsFullName + nameLength, name, resultsLength);
+    printf("%s\n", resultsFullName);
 
     return 0;
 }

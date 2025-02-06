@@ -19,4 +19,7 @@ int addBufferRowToResultsFile(int numRows);
 //if you do not want the description, pass `NULL`
 int addHeadersToResultsFile(char* optionalDescription);
 
+//prepends the default names with the provided string
+int setFileNamePrepend(char* name);
+
 #endif
