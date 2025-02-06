@@ -15,11 +15,11 @@ char conflictsFullName[FULL_FILE_NAME_LENGTH] = CONFLICTS_SAVE_FILE_NAME;
 char resultsFullName[FULL_FILE_NAME_LENGTH] = RESULTS_SAVE_FILE_NAME;
 
 int appendToResults(int* conflictArray, int numIterations) {
-    FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
+    FILE* results = fopen(conflictsFullName, "r");
     FILE* temp = fopen("temp.csv", "w");
 
     if(results == NULL) {
-        results = fopen(CONFLICTS_SAVE_FILE_NAME, "w+");
+        results = fopen(conflictsFullName, "w+");
     }
 
     //write the new data
@@ -94,8 +94,8 @@ int appendToResults(int* conflictArray, int numIterations) {
     fclose(results);
     fclose(temp);
 
-    remove(CONFLICTS_SAVE_FILE_NAME);
-    rename("temp.csv", CONFLICTS_SAVE_FILE_NAME);
+    remove(conflictsFullName);
+    rename("temp.csv", conflictsFullName);
 
     return 0;
 }
@@ -106,7 +106,7 @@ int addBufferColumnToConflictsFile(int numColumns) {
         return 1;
     }
     
-    FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
+    FILE* results = fopen(conflictsFullName, "r");
     FILE* temp = fopen("temp.csv", "w");
 
     if(results == NULL) {
@@ -135,8 +135,8 @@ int addBufferColumnToConflictsFile(int numColumns) {
     fclose(results);
     fclose(temp);
 
-    remove(CONFLICTS_SAVE_FILE_NAME);
-    rename("temp.csv", CONFLICTS_SAVE_FILE_NAME);
+    remove(conflictsFullName);
+    rename("temp.csv", conflictsFullName);
 
     return 0;
 }
@@ -144,7 +144,7 @@ int addBufferColumnToConflictsFile(int numColumns) {
 int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int numiterations, 
     int numAgents, int numColours, int finalNumConflicts, int numMissedNodes, double time)
 {
-    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+    FILE* results = fopen(resultsFullName, "a");
 
     fprintf(results, "%d,%d,%d,%d,%d,%d,%d,%d,%.4f\n",
         benchmark,
@@ -164,7 +164,7 @@ int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int num
 }
 
 int addBufferRowToResultsFile(int numRows) {
-    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+    FILE* results = fopen(resultsFullName, "a");
 
     for(int i = 0; i < numRows; i++) {
         fprintf(results, "\n");
@@ -176,7 +176,7 @@ int addBufferRowToResultsFile(int numRows) {
 }
 
 int addHeadersToResultsFile(char* optionalDescription) {
-    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+    FILE* results = fopen(resultsFullName, "a");
 
     if(optionalDescription != NULL) {
         fprintf(results, "%s\n", optionalDescription);
