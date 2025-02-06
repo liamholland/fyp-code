@@ -8,12 +8,18 @@
 
 #define LINE_BUFFER_SIZE 5012
 
+#define FULL_FILE_NAME_LENGTH 30
+
+//variables to allow for custom file names
+char conflictsFullName[FULL_FILE_NAME_LENGTH] = CONFLICTS_SAVE_FILE_NAME;
+char resultsFullName[FULL_FILE_NAME_LENGTH] = RESULTS_SAVE_FILE_NAME;
+
 int appendToResults(int* conflictArray, int numIterations) {
-    FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
+    FILE* results = fopen(conflictsFullName, "r");
     FILE* temp = fopen("temp.csv", "w");
 
     if(results == NULL) {
-        results = fopen(CONFLICTS_SAVE_FILE_NAME, "w+");
+        results = fopen(conflictsFullName, "w+");
     }
 
     //write the new data
@@ -88,8 +94,8 @@ int appendToResults(int* conflictArray, int numIterations) {
     fclose(results);
     fclose(temp);
 
-    remove(CONFLICTS_SAVE_FILE_NAME);
-    rename("temp.csv", CONFLICTS_SAVE_FILE_NAME);
+    remove(conflictsFullName);
+    rename("temp.csv", conflictsFullName);
 
     return 0;
 }
@@ -100,7 +106,7 @@ int addBufferColumnToConflictsFile(int numColumns) {
         return 1;
     }
     
-    FILE* results = fopen(CONFLICTS_SAVE_FILE_NAME, "r");
+    FILE* results = fopen(conflictsFullName, "r");
     FILE* temp = fopen("temp.csv", "w");
 
     if(results == NULL) {
@@ -129,8 +135,8 @@ int addBufferColumnToConflictsFile(int numColumns) {
     fclose(results);
     fclose(temp);
 
-    remove(CONFLICTS_SAVE_FILE_NAME);
-    rename("temp.csv", CONFLICTS_SAVE_FILE_NAME);
+    remove(conflictsFullName);
+    rename("temp.csv", conflictsFullName);
 
     return 0;
 }
@@ -138,7 +144,7 @@ int addBufferColumnToConflictsFile(int numColumns) {
 int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int numiterations, 
     int numAgents, int numColours, int finalNumConflicts, int numMissedNodes, double time)
 {
-    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+    FILE* results = fopen(resultsFullName, "a");
 
     fprintf(results, "%d,%d,%d,%d,%d,%d,%d,%d,%.4f\n",
         benchmark,
@@ -158,7 +164,7 @@ int saveColouringData(int benchmark, int numNodesStart, int numNodesEnd, int num
 }
 
 int addBufferRowToResultsFile(int numRows) {
-    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+    FILE* results = fopen(resultsFullName, "a");
 
     for(int i = 0; i < numRows; i++) {
         fprintf(results, "\n");
@@ -170,7 +176,7 @@ int addBufferRowToResultsFile(int numRows) {
 }
 
 int addHeadersToResultsFile(char* optionalDescription) {
-    FILE* results = fopen(RESULTS_SAVE_FILE_NAME, "a");
+    FILE* results = fopen(resultsFullName, "a");
 
     if(optionalDescription != NULL) {
         fprintf(results, "%s\n", optionalDescription);
@@ -179,6 +185,32 @@ int addHeadersToResultsFile(char* optionalDescription) {
     fprintf(results, "benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)\n");
 
     fclose(results);
+
+    return 0;
+}
+
+int setFileNamePrepend(const char* name) {
+    if(name == NULL) {
+        printf("no name provided\n");
+        return 1;
+    }
+
+    int nameLength = strlen(name);
+    int conflictsLength = strlen(CONFLICTS_SAVE_FILE_NAME);
+    int resultsLength = strlen(RESULTS_SAVE_FILE_NAME);
+
+    if(nameLength > FULL_FILE_NAME_LENGTH - conflictsLength) {
+        printf("provided name too long\n");
+        return 1;
+    }
+
+    //create conflicts name
+    memcpy(conflictsFullName, name, nameLength);
+    memcpy(conflictsFullName + nameLength, CONFLICTS_SAVE_FILE_NAME, conflictsLength);
+
+    //create results name
+    memcpy(resultsFullName, name, nameLength);
+    memcpy(resultsFullName + nameLength, RESULTS_SAVE_FILE_NAME, resultsLength);
 
     return 0;
 }

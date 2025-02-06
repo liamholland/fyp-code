@@ -62,9 +62,10 @@ options:
                     the default is determined by a brute force centralised approach
                     this paramter will have no effect if the lower bound is not also set
                     can be used to ensure that the solution is optimal or to force conflicts
--S                set the save mode on
+-S [name/path]    set the save mode on
                     flag which sets whether the results are saved to a file called results.csv
                     the default is false
+                    the name/path is optional, but allows for custom names or paths if included
 -A [integer]      number of automatic runs
                     default is 1 (run the program once)
                     increasing the number will run the program that number of times
