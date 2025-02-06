@@ -20,6 +20,7 @@ int addBufferRowToResultsFile(int numRows);
 int addHeadersToResultsFile(char* optionalDescription);
 
 //prepends the default names with the provided string
-int setFileNamePrepend(char* name);
+//sets the name for both results and conflicts saves
+int setFileNamePrepend(const char* name);
 
 #endif

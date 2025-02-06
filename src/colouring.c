@@ -69,6 +69,11 @@ int main(int argc, char const *argv[]) {
         }
         else if(!strcmp(argv[i], "-S")) {
             save = 1;
+
+            //if name file name is provided, set it
+            if(i + 1 < argc && !(*argv[i + 1] == '-') && setFileNamePrepend(argv[i + 1])) {
+                return 1;   //do not want to accidentally overwrite saved data
+            }
         }
         else if(!strcmp(argv[i], "-A")) {
             autoRuns = atoi(argv[i + 1]);

@@ -189,7 +189,7 @@ int addHeadersToResultsFile(char* optionalDescription) {
     return 0;
 }
 
-int setFileNamePrepend(char* name) {
+int setFileNamePrepend(const char* name) {
     if(name == NULL) {
         printf("no name provided\n");
         return 1;
@@ -206,13 +206,11 @@ int setFileNamePrepend(char* name) {
 
     //create conflicts name
     memcpy(conflictsFullName, name, nameLength);
-    memcpy(conflictsFullName + nameLength, name, conflictsLength);
-    printf("%s\n", conflictsFullName);
+    memcpy(conflictsFullName + nameLength, CONFLICTS_SAVE_FILE_NAME, conflictsLength);
 
     //create results name
     memcpy(resultsFullName, name, nameLength);
-    memcpy(resultsFullName + nameLength, name, resultsLength);
-    printf("%s\n", resultsFullName);
+    memcpy(resultsFullName + nameLength, RESULTS_SAVE_FILE_NAME, resultsLength);
 
     return 0;
 }
