@@ -1,4 +1,4 @@
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.100;
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.100;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 35,1000,1000,12,1000,646,0,0,0.0035
 35,1000,1000,12,1000,641,0,0,0.0034
@@ -9,10 +9,10 @@ benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, 
 35,1000,1000,11,1000,648,0,0,0.0037
 34,1000,1000,12,1000,664,0,0,0.0042
 35,1000,1000,11,1000,647,0,0,0.0041
-35,1000,1000,11,1000,658,0,0,0.0040
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.200;
+35,1000,1000,11,1000,658,0,0,0.004
+,,,11.7,,651.6,,,0.00384
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.200;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 56,1000,1000,12,1000,676,0,0,0.0067
 57,1000,1000,12,1000,677,0,0,0.0073
@@ -20,27 +20,27 @@ benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, 
 56,1000,1000,13,1000,669,0,0,0.0073
 55,1000,1000,13,1000,682,0,0,0.0083
 57,1000,1000,12,1000,678,0,0,0.0071
-58,1000,1000,13,1000,675,0,0,0.0070
+58,1000,1000,13,1000,675,0,0,0.007
 56,1000,1000,12,1000,684,0,0,0.0073
 56,1000,1000,12,1000,672,0,0,0.0083
 56,1000,1000,12,1000,674,0,0,0.0072
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.300;
+,,,12.4,,676.7,,,0.00741
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.300;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
-80,1000,1000,14,1000,697,0,0,0.0130
-77,1000,1000,13,1000,703,0,0,0.0120
-79,1000,1000,14,1000,710,0,0,0.0120
+80,1000,1000,14,1000,697,0,0,0.013
+77,1000,1000,13,1000,703,0,0,0.012
+79,1000,1000,14,1000,710,0,0,0.012
 79,1000,1000,14,1000,689,0,0,0.0125
 79,1000,1000,13,1000,692,0,0,0.0121
 77,1000,1000,12,1000,697,0,0,0.0117
 81,1000,1000,13,1000,695,0,0,0.0117
 77,1000,1000,14,1000,717,0,0,0.0117
-77,1000,1000,13,1000,699,0,0,0.0120
+77,1000,1000,13,1000,699,0,0,0.012
 78,1000,1000,13,1000,708,0,0,0.0122
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.400;
+,,,13.3,,700.7,,,0.01209
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.400;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 101,1000,1000,14,1000,721,0,0,0.0152
 102,1000,1000,14,1000,739,0,0,0.0157
@@ -52,9 +52,9 @@ benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, 
 102,1000,1000,17,1000,736,0,0,0.0175
 102,1000,1000,14,1000,748,0,0,0.0158
 104,1000,1000,15,1000,701,0,0,0.0178
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.500;
+,,,14.4,,728.8,,,0.01613
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.500;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 129,1000,1000,17,1000,755,0,0,0.0232
 131,1000,1000,14,1000,768,0,0,0.0191
@@ -63,26 +63,26 @@ benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, 
 126,1000,1000,16,1000,768,0,0,0.0204
 130,1000,1000,15,1000,753,0,0,0.0184
 130,1000,1000,16,1000,744,0,0,0.0213
-129,1000,1000,14,1000,753,0,0,0.0210
-128,1000,1000,15,1000,752,0,0,0.0210
+129,1000,1000,14,1000,753,0,0,0.021
+128,1000,1000,15,1000,752,0,0,0.021
 132,1000,1000,15,1000,739,0,0,0.0191
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.600;
+,,,15.3,,754.5,,,0.02095
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.600;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 158,1000,1000,18,1000,786,0,0,0.0282
 159,1000,1000,17,1000,797,0,0,0.0243
 157,1000,1000,15,1000,770,0,0,0.0221
 158,1000,1000,16,1000,802,0,0,0.0265
 157,1000,1000,16,1000,802,0,0,0.0241
-159,1000,1000,17,1000,794,0,0,0.0240
-164,1000,1000,17,1000,779,0,0,0.0250
+159,1000,1000,17,1000,794,0,0,0.024
+164,1000,1000,17,1000,779,0,0,0.025
 159,1000,1000,18,1000,767,0,0,0.0255
 163,1000,1000,15,1000,791,0,0,0.0222
 160,1000,1000,16,1000,773,0,0,0.0247
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.700;
+,,,16.5,,786.1,,,0.02466
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.700;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 195,1000,1000,18,1000,829,0,0,0.0344
 197,1000,1000,17,1000,824,0,0,0.0319
@@ -94,13 +94,13 @@ benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, 
 197,1000,1000,18,1000,819,0,0,0.0331
 196,1000,1000,20,1000,822,0,0,0.0332
 196,1000,1000,18,1000,809,0,0,0.0345
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.800;
+,,,17.9,,819.1,,,0.03179
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.800;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 245,1000,1000,18,1000,865,0,0,0.0368
 240,1000,1000,20,1000,863,0,0,0.0387
-245,1000,1000,21,1000,861,0,0,0.0420
+245,1000,1000,21,1000,861,0,0,0.042
 243,1000,1000,21,1000,878,0,0,0.0408
 244,1000,1000,20,1000,859,0,0,0.0387
 243,1000,1000,17,1000,858,0,0,0.0338
@@ -108,9 +108,9 @@ benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, 
 247,1000,1000,21,1000,862,0,0,0.0382
 243,1000,1000,20,1000,884,0,0,0.0385
 244,1000,1000,26,1000,864,0,0,0.0474
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.900;
+,,,21.4,,865.5,,,0.04104
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 0.900;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
 324,1000,1000,25,1000,912,0,0,0.0513
 323,1000,1000,43,1000,916,0,0,0.0818
@@ -122,19 +122,18 @@ benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, 
 325,1000,1000,23,1000,914,0,0,0.0461
 327,1000,1000,27,1000,925,0,0,0.0533
 321,1000,1000,38,1000,925,0,0,0.0729
-
-
-generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 1.000;
+,,,29.8,,921.7,,,0.05858
+,,,,,,,,
+generator: r; coloring kernel: r; dynamic kernel: x; no. nodes: 1000; probability: 1.000;,,,,,,,,
 benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
-1001,1000,1000,188,1000,1000,0,0,0.3790
+1001,1000,1000,188,1000,1000,0,0,0.379
 1001,1000,1000,259,1000,1000,0,0,0.5179
 1001,1000,1000,753,1000,1000,0,0,1.4618
 1001,1000,1000,409,1000,1000,0,0,0.7968
 1001,1000,1000,383,1000,1000,0,0,0.8698
-1001,1000,1000,190,1000,1000,0,0,0.3800
+1001,1000,1000,190,1000,1000,0,0,0.38
 1001,1000,1000,467,1000,1000,0,0,0.9152
 1001,1000,1000,300,1000,1000,0,0,0.5825
-1001,1000,1000,153,1000,1000,0,0,0.3050
+1001,1000,1000,153,1000,1000,0,0,0.305
 1001,1000,1000,413,1000,1000,0,0,0.8053
-
-
+,,,351.5,,1000,,,0.70133
