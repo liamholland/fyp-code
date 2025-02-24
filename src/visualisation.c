@@ -96,7 +96,12 @@ int printTraversalModeCommands() {
 }
 
 int printNode(node* focusNode, int nextNeighbour) {
-        printf("--- node %d ---\ndegree: %d; colour: %d\n\n", focusNode->id, focusNode->degree, focusNode->colour);
+        printf("--- node %d ---\ndegree: %d; colour: %d; no. local colours: %d\n\n", 
+            focusNode->id, 
+            focusNode->degree, 
+            focusNode->colour,
+            findNumColoursUsed(focusNode->neighbours, focusNode->degree, focusNode->degree + 1)
+        );
 
         switch (focusNode->degree) {
         case 0:
