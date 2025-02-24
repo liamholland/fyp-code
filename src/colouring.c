@@ -190,6 +190,9 @@ int main(int argc, char const *argv[]) {
                 return 1;
         }
 
+        printf("highest degree: %d\n", findNodeWithHighestDegree(graph, numNodes)->degree);
+        printf("lowest degree: %d\n", findNodeWithLowestDegree(graph, numNodes)->degree);
+
         //colour the graph
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
         

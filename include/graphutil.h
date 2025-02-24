@@ -89,6 +89,11 @@ int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo);
 //will be returned 
 node* findNodeWithHighestDegree(node** graph, int numNodes);
 
+//similar to the previous, this function will find the node with the lowest degree
+//in the case of a tie, the contender with the "largest colour" (least optimised)
+//will be returned
+node* findNodeWithLowestDegree(node** graph, int numNodes);
+
 //this function modifies the provided list and list length in order to remove
 //the provided pointer from the list
 int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength);
