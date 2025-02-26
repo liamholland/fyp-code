@@ -433,8 +433,8 @@ node* findNodeWithLowestDegree(node** graph, int numNodes) {
     return lowestDegreeNode;
 }
 
-int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength) {
-    node** list = *nodeList;
+int removeAllInstancesOfNodePointerFromList(node*** nodeListReference, node* targetPointer, int* listLength) {
+    node** list = *nodeListReference;
     
     int countValidAgents = 0;
     node** remainingAgents = (node**)malloc(sizeof(node*) * (*listLength));
@@ -446,7 +446,7 @@ int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointe
 
     remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
     free(list);
-    *nodeList = remainingAgents;
+    *nodeListReference = remainingAgents;
     *listLength = countValidAgents;
 
     return 0;
