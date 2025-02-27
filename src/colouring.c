@@ -115,22 +115,22 @@ int main(int argc, char const *argv[]) {
     int useBenchmark = !maxColour ? 1 : 0;
 
     //set colouring kernel
-    int (*agentController) (node*, int);
+    int (*colouringKernel) (node*, int);
     switch (cKernelCode) {
         case 'r':
-            agentController = &randomKernel;
+            colouringKernel = &randomKernel;
             break;
         case 'd':
-            agentController = &colourblindFishAgentDecrement;
+            colouringKernel = &colourblindFishAgentDecrement;
             break;
         case 'i':
-            agentController = &colourblindFishAgentIncrement;
+            colouringKernel = &colourblindFishAgentIncrement;
             break;
         case 'a':
-            agentController = &amongUsKernel;
+            colouringKernel = &amongUsKernel;
             break;
         case 'm':
-            agentController = &minimumAgent;
+            colouringKernel = &minimumAgent;
             break;
         default:
             printf("invalid colouring kernel\n");
@@ -201,7 +201,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, agentController, dynamicKernel, &optimalMoveKernel);
+        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, &optimalMoveKernel);
 
         if(visualise) {
             autoRuns = 1;   //should only run once if viewing the graph
@@ -213,7 +213,7 @@ int main(int argc, char const *argv[]) {
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, agentController, dynamicKernel, &optimalMoveKernel);
+                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, &optimalMoveKernel);
             }
         }
 
