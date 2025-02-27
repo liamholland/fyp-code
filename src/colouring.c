@@ -42,6 +42,7 @@ int main(int argc, char const *argv[]) {
     //kernels
     char cKernelCode = 'm';
     char dKernelCode = 'x';
+    char mKernelCode = 'x';
 
     //CONSIDER: so many string comparisons; no better way?
     for(int i = 0; i < argc; i++) {
@@ -90,6 +91,9 @@ int main(int argc, char const *argv[]) {
         }
         else if(!strcmp(argv[i], "-m")) {
             numMoves = atoi(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-w")) {
+            mKernelCode = *argv[i + 1];
         }
         else if(!strcmp(argv[i], "-v")) {
             visualise = 1;
@@ -157,6 +161,23 @@ int main(int argc, char const *argv[]) {
             return 1;
     }
 
+    //set the movement kernel
+    node* (*movementKernel) (node*, int);
+    switch(mKernelCode) {
+        case 'r':
+            movementKernel = &randomMoveKernel;
+            break;
+        case 'o':
+            movementKernel = &optimalMoveKernel;
+            break;
+        case 'x':
+            movementKernel = NULL;
+            break;
+        default:
+            printf("invalid movement kernel\n");
+            return 1;
+    }
+
     //graph variables
     node** graph;
     node** colouredGraph;
@@ -164,8 +185,8 @@ int main(int argc, char const *argv[]) {
 
     if(save) {
         char description[100];
-        snprintf(description, 100, "generator: %c; coloring kernel: %c; dynamic kernel: %c; no. nodes: %d; probability: %.3f;",
-            generator, cKernelCode, dKernelCode, numNodes, prob);
+        snprintf(description, 100, "generator: %c; coloring kernel: %c; dynamic kernel: %c; movement kernel: %c; no. nodes: %d; probability: %.3f;",
+            generator, cKernelCode, dKernelCode, mKernelCode, numNodes, prob);
         addHeadersToResultsFile(description);
     }
 
@@ -201,7 +222,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, &optimalMoveKernel);
+        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
 
         if(visualise) {
             autoRuns = 1;   //should only run once if viewing the graph
@@ -213,7 +234,7 @@ int main(int argc, char const *argv[]) {
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, &optimalMoveKernel);
+                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
             }
         }
 

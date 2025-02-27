@@ -40,7 +40,10 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
             numChanges += colouringKernel(agents[a], numColours);
-            agents[a] = movementKernel(agents[a], numMoves);
+
+            if(movementKernel != NULL) {
+                agents[a] = movementKernel(agents[a], numMoves);
+            }
         }
 
         if(dynamicKernel != NULL) {
