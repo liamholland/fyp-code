@@ -63,3 +63,9 @@ options:
                       e: possibly remove edge
                       n: possibly remove node
                       o: remove orphan nodes
+-w [kernel]       set the movement kernel
+                    sets the kernel used to move agents between nodes
+                    options include:
+                      x: no movement kernel (default)
+                      r: random movement kernel
+                      o: optimal movement kernel
