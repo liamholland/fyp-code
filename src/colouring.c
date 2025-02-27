@@ -43,6 +43,7 @@ int main(int argc, char const *argv[]) {
     char cKernelCode = 'm';
     char dKernelCode = 'x';
     char mKernelCode = 'x';
+    const char* kernelConfig;
 
     //CONSIDER: so many string comparisons; no better way?
     for(int i = 0; i < argc; i++) {
@@ -83,6 +84,14 @@ int main(int argc, char const *argv[]) {
         else if(!strcmp(argv[i], "-d")) {
             dKernelCode = *argv[i + 1];  
         }
+        else if(!strcmp(argv[i], "-K")) {
+            kernelConfig = argv[i + 1];
+            int configLength = strlen(kernelConfig);
+            if(configLength < 3 || configLength > 3) {
+                printf("invalid kernel config\n");
+                return 1;
+            }
+        }
         else if(!strcmp(argv[i], "-C")) {
             maxColour = atoi(argv[i + 1]) - 1;
         }
@@ -117,6 +126,13 @@ int main(int argc, char const *argv[]) {
     }
 
     int useBenchmark = !maxColour ? 1 : 0;
+
+    //set kernel config
+    if(kernelConfig != NULL) {
+        cKernelCode = kernelConfig[0];
+        dKernelCode = kernelConfig[1];
+        mKernelCode = kernelConfig[2];
+    }
 
     //set colouring kernel
     int (*colouringKernel) (node*, int);
