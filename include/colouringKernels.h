@@ -2,11 +2,7 @@
 #define COLOURERS
 
 /*
-colouring kernels will change the colour of a node, and move the agent to
-a different node. noteably, these kernels are the only place in the program
-where a node** is not an array of nodes, but a reference to a single node pointer.
-this is necessary in order to allow the agent to "move" (i.e. point to a
-different node)
+colouring kernels will change the colour of a node based on the maxColour provided
 */
 
 #include "node.h"
