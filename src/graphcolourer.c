@@ -9,8 +9,10 @@
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
 
-node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
-    int (*agentController)(node**, int, int), int (*dynamicKernel)(node***, int*, node*, node***, int*), int save)
+node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int save,
+    int (*agentController)(node**, int, int),
+    int (*dynamicKernel)(node***, int*, node*, node***, int*),
+    node* (*movementKernel)(node*, int))
 {
     int numNodes = *numNodesPtr;
 
@@ -38,6 +40,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
             numChanges += agentController(&agents[a], numMoves, numColours);
+            agents[a] = movementKernel(agents[a], numMoves);
         }
 
         if(dynamicKernel != NULL) {
