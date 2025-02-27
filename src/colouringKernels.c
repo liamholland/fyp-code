@@ -3,17 +3,17 @@
 #include "graphutil.h"
 #include "colouringKernels.h"
 
-int colourblindFishAgentIncrement(node* fish, int maxColour) {
+int colourblindAgentIncrement(node* agent, int maxColour) {
     int numChanges = 0;
     
-    int max = maxColour < fish->degree ? maxColour : fish->degree;
+    int max = maxColour < agent->degree ? maxColour : agent->degree;
 
     //check for conflicts in neighbours
-    if(!fish->colour || nodeIsInConflict(fish)) {
-        fish->colour = (fish->colour + 1) % (max + 1);
+    if(!agent->colour || nodeIsInConflict(agent)) {
+        agent->colour = (agent->colour + 1) % (max + 1);
 
-        if(!fish->colour) {
-            fish->colour++;
+        if(!agent->colour) {
+            agent->colour++;
         }
 
         numChanges = 1;
@@ -22,17 +22,17 @@ int colourblindFishAgentIncrement(node* fish, int maxColour) {
     return numChanges;
 }
 
-int colourblindFishAgentDecrement(node* fish, int maxColour) {
+int colourblindAgentDecrement(node* agent, int maxColour) {
     int numChanges = 0;
     
-    int max = maxColour < fish->degree ? maxColour : fish->degree;
+    int max = maxColour < agent->degree ? maxColour : agent->degree;
 
     //check for conflicts in neighbours
-    if(!fish->colour || nodeIsInConflict(fish)) {
-        fish->colour--;
+    if(!agent->colour || nodeIsInConflict(agent)) {
+        agent->colour--;
 
-        if(fish->colour <= 0) {
-            fish->colour = max;
+        if(agent->colour <= 0) {
+            agent->colour = max;
         }
 
         numChanges = 1;

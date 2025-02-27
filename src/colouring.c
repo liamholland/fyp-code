@@ -121,10 +121,10 @@ int main(int argc, char const *argv[]) {
             colouringKernel = &randomKernel;
             break;
         case 'd':
-            colouringKernel = &colourblindFishAgentDecrement;
+            colouringKernel = &colourblindAgentDecrement;
             break;
         case 'i':
-            colouringKernel = &colourblindFishAgentIncrement;
+            colouringKernel = &colourblindAgentIncrement;
             break;
         case 'a':
             colouringKernel = &amongUsKernel;
