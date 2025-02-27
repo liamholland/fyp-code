@@ -1,4 +1,5 @@
-
+#include <stdlib.h>
+#include "graphutil.h"
 #include "movementKernels.h"
 
 node* randomMoveKernel(node* agent, int numMoves) {

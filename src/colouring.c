@@ -10,6 +10,7 @@
 #include "visualisation.h"
 #include "dynamicKernels.h"
 #include "colouringKernels.h"
+#include "movementKernels.h"
 #include "saving.h"
 
 #define HELP_FILE_NAME "help.txt"
@@ -114,7 +115,7 @@ int main(int argc, char const *argv[]) {
     int useBenchmark = !maxColour ? 1 : 0;
 
     //set colouring kernel
-    int (*agentController) (node**, int, int);
+    int (*agentController) (node*, int);
     switch (cKernelCode) {
         case 'r':
             agentController = &randomKernel;
@@ -200,7 +201,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
+        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, agentController, dynamicKernel, &optimalMoveKernel);
 
         if(visualise) {
             autoRuns = 1;   //should only run once if viewing the graph
@@ -212,7 +213,7 @@ int main(int argc, char const *argv[]) {
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
+                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, agentController, dynamicKernel, &optimalMoveKernel);
             }
         }
 
