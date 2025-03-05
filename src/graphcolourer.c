@@ -107,7 +107,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     return colouringGraph;
 }
 
-node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int (*agentController)(node**, int, int), int minColour, int maxColour, int save) {
+node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int (*colouringKernel)(node**, int, int), int minColour, int maxColour, int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     //find the starting point in the new graph
@@ -144,7 +144,7 @@ node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* sec
     while(queueLength > 0) {
         printf("queue length: %d\n", queueLength);
 
-        int numChanges = agentController(&colouringQueue[0], 0, maxColour);
+        int numChanges = colouringKernel(&colouringQueue[0], 0, maxColour);
 
         if(numChanges > 0) {
             numUpdates++;
