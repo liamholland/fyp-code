@@ -10,6 +10,7 @@
 #include "visualisation.h"
 #include "dynamicKernels.h"
 #include "colouringKernels.h"
+#include "movementKernels.h"
 #include "saving.h"
 
 #define HELP_FILE_NAME "help.txt"
@@ -41,6 +42,8 @@ int main(int argc, char const *argv[]) {
     //kernels
     char cKernelCode = 'm';
     char dKernelCode = 'x';
+    char mKernelCode = 'x';
+    const char* kernelConfig;
 
     //CONSIDER: so many string comparisons; no better way?
     for(int i = 0; i < argc; i++) {
@@ -69,12 +72,25 @@ int main(int argc, char const *argv[]) {
         }
         else if(!strcmp(argv[i], "-S")) {
             save = 1;
+
+            //if name file name is provided, set it
+            if(i + 1 < argc && !(*argv[i + 1] == '-') && setFileNamePrepend(argv[i + 1])) {
+                return 1;   //do not want to accidentally overwrite saved data
+            }
         }
         else if(!strcmp(argv[i], "-A")) {
             autoRuns = atoi(argv[i + 1]);
         }
         else if(!strcmp(argv[i], "-d")) {
             dKernelCode = *argv[i + 1];  
+        }
+        else if(!strcmp(argv[i], "-K")) {
+            kernelConfig = argv[i + 1];
+            int configLength = strlen(kernelConfig);
+            if(configLength < 3 || configLength > 3) {
+                printf("invalid kernel config\n");
+                return 1;
+            }
         }
         else if(!strcmp(argv[i], "-C")) {
             maxColour = atoi(argv[i + 1]) - 1;
@@ -84,6 +100,9 @@ int main(int argc, char const *argv[]) {
         }
         else if(!strcmp(argv[i], "-m")) {
             numMoves = atoi(argv[i + 1]);
+        }
+        else if(!strcmp(argv[i], "-w")) {
+            mKernelCode = *argv[i + 1];
         }
         else if(!strcmp(argv[i], "-v")) {
             visualise = 1;
@@ -108,23 +127,30 @@ int main(int argc, char const *argv[]) {
 
     int useBenchmark = !maxColour ? 1 : 0;
 
+    //set kernel config
+    if(kernelConfig != NULL) {
+        cKernelCode = kernelConfig[0];
+        dKernelCode = kernelConfig[1];
+        mKernelCode = kernelConfig[2];
+    }
+
     //set colouring kernel
-    int (*agentController) (node**, int, int);
+    int (*colouringKernel) (node*, int);
     switch (cKernelCode) {
         case 'r':
-            agentController = &randomKernel;
+            colouringKernel = &randomKernel;
             break;
         case 'd':
-            agentController = &colourblindFishAgentDecrement;
+            colouringKernel = &colourblindAgentDecrement;
             break;
         case 'i':
-            agentController = &colourblindFishAgentIncrement;
+            colouringKernel = &colourblindAgentIncrement;
             break;
         case 'a':
-            agentController = &amongUsKernel;
+            colouringKernel = &amongUsKernel;
             break;
         case 'm':
-            agentController = &minimumAgent;
+            colouringKernel = &minimumAgent;
             break;
         default:
             printf("invalid colouring kernel\n");
@@ -151,6 +177,23 @@ int main(int argc, char const *argv[]) {
             return 1;
     }
 
+    //set the movement kernel
+    node* (*movementKernel) (node*, int);
+    switch(mKernelCode) {
+        case 'r':
+            movementKernel = &randomMoveKernel;
+            break;
+        case 'o':
+            movementKernel = &optimalMoveKernel;
+            break;
+        case 'x':
+            movementKernel = NULL;
+            break;
+        default:
+            printf("invalid movement kernel\n");
+            return 1;
+    }
+
     //graph variables
     node** graph;
     node** colouredGraph;
@@ -158,8 +201,8 @@ int main(int argc, char const *argv[]) {
 
     if(save) {
         char description[100];
-        snprintf(description, 100, "generator: %c; coloring kernel: %c; dynamic kernel: %c; no. nodes: %d; probability: %.3f;",
-            generator, cKernelCode, dKernelCode, numNodes, prob);
+        snprintf(description, 100, "generator: %c; coloring kernel: %c; dynamic kernel: %c; movement kernel: %c; no. nodes: %d; probability: %.3f;",
+            generator, cKernelCode, dKernelCode, mKernelCode, numNodes, prob);
         addHeadersToResultsFile(description);
     }
 
@@ -185,6 +228,9 @@ int main(int argc, char const *argv[]) {
                 return 1;
         }
 
+        printf("highest degree: %d\n", findNodeWithHighestDegree(graph, numNodes)->degree);
+        printf("lowest degree: %d\n", findNodeWithLowestDegree(graph, numNodes)->degree);
+
         //colour the graph
         benchmarkMinimumGraph = minimumColour(graph, numNodes);
         
@@ -192,7 +238,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
+        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
 
         if(visualise) {
             autoRuns = 1;   //should only run once if viewing the graph
@@ -205,10 +251,7 @@ int main(int argc, char const *argv[]) {
             //TODO: hard to see changes when you only see the non-recoloured graph
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                // colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, agentController, dynamicKernel, save);
-                node** traversedGraph = pathColour(colouredGraph, numNodes, colouredGraph[0], agentController, minColour, numNodes, 0);
-                printf("new number of colours: %d\n", findNumColoursUsed(traversedGraph, numNodes, maxColour));
-                free(traversedGraph);
+                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
             }
         }
 

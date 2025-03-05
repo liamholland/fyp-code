@@ -3,9 +3,10 @@
 
 #include "node.h"
 
-node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
-    int (*agentController)(node** agent, int numMoves, int numNodes),
-    int (*dynamicKernel)(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents), int save);
+node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int save,
+    int (*colouringKernel)(node* agent, int numNodes),
+    int (*dynamicKernel)(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents),
+    node* (*movementKernel)(node* agent, int numMoves));
 
 node** pathColour(node** graph, int numNodes, node* startingNode, int (*agentController)(node**, int, int), int minColour, int maxColour, int save);
 

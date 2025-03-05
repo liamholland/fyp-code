@@ -390,8 +390,51 @@ node* findNodeWithHighestDegree(node** graph, int numNodes) {
     return highestDegreeNode;
 }
 
-int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength) {
-    node** list = *nodeList;
+node* findNodeWithLowestDegree(node** graph, int numNodes) {
+    int lowestDegree = 0;
+    node** lowestDegreeContenders = (node**)malloc(sizeof(node*) * numNodes);
+    int numContenders = 0;
+
+    for(int n = 0; n < numNodes; n++) {
+        if(graph[n]->degree < lowestDegree) {
+            lowestDegree = graph[n]->degree;
+            numContenders = 1;
+            lowestDegreeContenders[0] = graph[n];
+        }
+        else if(graph[n]->degree == lowestDegree) {
+            lowestDegreeContenders[numContenders++] = graph[n];
+        }
+    }
+
+    if(numContenders == 0) {
+        free(lowestDegreeContenders);
+        return graph[0];    //all nodes are orphans
+    }
+    
+    //in the case of a tie, return the node with the highest colour
+    if(numContenders > 1) {
+        int highestColour = -1; //worst case, the first contender will be returned
+        node* highestColourNode;
+
+        for(int n = 0; n < numContenders; n++) {
+            if(lowestDegreeContenders[n]->colour > highestColour) {
+                highestColour = lowestDegreeContenders[n]->colour;
+                highestColourNode = lowestDegreeContenders[n];
+            }
+        }
+
+        free(lowestDegreeContenders);
+        return highestColourNode;
+    }
+
+    //only one contender
+    node* lowestDegreeNode = lowestDegreeContenders[0];
+    free(lowestDegreeContenders);
+    return lowestDegreeNode;
+}
+
+int removeAllInstancesOfNodePointerFromList(node*** nodeListReference, node* targetPointer, int* listLength) {
+    node** list = *nodeListReference;
     
     int countValidAgents = 0;
     node** remainingAgents = (node**)malloc(sizeof(node*) * (*listLength));
@@ -403,7 +446,7 @@ int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointe
 
     remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
     free(list);
-    *nodeList = remainingAgents;
+    *nodeListReference = remainingAgents;
     *listLength = countValidAgents;
 
     return 0;

@@ -9,35 +9,26 @@
 node** minimumColour(node** graph, int numNodes) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
-    int chromaticColour = numNodes;
+    int m = 1;
 
-    for(int m = 1; m < numNodes + 1; m++) {
+    // colour each node
+    for(int n = 0; n < numNodes; n++) {
 
-        for(int n = 0; n < numNodes; n++) {
+        // find the smallest colour possible to colour it with
+        for(int k = 1; k < m + 1; k++) {
 
-            for(int k = 1; k < m + 1; k++) {
+            colouringGraph[n]->colour = k;
 
-                colouringGraph[n]->colour = k;
-
-                if(!nodeIsInConflict(colouringGraph[n])) {
-                    break;
-                }
-                else if(k == m) {
-                    m++;
-                }
+            if(!nodeIsInConflict(colouringGraph[n])) {
+                break;  //break if the node is successfully coloured
             }
-        }
-
-        if(findNumConflicts(colouringGraph, numNodes) == 0) {
-            chromaticColour = m;
-            break;
-        }
-        else {
-            resetGraphColours(colouringGraph, numNodes);
+            else if(k == m) {
+                m++;    //increase m if there is no way to colour it properly
+            }
         }
     }
 
-    printf("centralised colour: %d\n", chromaticColour);
+    printf("centralised colour: %d\n", m);
 
     return colouringGraph;
 }
