@@ -107,22 +107,32 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     return colouringGraph;
 }
 
-node** pathColour(node** graph, int numNodes, node* startingNode, int (*agentController)(node**, int, int), int minColour, int maxColour, int save) {
+node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int (*agentController)(node**, int, int), int minColour, int maxColour, int save) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     //find the starting point in the new graph
-    node* copyStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, startingNode->id);
+    node* copyFirstStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, firstStartingNode->id);
+    
+    if(copyFirstStartingNode == NULL) {
+        printf("failed to find first starting node in graph copy; aborting\n");
+        return NULL;
+    }
+    
+    node* copySecondStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, secondStartingNode->id);
 
-    if(copyStartingNode == NULL) {
-        printf("failed to find starting node in graph copy; aborting\n");
+    if(copyFirstStartingNode == NULL) {
+        printf("failed to find second starting node in graph copy; aborting\n");
         return NULL;
     }
 
     //some sort of dynamic data structure
     //probably a queue
     node** colouringQueue = (node**)malloc(sizeof(node*) * numNodes);
-    colouringQueue[0] = copyStartingNode;
-    int queueLength = 1;
+
+    // add both starting nodes manually
+    colouringQueue[0] = copyFirstStartingNode;
+    colouringQueue[1] = copySecondStartingNode;
+    int queueLength = 2;
 
     //check the next node in the list
     //try to colour it
