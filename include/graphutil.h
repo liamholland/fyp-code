@@ -1,6 +1,21 @@
 #ifndef UTIL
 #define UTIL
 
+/*
+these functions are helper functions used throughout the code base in order
+to make common operations easier. their complexity varies.
+
+note that two functions here are the only other places where triple-pointers
+are used outside of the dynamic kernels. These are
+- removeNode
+- removeAllInstancesOfNodePointerFromList
+the reason triple pointers are used is because the functions are written for use
+specifically *in* the dynamic kernels. i did not want to make an entire copy of the
+graph when removing nodes from it when these functions were going to be called a lot,
+and the point of the dynamic kernels is to modify the lists anyway
+*/
+
+
 #include "node.h"
 
 //initialises a whole load of node pointers.
@@ -77,6 +92,9 @@ int removeEdge(node* nodeReference, node* neighbour);
 int makeNodeOrpan(node* targetNode);
 
 //yes that really is a `node***`
+//it is better to use a triple pointer here rather than an expensive copy operation on every
+//dyanmic kernel call. the copy would also require relocating the target node in
+//the copied graph
 //removes the node and frees all of its memory, then reallocates the memory
 //associated with the array, hence the pass by reference for the pointer
 int removeNode(node*** graphReference, int numNodes, node* targetNode);
@@ -89,9 +107,15 @@ int addEdgeBetweenNodes(node* nodeOne, node* nodeTwo);
 //will be returned 
 node* findNodeWithHighestDegree(node** graph, int numNodes);
 
+//similar to the previous, this function will find the node with the lowest degree
+//in the case of a tie, the contender with the "largest colour" (least optimised)
+//will be returned
+node* findNodeWithLowestDegree(node** graph, int numNodes);
+
 //this function modifies the provided list and list length in order to remove
 //the provided pointer from the list
-int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength);
+//uses references for a similar reason to the removeNode function
+int removeAllInstancesOfNodePointerFromList(node*** nodeListReference, node* targetPointer, int* listLength);
 
 //returns a vector of numbers representing how many times each colour
 //appeared at in the graph
