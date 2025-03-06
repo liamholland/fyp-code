@@ -42,14 +42,13 @@ node** copyGraph(node** graph, int numNodes) {
         memcpy(graphcpy[n], graph[n], sizeof(node));
     }
 
-    int* differentials = (int*)calloc(numNodes, sizeof(int));
-    if(numNodes - graph[numNodes - 1]->id != 0) {
+    int* differentials = (int*)calloc(graph[numNodes - 1]->id + 1, sizeof(int));
+    if(numNodes - (graph[numNodes - 1]->id + 1) != 0) {
         //graph indexes do not line up with ids, calculate differentials
-        int differential = 0;
         int nodesTraversed = 0;
 
         for(int n = 0; n < numNodes; n++) {
-            differentials[n] += graph[n]->id - nodesTraversed++;
+            differentials[graph[n]->id] = graph[n]->id - nodesTraversed++;
         }
     }
 
