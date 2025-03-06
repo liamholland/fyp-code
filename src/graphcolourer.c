@@ -107,7 +107,9 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     return colouringGraph;
 }
 
-node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int (*colouringKernel)(node**, int, int), int minColour, int maxColour, int save) {
+node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int minColour, int maxColour, int save,
+    int (*colouringKernel)(node**, int, int)
+) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
     //find the starting point in the new graph
