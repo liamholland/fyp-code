@@ -42,19 +42,28 @@ node** copyGraph(node** graph, int numNodes) {
         memcpy(graphcpy[n], graph[n], sizeof(node));
     }
 
-    //check if ids line up with indexes
-    int graphIsModified = graph[numNodes - 1]->id - numNodes != 0;
+    int* differentials = (int*)calloc(numNodes, sizeof(int));
+    if(numNodes - graph[numNodes - 1]->id != 0) {
+        //graph indexes do not line up with ids, calculate differentials
+        int differential = 0;
+        int nodesTraversed = 0;
+
+        for(int n = 0; n < numNodes; n++) {
+            differentials[n] += graph[n]->id - nodesTraversed++;
+        }
+    }
 
     //update the neighbours to point to the new array
     //do it after first loop so that all the nodes actually exist
     for(int n = 0; n < numNodes; n++) {
         graphcpy[n]->neighbours = (node**)malloc(sizeof(node*) * graphcpy[n]->degree);
         for(int nb = 0; nb < graphcpy[n]->degree; nb++) {
-            graphcpy[n]->neighbours[nb] = graphIsModified ? 
-                findNodeWithIdInGraph(graphcpy, numNodes, graph[n]->neighbours[nb]->id) : 
-                graphcpy[graph[n]->neighbours[nb]->id];
+            int neighbourId = graph[n]->neighbours[nb]->id;
+            graphcpy[n]->neighbours[nb] = graphcpy[neighbourId - differentials[neighbourId]];
         }
     }
+
+    free(differentials);
 
     return graphcpy;
 }
