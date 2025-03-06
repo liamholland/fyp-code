@@ -64,7 +64,9 @@ node** copyGraph(node** graph, int numNodes) {
         }
     }
 
-    free(differentials);
+    if(differentials != NULL) {
+        free(differentials);
+    }
 
     return graphcpy;
 }
