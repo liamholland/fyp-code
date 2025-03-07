@@ -36,20 +36,16 @@ int printGraphAsText(node** graph, int numNodes) {
 node** copyGraph(node** graph, int numNodes) {
     node** graphcpy = (node**)malloc(sizeof(node*) * numNodes);
 
+    int* differentials = (int*)calloc(graph[numNodes - 1]->id + 1, sizeof(int));
+    int calculateDifferentials = numNodes - (graph[numNodes - 1]->id + 1) != 0;
+
     //copy all of the nodes
     for(int n = 0; n < numNodes; n++) {
         graphcpy[n] = (node*)malloc(sizeof(node));
         memcpy(graphcpy[n], graph[n], sizeof(node));
-    }
 
-    int* differentials = (int*)calloc(graph[numNodes - 1]->id + 1, sizeof(int));
-    if(numNodes - (graph[numNodes - 1]->id + 1) != 0) {
-        //graph indexes do not line up with ids, calculate differentials
-
-        int nodesTraversed = 0;
-
-        for(int n = 0; n < numNodes; n++) {
-            differentials[graph[n]->id] = graph[n]->id - nodesTraversed++;
+        if(calculateDifferentials) {
+            differentials[graph[n]->id] = graph[n]->id - n;
         }
     }
 

@@ -36,22 +36,16 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int* numAg
     //start the iterations
     int i;
     for(i = 0; i < maxIterations; i++) {
-        printf("i: %d\n", i);
-        
         int numChanges = 0;
 
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
-            printf("a: %d\n", a);
-
             numChanges += colouringKernel(agents[a], numColours);
 
             if(movementKernel != NULL) {
                 agents[a] = movementKernel(agents[a], numMoves);
             }
         }
-
-        printf("colouring kernel finished\n");
 
         if(dynamicKernel != NULL) {
             for(int a = 0; a < numAgents; a++) {
