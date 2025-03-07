@@ -238,7 +238,7 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
-        colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
+        colouredGraph = agentColour(graph, &numNodes, maxIterations, &numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
 
         // colouredGraph = pathColour(graph, numNodes, graph[0], graph[1], minColour, maxColour, save, colouringKernel);
 
@@ -252,7 +252,7 @@ int main(int argc, char const *argv[]) {
             printTraversalModeCommands();
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
-                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
+                colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, &numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
             }
         }
 
