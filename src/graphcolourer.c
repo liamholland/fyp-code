@@ -106,3 +106,74 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
 
     return colouringGraph;
 }
+
+node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int minColour, int maxColour, int save,
+    int (*colouringKernel)(node*, int)
+) {
+    node** colouringGraph = copyGraph(graph, numNodes);
+
+    //find the starting point in the new graph
+    node* copyFirstStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, firstStartingNode->id);
+    
+    if(copyFirstStartingNode == NULL) {
+        printf("failed to find first starting node in graph copy; aborting\n");
+        return NULL;
+    }
+    
+    node* copySecondStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, secondStartingNode->id);
+
+    if(copyFirstStartingNode == NULL) {
+        printf("failed to find second starting node in graph copy; aborting\n");
+        return NULL;
+    }
+
+    //queue structure
+    node** colouringQueue = (node**)malloc(sizeof(node*) * (numNodes * numNodes));
+
+    // add both starting nodes manually
+    colouringQueue[0] = copyFirstStartingNode;
+    colouringQueue[1] = copySecondStartingNode;
+    int queueLength = 2;
+
+    //check the next node in the list
+    //try to colour it
+    //if numChanges > 1, add its neighbours to the queue
+    //remove the node from the queue
+
+    int numUpdates = 0;
+
+    while(queueLength > 0) {
+        printf("queue length: %d\n", queueLength);
+
+        int numChanges = colouringKernel(colouringQueue[0], maxColour);
+
+        if(numChanges > 0) {
+            numUpdates++;
+
+            //add neighbours to queue if they are not already there
+            for(int nb = 0; nb < colouringQueue[0]->degree; nb++) {
+                for(int q = 0; q < queueLength; q++) {
+                    if(colouringQueue[q] == colouringQueue[0]->neighbours[nb]) continue;
+                }
+                colouringQueue[queueLength++] = colouringQueue[0]->neighbours[nb];
+            }
+        }
+
+        //shift queue up one
+        for(int n = 0; n < queueLength - 1; n++) {
+            colouringQueue[n] = colouringQueue[n + 1];
+        }
+
+        colouringQueue[--queueLength] = NULL;   //decrement queue length
+    }
+
+    //repeat the process until the queue is empty
+
+    free(colouringQueue);
+
+    //print the new data, the number of updated nodes
+    printf("number of updates: %d\n\n", numUpdates);
+
+    //return the new coloured graph
+    return colouringGraph;
+}
