@@ -9,6 +9,6 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     node* (*movementKernel)(node* agent, int numMoves));
 
 node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int minColour, int maxColour, int save,
-    int (*colouringKernel)(node**, int, int));
+    int (*colouringKernel)(node*, int));
 
 #endif

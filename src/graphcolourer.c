@@ -108,7 +108,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
 }
 
 node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int minColour, int maxColour, int save,
-    int (*colouringKernel)(node**, int, int)
+    int (*colouringKernel)(node*, int)
 ) {
     node** colouringGraph = copyGraph(graph, numNodes);
 
@@ -129,7 +129,7 @@ node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* sec
 
     //some sort of dynamic data structure
     //probably a queue
-    node** colouringQueue = (node**)malloc(sizeof(node*) * numNodes);
+    node** colouringQueue = (node**)malloc(sizeof(node*) * (numNodes * numNodes));
 
     // add both starting nodes manually
     colouringQueue[0] = copyFirstStartingNode;
@@ -146,7 +146,7 @@ node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* sec
     while(queueLength > 0) {
         printf("queue length: %d\n", queueLength);
 
-        int numChanges = colouringKernel(&colouringQueue[0], 0, maxColour);
+        int numChanges = colouringKernel(colouringQueue[0], maxColour);
 
         if(numChanges > 0) {
             numUpdates++;
