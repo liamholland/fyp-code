@@ -9,12 +9,13 @@
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
 
-node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, int save,
+node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int* numAgentsPtr, int numMoves, int minColour, int maxColour, int save,
     int (*colouringKernel)(node*, int),
     int (*dynamicKernel)(node***, int*, node*, node***, int*),
     node* (*movementKernel)(node*, int))
 {
     int numNodes = *numNodesPtr;
+    int numAgents = *numAgentsPtr;
 
     node** colouringGraph = copyGraph(graph, numNodes);
 
@@ -35,16 +36,22 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
     //start the iterations
     int i;
     for(i = 0; i < maxIterations; i++) {
+        printf("i: %d\n", i);
+        
         int numChanges = 0;
 
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
+            printf("a: %d\n", a);
+
             numChanges += colouringKernel(agents[a], numColours);
 
             if(movementKernel != NULL) {
                 agents[a] = movementKernel(agents[a], numMoves);
             }
         }
+
+        printf("colouring kernel finished\n");
 
         if(dynamicKernel != NULL) {
             for(int a = 0; a < numAgents; a++) {
@@ -100,6 +107,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
 
     //update original value of numNodes
     *numNodesPtr = numNodes;
+    *numAgentsPtr = numAgents;
 
     free(problemsAtIteration);
     free(agents);
