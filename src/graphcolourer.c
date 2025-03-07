@@ -9,10 +9,13 @@
 #define AGENT_BREAK_LIMIT 10
 #define COLOUR_INCREASE_LIMIT 2
 
-node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAgents, int numMoves, int minColour, int maxColour, 
-    int (*agentController)(node**, int, int), int (*dynamicKernel)(node***, int*, node*, node***, int*), int save)
+node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int* numAgentsPtr, int numMoves, int minColour, int maxColour, int save,
+    int (*colouringKernel)(node*, int),
+    int (*dynamicKernel)(node***, int*, node*, node***, int*),
+    node* (*movementKernel)(node*, int))
 {
     int numNodes = *numNodesPtr;
+    int numAgents = *numAgentsPtr;
 
     node** colouringGraph = copyGraph(graph, numNodes);
 
@@ -37,7 +40,11 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
 
         //each agent makes changes to the graph
         for(int a = 0; a < numAgents; a++) {
-            numChanges += agentController(&agents[a], numMoves, numColours);
+            numChanges += colouringKernel(agents[a], numColours);
+
+            if(movementKernel != NULL) {
+                agents[a] = movementKernel(agents[a], numMoves);
+            }
         }
 
         if(dynamicKernel != NULL) {
@@ -92,11 +99,83 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int numAge
         saveColouringData(maxColour, *numNodesPtr, numNodes, i, numAgents, finalNumColours, numConflicts, numMissedNodes, time);
     }
 
-    //update original value of numNodes
+    //update original value of numNodes and numAgents
     *numNodesPtr = numNodes;
+    *numAgentsPtr = numAgents;
 
     free(problemsAtIteration);
     free(agents);
 
+    return colouringGraph;
+}
+
+node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* secondStartingNode, int minColour, int maxColour, int save,
+    int (*colouringKernel)(node*, int)
+) {
+    node** colouringGraph = copyGraph(graph, numNodes);
+
+    //find the starting point in the new graph
+    node* copyFirstStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, firstStartingNode->id);
+    
+    if(copyFirstStartingNode == NULL) {
+        printf("failed to find first starting node in graph copy; aborting\n");
+        return NULL;
+    }
+    
+    node* copySecondStartingNode = findNodeWithIdInGraph(colouringGraph, numNodes, secondStartingNode->id);
+
+    if(copyFirstStartingNode == NULL) {
+        printf("failed to find second starting node in graph copy; aborting\n");
+        return NULL;
+    }
+
+    //queue structure
+    node** colouringQueue = (node**)malloc(sizeof(node*) * (numNodes * numNodes));
+
+    // add both starting nodes manually
+    colouringQueue[0] = copyFirstStartingNode;
+    colouringQueue[1] = copySecondStartingNode;
+    int queueLength = 2;
+
+    //check the next node in the list
+    //try to colour it
+    //if numChanges > 1, add its neighbours to the queue
+    //remove the node from the queue
+
+    int numUpdates = 0;
+
+    while(queueLength > 0) {
+        printf("queue length: %d\n", queueLength);
+
+        int numChanges = colouringKernel(colouringQueue[0], maxColour);
+
+        if(numChanges > 0) {
+            numUpdates++;
+
+            //add neighbours to queue if they are not already there
+            for(int nb = 0; nb < colouringQueue[0]->degree; nb++) {
+                for(int q = 0; q < queueLength; q++) {
+                    if(colouringQueue[q] == colouringQueue[0]->neighbours[nb]) continue;
+                }
+                colouringQueue[queueLength++] = colouringQueue[0]->neighbours[nb];
+            }
+        }
+
+        //shift queue up one
+        for(int n = 0; n < queueLength - 1; n++) {
+            colouringQueue[n] = colouringQueue[n + 1];
+        }
+
+        colouringQueue[--queueLength] = NULL;   //decrement queue length
+    }
+
+    //repeat the process until the queue is empty
+
+    free(colouringQueue);
+
+    //print the new data, the number of updated nodes
+    printf("number of updates: %d\n\n", numUpdates);
+
+    //return the new coloured graph
     return colouringGraph;
 }

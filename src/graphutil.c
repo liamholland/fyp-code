@@ -36,10 +36,17 @@ int printGraphAsText(node** graph, int numNodes) {
 node** copyGraph(node** graph, int numNodes) {
     node** graphcpy = (node**)malloc(sizeof(node*) * numNodes);
 
+    int* differentials = (int*)calloc(graph[numNodes - 1]->id + 1, sizeof(int));
+    int calculateDifferentials = numNodes - (graph[numNodes - 1]->id + 1) != 0;
+
     //copy all of the nodes
     for(int n = 0; n < numNodes; n++) {
         graphcpy[n] = (node*)malloc(sizeof(node));
         memcpy(graphcpy[n], graph[n], sizeof(node));
+
+        if(calculateDifferentials) {
+            differentials[graph[n]->id] = graph[n]->id - n;
+        }
     }
 
     //update the neighbours to point to the new array
@@ -47,9 +54,12 @@ node** copyGraph(node** graph, int numNodes) {
     for(int n = 0; n < numNodes; n++) {
         graphcpy[n]->neighbours = (node**)malloc(sizeof(node*) * graphcpy[n]->degree);
         for(int nb = 0; nb < graphcpy[n]->degree; nb++) {
-            graphcpy[n]->neighbours[nb] = graphcpy[graph[n]->neighbours[nb]->id];
+            int neighbourId = graph[n]->neighbours[nb]->id;
+            graphcpy[n]->neighbours[nb] = graphcpy[neighbourId - differentials[neighbourId]];
         }
     }
+
+    free(differentials);
 
     return graphcpy;
 }
@@ -390,8 +400,51 @@ node* findNodeWithHighestDegree(node** graph, int numNodes) {
     return highestDegreeNode;
 }
 
-int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointer, int* listLength) {
-    node** list = *nodeList;
+node* findNodeWithLowestDegree(node** graph, int numNodes) {
+    int lowestDegree = 0;
+    node** lowestDegreeContenders = (node**)malloc(sizeof(node*) * numNodes);
+    int numContenders = 0;
+
+    for(int n = 0; n < numNodes; n++) {
+        if(graph[n]->degree < lowestDegree) {
+            lowestDegree = graph[n]->degree;
+            numContenders = 1;
+            lowestDegreeContenders[0] = graph[n];
+        }
+        else if(graph[n]->degree == lowestDegree) {
+            lowestDegreeContenders[numContenders++] = graph[n];
+        }
+    }
+
+    if(numContenders == 0) {
+        free(lowestDegreeContenders);
+        return graph[0];    //all nodes are orphans
+    }
+    
+    //in the case of a tie, return the node with the highest colour
+    if(numContenders > 1) {
+        int highestColour = -1; //worst case, the first contender will be returned
+        node* highestColourNode;
+
+        for(int n = 0; n < numContenders; n++) {
+            if(lowestDegreeContenders[n]->colour > highestColour) {
+                highestColour = lowestDegreeContenders[n]->colour;
+                highestColourNode = lowestDegreeContenders[n];
+            }
+        }
+
+        free(lowestDegreeContenders);
+        return highestColourNode;
+    }
+
+    //only one contender
+    node* lowestDegreeNode = lowestDegreeContenders[0];
+    free(lowestDegreeContenders);
+    return lowestDegreeNode;
+}
+
+int removeAllInstancesOfNodePointerFromList(node*** nodeListReference, node* targetPointer, int* listLength) {
+    node** list = *nodeListReference;
     
     int countValidAgents = 0;
     node** remainingAgents = (node**)malloc(sizeof(node*) * (*listLength));
@@ -403,7 +456,7 @@ int removeAllInstancesOfNodePointerFromList(node*** nodeList, node* targetPointe
 
     remainingAgents = (node**)realloc(remainingAgents, sizeof(node*) * countValidAgents);
     free(list);
-    *nodeList = remainingAgents;
+    *nodeListReference = remainingAgents;
     *listLength = countValidAgents;
 
     return 0;
@@ -432,4 +485,14 @@ int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
     free(colourFreqVector);
 
     return mostCommonColour;
+}
+
+node* findNodeWithIdInGraph(node** graph, int numNodes, int id) {
+    for(int n = 0; n < numNodes; n++) {
+        if(graph[n]->id == id) {
+            return graph[n];
+        }
+    }
+
+    return NULL;
 }
