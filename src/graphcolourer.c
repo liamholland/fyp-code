@@ -105,7 +105,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int* numAg
         saveColouringData(maxColour, *numNodesPtr, numNodes, i, numAgents, finalNumColours, numConflicts, numMissedNodes, time);
     }
 
-    //update original value of numNodes
+    //update original value of numNodes and numAgents
     *numNodesPtr = numNodes;
     *numAgentsPtr = numAgents;
 
