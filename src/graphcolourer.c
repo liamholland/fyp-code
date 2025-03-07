@@ -127,8 +127,7 @@ node** pathColour(node** graph, int numNodes, node* firstStartingNode, node* sec
         return NULL;
     }
 
-    //some sort of dynamic data structure
-    //probably a queue
+    //queue structure
     node** colouringQueue = (node**)malloc(sizeof(node*) * (numNodes * numNodes));
 
     // add both starting nodes manually

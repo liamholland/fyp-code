@@ -240,6 +240,8 @@ int main(int argc, char const *argv[]) {
 
         colouredGraph = agentColour(graph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
 
+        // colouredGraph = pathColour(graph, numNodes, graph[0], graph[1], minColour, maxColour, save, colouringKernel);
+
         if(visualise) {
             autoRuns = 1;   //should only run once if viewing the graph
 
@@ -248,7 +250,6 @@ int main(int argc, char const *argv[]) {
 
             //enter interactive traversal mode
             printTraversalModeCommands();
-            //TODO: hard to see changes when you only see the non-recoloured graph
             while(traverseGraph(colouredGraph, numNodes, highestDegreeNode, 1) < 0) {
                 //run it again
                 colouredGraph = agentColour(colouredGraph, &numNodes, maxIterations, numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
