@@ -172,6 +172,9 @@ int main(int argc, char const *argv[]) {
         case 't':
             dynamicKernel = &removeNodeIfThereAreTooManyConflictsKernel;
             break;
+        case 'a':
+            dynamicKernel = &reduceAgentsInGraphKernel;
+            break;
         case 'x':
             dynamicKernel = NULL;
             break;
