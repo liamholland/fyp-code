@@ -50,7 +50,9 @@ int removeNodeIfThereAreTooManyConflictsKernel(node*** graphReference, int* numN
 }
 
 int reduceAgentsInGraphKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents) {
-    if(rand() & 1000 == 0) {
+    if(rand() % 100 == 0) {
+        printf("removing agent on node %d\n", agent->id);
+
         removeAllInstancesOfNodePointerFromList(agentsReference, agent, numAgents);
     }
 
