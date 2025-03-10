@@ -38,10 +38,10 @@ done
 # decrementing kernel
 for k in 2 50 500 800
 do
-done
-for p in $(seq 0.1 0.1 1)
-do
-    ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c 800 -C 800 -S res/d_lmtd_800_ -M 10000 -k d
+    for p in $(seq 0.1 0.1 1)
+    do
+        ./colouring -n $NUMBER_OF_NODES -p $p -A $NUMBER_OF_AUTO_RUNS -c 800 -C 800 -S res/d_lmtd_800_ -M 10000 -k d
+    done
 done
 
 # incrementing kernel
