@@ -82,6 +82,9 @@ node** findAllConflictingNodesInGraph(node** graph, int numNodes);
 //returns them in an array
 node** findConflictingNeighboursForNode(node* n);
 
+//returns the number of conflicts that node n is under
+int findNumberOfConflictsForNode(node* n);
+
 //does what it says on the tin; removes the edge between the node
 //and its neighbour
 int removeEdge(node* nodeReference, node* neighbour);

@@ -169,6 +169,9 @@ int main(int argc, char const *argv[]) {
         case 'o':
             dynamicKernel = &removeOrphanNodesKernel;
             break;
+        case 't':
+            dynamicKernel = &removeNodeIfThereAreTooManyConflictsKernel;
+            break;
         case 'x':
             dynamicKernel = NULL;
             break;

@@ -49,7 +49,7 @@ node** agentColour(node** graph, int* numNodesPtr, int maxIterations, int* numAg
 
         if(dynamicKernel != NULL) {
             for(int a = 0; a < numAgents; a++) {
-                dynamicKernel(&colouringGraph, &numNodes, agents[a], &agents, &numAgents);
+                numChanges += dynamicKernel(&colouringGraph, &numNodes, agents[a], &agents, &numAgents);
             }
         }
 
