@@ -62,9 +62,10 @@ options:
                     the default is determined by a brute force centralised approach
                     this paramter will have no effect if the lower bound is not also set
                     can be used to ensure that the solution is optimal or to force conflicts
--S                set the save mode on
+-S [name/path]    set the save mode on
                     flag which sets whether the results are saved to a file called results.csv
                     the default is false
+                    the name/path is optional, but allows for custom names or paths if included
 -A [integer]      number of automatic runs
                     default is 1 (run the program once)
                     increasing the number will run the program that number of times
@@ -84,16 +85,42 @@ options:
 -g [generator]    set the generator
                     sets the graph generator function to use
                     there are currently two different types of graphs you can use
-                    r: random graph; each edge has a p% chance of existing (default)
-                      options:
-                        -p [float]      probability (as a floating point number between 0 and 1)
-                                          probability that each edge of the graph exists
-                                          default is 0.5
-                    o: ring graph; undirected graph where each node has two neighbours
-                    b: bipartite graph; a graph of two disjoint subsets
-                      options:
-                        -s [integer]    set one; the number of nodes in the first subset
-                                          the default is to split the number of nodes in two
+                      r: random graph; each edge has a p% chance of existing (default)
+                        options:
+                          -p [float]      probability (as a floating point number between 0 and 1)
+                                            probability that each edge of the graph exists
+                                            default is 0.5
+                      o: ring graph; undirected graph where each node has two neighbours
+                      b: bipartite graph; a graph of two disjoint subsets
+                        options:
+                          -s [integer]    set one; the number of nodes in the first subset
+                                            the default is to split the number of nodes in two
+-k [kernel]       set the colouring kernel
+                    sets the kernel used to colour the nodes
+                    options include:
+                      m: local minimum (default); applies the local minimum colour
+                      r: random kernel; picks a colour between 1 and max if in conflict
+                      d: colour-blind decrement; decrements colour if in conflict
+                      i: colour-blind increment; increments colour if in conflict
+                      a: amongus kernel; introduces a bad actor (colours with m)
+-d [kernel]       set the dynamic kernel
+                    sets the kernel used to modify the topology of the graph
+                    options include:
+                      x: no dynamic kernel (default)
+                      e: possibly remove edge
+                      n: possibly remove node
+                      o: remove orphan nodes
+-w [kernel]       set the movement kernel
+                    sets the kernel used to move agents between nodes
+                    options include:
+                      x: no movement kernel (default)
+                      r: random movement kernel
+                      o: optimal movement kernel
+-K [config]       set kernel config
+                    sets the kernel config based on the provided string
+                    the string is parsed in the format [colour, dynamic, movement]
+                    for example, the default configuration is 'mxx'
+                    colour-blind decrement with possible edge removal would be 'dex'
 ```
 
 #### Example Usage

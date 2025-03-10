@@ -3,60 +3,46 @@
 #include "graphutil.h"
 #include "colouringKernels.h"
 
-int colourblindFishAgentIncrement(node** fishPointer, int numMoves, int maxColour) {
+int colourblindAgentIncrement(node* agent, int maxColour) {
     int numChanges = 0;
     
-    node* fish = *fishPointer;
+    int max = maxColour < agent->degree ? maxColour : agent->degree;
 
     //check for conflicts in neighbours
-    if(!fish->colour || nodeIsInConflict(fish)) {
-        fish->colour = (fish->colour + 1) % (fish->degree + 1);
+    if(!agent->colour || nodeIsInConflict(agent)) {
+        agent->colour = (agent->colour + 1) % (max + 1);
 
-        if(!fish->colour) {
-            fish->colour++;
+        if(!agent->colour) {
+            agent->colour++;
         }
 
         numChanges = 1;
     }
 
-    //the fish wanders in its locality
-    for(int m = 0; m < numMoves; m++) {
-        *fishPointer = fish->neighbours[rand() % fish->degree];
-        fish = *fishPointer;
-    }
-
     return numChanges;
 }
 
-int colourblindFishAgentDecrement(node** fishPointer, int numMoves, int maxColour) {
+int colourblindAgentDecrement(node* agent, int maxColour) {
     int numChanges = 0;
     
-    node* fish = *fishPointer;
+    int max = maxColour < agent->degree ? maxColour : agent->degree;
 
     //check for conflicts in neighbours
-    if(!fish->colour || nodeIsInConflict(fish)) {
-        fish->colour--;
+    if(!agent->colour || nodeIsInConflict(agent)) {
+        agent->colour--;
 
-        if(fish->colour <= 0) {
-            fish->colour = fish->degree + 1;
+        if(agent->colour <= 0) {
+            agent->colour = max;
         }
 
         numChanges = 1;
     }
 
-    //the fish wanders in its locality
-    for(int m = 0; m < numMoves; m++) {
-        *fishPointer = fish->neighbours[rand() % fish->degree];
-        fish = *fishPointer;
-    }
-
     return numChanges;
 }
 
-int minimumAgent(node** agentPointer, int numMoves, int maxColour) {
+int minimumAgent(node* agent, int maxColour) {
     int numChanges = 0;
-
-    node* agent = *agentPointer;
 
     int* coloursInLocality = findWhichColoursInGraph(agent->neighbours, agent->degree, maxColour);
 
@@ -73,62 +59,22 @@ int minimumAgent(node** agentPointer, int numMoves, int maxColour) {
 
     free(coloursInLocality);
 
-    if(!agent->colour) {
-        agent->colour = max;
-        numChanges = 1;
-    }
-
-    //move the agent
-    for(int m = 0; m < numMoves; m++) {
-        if(agent->degree == 0) {
-            break;  //cant move the agent; on an orphan node
-        }
-        else if(findNumUncolouredNodes(agent->neighbours, agent->degree) > 0) {
-            for(int nb = 0; nb < agent->degree; nb++) {
-                if(!agent->neighbours[nb]->colour) {
-                    *agentPointer = agent->neighbours[nb];
-                    agent = *agentPointer;
-                }
-            }
-        }
-        else {
-            node* maxColourNode = agent->neighbours[0];
-            for(int nb = 0; nb < agent->degree; nb++) {
-                if(agent->neighbours[nb]->colour > maxColourNode->colour) {
-                    maxColourNode = agent->neighbours[nb];
-                }
-            }
-
-            *agentPointer = maxColourNode;
-            agent = *agentPointer;
-        }
-    }
-
     return numChanges;
 }
 
-int randomKernel(node** agentPointer, int numMoves, int maxColour) {
+int randomKernel(node* agent, int maxColour) {
     int numChanges = 0;
-
-    node* agent = *agentPointer;
 
     if(nodeIsInConflict(agent) || !agent->colour) {
         agent->colour = rand() % maxColour + 1;
         numChanges = 1;
     }
 
-    for(int m = 0; m < numMoves; m++) {
-        *agentPointer = agent->neighbours[rand() % agent->degree];
-        agent = *agentPointer;
-    }
-
     return numChanges;
 }
 
-int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
+int edgeChopperKernel(node* agent, int maxColour) {
     int numChanges = 0;
-
-    node* agent = *agentPointer;
 
     if(!agent->colour) {
         agent->colour = maxColour < agent->degree ? maxColour : agent->degree;  //something more interesting here maybe?
@@ -141,12 +87,6 @@ int edgeChopperKernel(node** agentPointer, int numMoves, int maxColour) {
         numChanges = 1;
 
         free(conflicts);
-    }
-
-    //move the agent
-    for(int m = 0; m < numMoves; m++) {
-        *agentPointer = agent->neighbours[rand() % agent->degree];
-        agent = *agentPointer;
     }
 
     return numChanges;
@@ -168,7 +108,7 @@ int kernelCallNumber = 0;   //keeps track of the number of times the kernal has 
 vote* badActorVotes;
 int numVotes = 0;
 
-int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
+int amongUsKernel(node* agent, int maxColour) {
     //if the agent is the bad actor, it should pick the least optimal colour
     //if it is a normal node, it should do a normal colouring
     //normal nodes can also vote for the neighbour they believe is the bad actor
@@ -177,8 +117,6 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
     kernelCallNumber++;
 
     int numChanges = 0;
-
-    node* agent = *agentPointer;
 
     //select the bad actor
     if(!badActorSelected && rand() % 100 == 0) {
@@ -268,50 +206,6 @@ int amongUsKernel(node** agentPointer, int numMoves, int maxColour) {
         numVotes = 0;
         free(badActorVotes);
         badActorVotes = NULL;
-    }
-
-    //move the agent(?)
-    for(int m = 0; m < numMoves; m++) {
-        if(agent->degree == 0) {
-            break;  //cant move the agent; on an orphan node
-        }
-        else if(findNumUncolouredNodes(agent->neighbours, agent->degree) > 0) {
-            for(int nb = 0; nb < agent->degree; nb++) {
-                if(!agent->neighbours[nb]->colour) {
-                    *agentPointer = agent->neighbours[nb];
-                    agent = *agentPointer;
-
-                    if(agent = badActor) {
-                        badActor = agent;
-                    }
-
-                    break;
-                }
-            }
-        }
-        else if(agent == badActor) {
-            node* minColourNode = agent->neighbours[0];
-            for(int nb = 0; nb < agent->degree; nb++) {
-                if(agent->neighbours[nb]->colour < minColourNode->colour) {
-                    minColourNode = agent->neighbours[nb];
-                }
-            }
-
-            *agentPointer = minColourNode;
-            agent = *agentPointer;
-            badActor = agent;
-        }
-        else {
-            node* maxColourNode = agent->neighbours[0];
-            for(int nb = 0; nb < agent->degree; nb++) {
-                if(agent->neighbours[nb]->colour > maxColourNode->colour) {
-                    maxColourNode = agent->neighbours[nb];
-                }
-            }
-
-            *agentPointer = maxColourNode;
-            agent = *agentPointer;
-        }
     }
 
     //if the collective is confident in their choice of imposter
