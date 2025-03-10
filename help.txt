@@ -64,6 +64,7 @@ options:
                       n: possibly remove node
                       o: remove orphan nodes
                       t: remove nodes based on a threshold
+                      a: possibly remove the agent, but not the node
 -w [kernel]       set the movement kernel
                     sets the kernel used to move agents between nodes
                     options include:
