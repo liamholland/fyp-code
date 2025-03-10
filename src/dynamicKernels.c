@@ -48,3 +48,11 @@ int removeNodeIfThereAreTooManyConflictsKernel(node*** graphReference, int* numN
     
     return numChanges;
 }
+
+int reduceAgentsInGraphKernel(node*** graphReference, int* numNodes, node* agent, node*** agentsReference, int* numAgents) {
+    if(rand() & 1000 == 0) {
+        removeAllInstancesOfNodePointerFromList(agentsReference, agent, numAgents);
+    }
+
+    return 0;
+}
