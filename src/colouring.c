@@ -206,8 +206,8 @@ int main(int argc, char const *argv[]) {
     node** benchmarkMinimumGraph;
 
     if(save) {
-        char description[100];
-        snprintf(description, 100, "generator: %c; coloring kernel: %c; dynamic kernel: %c; movement kernel: %c; no. nodes: %d; probability: %.3f;",
+        char description[150];
+        snprintf(description, 150, "generator: %c; coloring kernel: %c; dynamic kernel: %c; movement kernel: %c; no. nodes: %d; probability: %.3f;",
             generator, cKernelCode, dKernelCode, mKernelCode, numNodes, prob);
         addHeadersToResultsFile(description);
     }
