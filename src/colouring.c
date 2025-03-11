@@ -212,9 +212,16 @@ int main(int argc, char const *argv[]) {
         addHeadersToResultsFile(description);
     }
 
+    //save modifiable values
+    int numNodesSave = numNodes;
+    int numAgentsSave = numAgents;
+
     //run main program loop
     //remember default for this is to run once
     for(int a = 0; a < autoRuns; a++) {
+        numNodes = numNodesSave;
+        numAgents = numAgentsSave;
+        
         //generate the graph
         switch (generator) {
             case 'r':
