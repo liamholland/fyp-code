@@ -251,6 +251,8 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
+        freeGraph(benchmarkMinimumGraph, numNodes);
+
         colouredGraph = agentColour(graph, &numNodes, maxIterations, &numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
 
         // colouredGraph = pathColour(graph, numNodes, graph[0], graph[1], minColour, maxColour, save, colouringKernel);
@@ -272,7 +274,6 @@ int main(int argc, char const *argv[]) {
         //free memory
         freeGraph(graph, numNodes);
         freeGraph(colouredGraph, numNodes);
-        freeGraph(benchmarkMinimumGraph, numNodes);
     }
 
     if(save) {
