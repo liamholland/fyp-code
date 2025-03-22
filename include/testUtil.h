@@ -4,4 +4,7 @@
 int testInitialiseGraphNoNeighbours();
 int testInitialiseGraphWithNeighbours();
 
+int testCopyUnmodifiedGraph();
+int testCopyModifiedGraph();
+
 #endif
