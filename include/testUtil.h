@@ -11,4 +11,7 @@ int testFreeGraph();
 
 int testFindNumColoursUsed();
 
+int testCountNumConflictsAll();
+int testCountNumConflictsNone();
+
 #endif

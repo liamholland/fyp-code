@@ -131,3 +131,42 @@ int testFindNumColoursUsed() {
     return 0;
 }
 
+int testCountNumConflictsAll() {
+    int NUM_NODES = 10;
+
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //apply a colouring
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = 1;
+    }
+
+    //verify
+    //number of conflicts is n - 1 + n - 2 + ... + 1 == (n * (n - 1)) / 2
+    int numConflicts = findNumConflicts(g, NUM_NODES);
+    if(numConflicts != (NUM_NODES * (NUM_NODES - 1)) / 2) {
+        return 1;
+    }
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testCountNumConflictsNone() {
+    int NUM_NODES = 10;
+
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //verify
+    int numConflicts = findNumConflicts(g, NUM_NODES);
+    if(numConflicts > 0) {
+        return 1;
+    }
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}

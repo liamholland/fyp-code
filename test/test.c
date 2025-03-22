@@ -5,7 +5,7 @@ int main(int argc, char const *argv[]) {
     
     //run tests
     for(int t = 0; t < NUM_TESTS; t++) {
-        printf("TESTING %s...", tests[t].testName);
+        printf("TESTING %s... ", tests[t].testName);
         
         if(tests[t].test()) {
             printf("\033[38;5;196mFAILED\033[0m\n");
