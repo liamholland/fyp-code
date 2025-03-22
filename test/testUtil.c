@@ -91,6 +91,24 @@ int testCopyModifiedGraph() {
     return 0;
 }
 
+int testFreeGraph() {
+    int NUM_NODES = 10;
+
+    //create a graph with neighbours
+    node** g = initialiseGraph(NUM_NODES, 1);
+
+    //free it
+    freeGraph(g, NUM_NODES);
+
+    //create a graph with no neighbours
+    g = initialiseGraph(NUM_NODES, 0);
+
+    //free it
+    freeGraph(g, NUM_NODES);
+
+    return 0;   //can basically just test that we make it to this point
+}
+
 int testFindNumColoursUsed() {
     int NUM_NODES = 10;
     
@@ -112,3 +130,4 @@ int testFindNumColoursUsed() {
 
     return 0;
 }
+

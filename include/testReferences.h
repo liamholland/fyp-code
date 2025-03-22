@@ -4,7 +4,7 @@
 #include "testUtil.h"
 #include "testTests.h"
 
-# define NUM_TESTS 7
+# define NUM_TESTS 8
 
 typedef struct testStruct {
     int (*test)();
@@ -21,6 +21,7 @@ test tests[] = {
     {&testInitialiseGraphWithNeighbours, "testInitialiseGraphWithNeighbours"},
     {&testCopyUnmodifiedGraph, "testCopyUnmodifiedGraph"},
     {&testCopyModifiedGraph, "testCopyModifiedGraph"},
+    {&testFreeGraph, "testFreeGraph"},
     {&testFindNumColoursUsed, "testFindNumColoursUsed"}
 };
 

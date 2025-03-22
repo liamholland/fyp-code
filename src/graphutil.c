@@ -66,7 +66,10 @@ node** copyGraph(node** graph, int numNodes) {
 
 int freeGraph(node** graph, int numNodes) {
     for(int n = 0; n < numNodes; n++) {
-        free(graph[n]->neighbours); //dont have to free each member of neighbours since they are all in this array
+        if(graph[n]->degree > 0) {
+            free(graph[n]->neighbours); //dont have to free each member of neighbours since they are all in this array
+        }
+
         free(graph[n]);
         graph[n] == NULL;
     }
