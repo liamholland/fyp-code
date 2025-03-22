@@ -7,4 +7,6 @@ int testInitialiseGraphWithNeighbours();
 int testCopyUnmodifiedGraph();
 int testCopyModifiedGraph();
 
+int testFindNumColoursUsed();
+
 #endif

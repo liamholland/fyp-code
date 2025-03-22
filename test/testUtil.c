@@ -90,3 +90,25 @@ int testCopyModifiedGraph() {
 
     return 0;
 }
+
+int testFindNumColoursUsed() {
+    int NUM_NODES = 10;
+    
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //apply a colouring
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = g[n]->id + 1;
+    }
+
+    //verify
+    int numColours = findNumColoursUsed(g, NUM_NODES, NUM_NODES);
+    if(numColours != NUM_NODES) {
+        return 1;
+    }
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
