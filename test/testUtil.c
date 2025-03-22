@@ -170,3 +170,33 @@ int testCountNumConflictsNone() {
 
     return 0;
 }
+
+//num uncoloured nodes
+
+//fetch n unique nodes
+
+//node in conflict
+
+//find which colours in graph
+
+//find the conflicting nodes in the graph
+
+//find the conflicting neighbours for node
+
+//remove edge
+
+//make node orphan
+
+//remove node
+
+//add edge
+
+//find node with highest degree
+
+//find node with lowest degree
+
+//remove all instances of pointer from list
+
+//find most common colour in graph
+
+//find node with id
