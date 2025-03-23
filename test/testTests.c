@@ -1,3 +1,5 @@
+#include "testTests.h"
+
 int testPass() {
     return 0;
 }

@@ -4,7 +4,7 @@
 #include "testUtil.h"
 #include "testTests.h"
 
-# define NUM_TESTS 10
+#define NUM_TESTS 10
 
 typedef struct testStruct {
     int (*test)();
