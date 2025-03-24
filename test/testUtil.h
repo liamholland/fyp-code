@@ -19,4 +19,6 @@ int testNumUncolouredNodes();
 int testFetchNodes();
 int testFetchNodesMoreThanGraph();
 
+int testNodeInConflict();
+
 #endif

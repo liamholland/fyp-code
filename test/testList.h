@@ -4,8 +4,6 @@
 #include "testUtil.h"
 #include "testTests.h"
 
-#define NUM_TESTS 13
-
 typedef struct testStruct {
     int (*test)();
     const char* testName;
@@ -27,7 +25,10 @@ const test tests[] = {
     {&testCountNumConflictsNone, "testCountNumConflictsNone"},
     {&testNumUncolouredNodes, "testNumUncolouredNodes"},
     {&testFetchNodes, "testFetchNodes"},
-    {&testFetchNodesMoreThanGraph, "testFetchNodesMoreThanGraph"}
+    {&testFetchNodesMoreThanGraph, "testFetchNodesMoreThanGraph"},
+    {&testNodeInConflict, "testNodeInConflict"}
 };
+
+const int NUM_TESTS = sizeof(tests) / sizeof(test);
 
 #endif

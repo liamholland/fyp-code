@@ -235,7 +235,28 @@ int testFetchNodesMoreThanGraph() {
     return 0;
 }
 
-//node in conflict
+int testNodeInConflict() {
+    //create two nodes
+    node** g = initialiseGraph(2, 1);
+
+    g[0]->neighbours[0] = g[1];
+    g[1]->neighbours[0] = g[0];
+
+    if(nodeIsInConflict(g[0]) || nodeIsInConflict(g[1])) {
+        return 1;
+    }
+
+    g[0]->colour = 1;
+    g[1]->colour = 1;
+
+    if(!nodeIsInConflict(g[0]) || !nodeIsInConflict(g[1])) {
+        return 1;
+    }
+
+    freeGraph(g, 2);
+
+    return 0;
+}
 
 //find which colours in graph
 
