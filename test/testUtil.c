@@ -94,6 +94,12 @@ int testFreeGraph() {
 
     //free it
     freeGraph(g, NUM_NODES);
+    
+    for(int n = 0; n < NUM_NODES; n++) {
+        if(g[n] != NULL) {
+            return 1;
+        }
+    }
 
     //create a graph with no neighbours
     g = initialiseGraph(NUM_NODES, 0);
@@ -101,7 +107,13 @@ int testFreeGraph() {
     //free it
     freeGraph(g, NUM_NODES);
 
-    return 0;   //can basically just test that we make it to this point
+    for(int n = 0; n < NUM_NODES; n++) {
+        if(g[n] != NULL) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 int testFindNumColoursUsed() {
@@ -310,10 +322,89 @@ int testWhichColoursInGraphAll() {
     return 0;
 }
 
+int testFindConflictingNodesInGraph() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
 
-//find the conflicting nodes in the graph
+    //make the first have of the nodes conflict
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = 1;
+    }
 
-//find the conflicting neighbours for node
+    //verify
+    node** conflictingNodes = findAllConflictingNodesInGraph(g, NUM_NODES);
+    for(int n = 0; n < NUM_NODES; n++) {
+        if(conflictingNodes[n]->id != g[n]->id) {
+            return 1;
+        }
+    }
+
+    freeGraph(conflictingNodes, NUM_NODES / 2);
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testFindConflictingNeighbours() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //apply same colouring to every node
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = 1;
+    }
+
+    //verify
+    node** conflictingNodes = findConflictingNeighboursForNode(g[0]);
+    for(int n = 0; n < NUM_NODES - 1; n++) {
+        if(conflictingNodes[n]->id != n + 1) {
+            return 1;
+        }
+    }
+
+    free(conflictingNodes);
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testFindConflictingNeighboursNoConflicts() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //apply colouring to every node
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = g[n]->id + 1;
+    }
+
+    //verify
+    node** conflictingNodes = findConflictingNeighboursForNode(g[0]);
+    if(conflictingNodes != NULL) {
+        return 1;
+    }
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testCountNumberOfConflictsForNode() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //apply same colour to each node
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = 1;
+    }
+
+    //verify
+    int numConflicts = findNumberOfConflictsForNode(g[0]);
+    if(numConflicts != NUM_NODES - 1) return 1;
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
 
 //remove edge
 

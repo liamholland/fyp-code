@@ -71,7 +71,7 @@ int freeGraph(node** graph, int numNodes) {
         }
 
         free(graph[n]);
-        graph[n] == NULL;
+        graph[n] = NULL;
     }
 
     free(graph);
@@ -212,11 +212,13 @@ node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
 
         int numConflicts = findNumberOfConflictsForNode(graphCopy[i]);
 
-        memcpy(conflictingNodes[totalNumConflictingNodes], conflicts, sizeof(node*) * numConflicts);
+        memcpy(conflictingNodes + totalNumConflictingNodes, conflicts, sizeof(node*) * numConflicts);
 
         totalNumConflictingNodes += numConflicts;
+        printf("%d ", totalNumConflictingNodes);
 
         freeGraph(conflicts, numConflicts); //this should make the pointers null in the graph copy
+        printf("freed memory ");
     }
 
     freeGraph(graphCopy, numNodes);

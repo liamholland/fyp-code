@@ -30,7 +30,11 @@ const test tests[] = {
     REGISTER_TEST(testFetchNodesMoreThanGraph),
     REGISTER_TEST(testNodeInConflict),
     REGISTER_TEST(testWhichColoursInGraphOnlyOne),
-    REGISTER_TEST(testWhichColoursInGraphAll)
+    REGISTER_TEST(testWhichColoursInGraphAll),
+    REGISTER_TEST(testFindConflictingNeighbours),
+    REGISTER_TEST(testFindConflictingNeighboursNoConflicts),
+    REGISTER_TEST(testCountNumberOfConflictsForNode),
+    REGISTER_TEST(testFindConflictingNodesInGraph)
 };
 
 const int NUM_TESTS = sizeof(tests) / sizeof(test);

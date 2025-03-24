@@ -24,4 +24,11 @@ int testNodeInConflict();
 int testWhichColoursInGraphOnlyOne();
 int testWhichColoursInGraphAll();
 
+int testFindConflictingNodesInGraph();
+
+int testFindConflictingNeighbours();
+int testFindConflictingNeighboursNoConflicts();
+
+int testCountNumberOfConflictsForNode();
+
 #endif
