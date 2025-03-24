@@ -1,11 +1,11 @@
+#include <stdlib.h>
 #include "graphutil.h"
 #include "graphgenerator.h"
-
 #include "testUtil.h"
 
+#define NUM_NODES 10
+
 int testInitialiseGraphNoNeighbours() {
-    int NUM_NODES = 10;
-    
     node** g = initialiseGraph(NUM_NODES, 0);
 
     for(int n = 0; n < NUM_NODES; n++) {
@@ -18,11 +18,12 @@ int testInitialiseGraphNoNeighbours() {
         }
     }
 
+    freeGraph(g, NUM_NODES);
+
     return 0;
 }
 
 int testInitialiseGraphWithNeighbours() {
-    int NUM_NODES = 10;
     int DEGREE = 2;
 
     node** g = initialiseGraph(NUM_NODES, DEGREE);
@@ -43,8 +44,6 @@ int testInitialiseGraphWithNeighbours() {
 }
 
 int testCopyUnmodifiedGraph() {
-    int NUM_NODES = 10;
-    
     //create a graph
     node** g = generateRandomGraph(NUM_NODES, 1);
 
@@ -65,8 +64,6 @@ int testCopyUnmodifiedGraph() {
 }
 
 int testCopyModifiedGraph() {
-    int NUM_NODES = 10;
-
     //create a graph
     node** g = generateRandomGraph(NUM_NODES, 1);
 
@@ -92,8 +89,6 @@ int testCopyModifiedGraph() {
 }
 
 int testFreeGraph() {
-    int NUM_NODES = 10;
-
     //create a graph with neighbours
     node** g = initialiseGraph(NUM_NODES, 1);
 
@@ -110,8 +105,6 @@ int testFreeGraph() {
 }
 
 int testFindNumColoursUsed() {
-    int NUM_NODES = 10;
-    
     //create a graph
     node** g = generateRandomGraph(NUM_NODES, 1);
 
@@ -132,8 +125,6 @@ int testFindNumColoursUsed() {
 }
 
 int testCountNumConflictsAll() {
-    int NUM_NODES = 10;
-
     //create a graph
     node** g = generateRandomGraph(NUM_NODES, 1);
 
@@ -155,8 +146,6 @@ int testCountNumConflictsAll() {
 }
 
 int testCountNumConflictsNone() {
-    int NUM_NODES = 10;
-
     //create a graph
     node** g = generateRandomGraph(NUM_NODES, 1);
 
@@ -171,9 +160,80 @@ int testCountNumConflictsNone() {
     return 0;
 }
 
-//num uncoloured nodes
+int testNumUncolouredNodes() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
 
-//fetch n unique nodes
+    //verify
+    int numUncolouredNodes = findNumUncolouredNodes(g, NUM_NODES);
+    if(numUncolouredNodes != NUM_NODES) {
+        return 1;
+    }
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testFetchNodes() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //select nodes
+    node** selectedNodes = fetchNUniqueNodes(g, NUM_NODES, NUM_NODES / 2);
+    
+    //verify
+    for(int n = 0; n < NUM_NODES / 2; n++) {
+        //verify the pointer is in g
+
+        int foundNode = 0;
+
+        for(int i = 0; i < NUM_NODES; i++) {
+            if(g[i] == selectedNodes[n]) {
+                foundNode = 1;
+            }
+        }
+
+        if(!foundNode) {
+            return 1;
+        }
+    }
+
+    free(selectedNodes);
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testFetchNodesMoreThanGraph() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //select nodes
+    node** selectedNodes = fetchNUniqueNodes(g, NUM_NODES, NUM_NODES + 1);
+
+    //verify
+    for(int n = 0; n < NUM_NODES; n++) {
+        //verify the pointer is in g
+
+        int foundNode = 0;
+
+        for(int i = 0; i < NUM_NODES; i++) {
+            if(g[i] == selectedNodes[n]) {
+                foundNode = 1;
+            }
+        }
+
+        if(!foundNode) {
+            return 1;
+        }
+    }
+
+    free(selectedNodes);
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
 
 //node in conflict
 

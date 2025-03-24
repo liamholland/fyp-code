@@ -4,14 +4,14 @@
 #include "testUtil.h"
 #include "testTests.h"
 
-#define NUM_TESTS 10
+#define NUM_TESTS 13
 
 typedef struct testStruct {
     int (*test)();
     const char* testName;
 } test;
 
-test tests[] = {
+const test tests[] = {
     //test tests
     {&testPass, "testPass"},
     {&testFail, "testFail"},
@@ -24,7 +24,10 @@ test tests[] = {
     {&testFreeGraph, "testFreeGraph"},
     {&testFindNumColoursUsed, "testFindNumColoursUsed"},
     {&testCountNumConflictsAll, "testCountNumConflictsAll"},
-    {&testCountNumConflictsNone, "testCountNumConflictsNone"}
+    {&testCountNumConflictsNone, "testCountNumConflictsNone"},
+    {&testNumUncolouredNodes, "testNumUncolouredNodes"},
+    {&testFetchNodes, "testFetchNodes"},
+    {&testFetchNodesMoreThanGraph, "testFetchNodesMoreThanGraph"}
 };
 
 #endif

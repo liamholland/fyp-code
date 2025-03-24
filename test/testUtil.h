@@ -14,4 +14,9 @@ int testFindNumColoursUsed();
 int testCountNumConflictsAll();
 int testCountNumConflictsNone();
 
+int testNumUncolouredNodes();
+
+int testFetchNodes();
+int testFetchNodesMoreThanGraph();
+
 #endif
