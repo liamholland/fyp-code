@@ -424,13 +424,79 @@ int testRemoveEdge() {
     return 0;
 }
 
-//make node orphan
+int testMakeNodeOrphan() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
 
-//remove node
+    //make one an orphan
+    makeNodeOrpan(g[0]);
 
-//add edge
+    //verify
+    if(g[0]->degree > 0) return 1;
+    if(g[0]->neighbours != NULL) return 1;
 
-//find node with highest degree
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testRemoveNode() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //remove a node
+    int idToRemove = g[0]->id;
+    removeNode(&g, NUM_NODES, g[0]);
+
+    //verify
+    for(int n = 0; n < NUM_NODES - 1; n++) {
+        for(int nb = 0; nb < g[n]->degree; nb++) {
+            if(g[n]->neighbours[nb]->id == idToRemove) {
+                return 1;
+            }
+        }
+    }
+
+    freeGraph(g, NUM_NODES - 1);
+
+    return 0;
+}
+
+int testAddEdge() {
+    //create graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    makeNodeOrpan(g[0]);
+
+    //add an edge between two nodes
+    addEdgeBetweenNodes(g[0], g[1]);
+
+    //verify
+    if(g[0]->degree != 1) return 1;
+    if(g[0]->neighbours[0] != g[1]) return 1;
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testFindHighestDegree() {
+    //create a graph of orphans
+    node** g = generateRandomGraph(NUM_NODES, 0);
+
+    for(int n = 1; n < NUM_NODES; n++) {
+        addEdgeBetweenNodes(g[0], g[n]);
+    }
+
+    node* highest = findNodeWithHighestDegree(g, NUM_NODES);
+
+    //verify
+    if(highest != g[0]) return 1;
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
 
 //find node with lowest degree
 

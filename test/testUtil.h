@@ -33,4 +33,12 @@ int testCountNumberOfConflictsForNode();
 
 int testRemoveEdge();
 
+int testMakeNodeOrphan();
+
+int testRemoveNode();
+
+int testAddEdge();
+
+int testFindHighestDegree();
+
 #endif
