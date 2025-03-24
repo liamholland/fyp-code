@@ -406,7 +406,23 @@ int testCountNumberOfConflictsForNode() {
     return 0;
 }
 
-//remove edge
+int testRemoveEdge() {
+    //create two nodes
+    node** g = initialiseGraph(2, 1);
+
+    g[0]->neighbours[0] = g[1];
+    g[1]->neighbours[0] = g[0];
+
+    removeEdge(g[0], g[1]);
+
+    //verify
+    if(g[0]->degree > 0) return 1;
+    if(g[1]->degree > 0) return 1;
+
+    freeGraph(g, 2);
+
+    return 0;
+}
 
 //make node orphan
 

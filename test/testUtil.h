@@ -31,4 +31,6 @@ int testFindConflictingNeighboursNoConflicts();
 
 int testCountNumberOfConflictsForNode();
 
+int testRemoveEdge();
+
 #endif

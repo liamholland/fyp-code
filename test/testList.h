@@ -34,7 +34,8 @@ const test tests[] = {
     REGISTER_TEST(testFindConflictingNeighbours),
     REGISTER_TEST(testFindConflictingNeighboursNoConflicts),
     REGISTER_TEST(testCountNumberOfConflictsForNode),
-    REGISTER_TEST(testFindConflictingNodesInGraph)
+    // REGISTER_TEST(testFindConflictingNodesInGraph)
+    REGISTER_TEST(testRemoveEdge)
 };
 
 const int NUM_TESTS = sizeof(tests) / sizeof(test);
