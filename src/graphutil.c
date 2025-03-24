@@ -196,36 +196,6 @@ int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour) {
     return colourTruthVector;
 }
 
-node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
-    node** conflictingNodes = (node**)malloc(numNodes * sizeof(node*));
-
-    int totalNumConflictingNodes = 0;
-
-    node** graphCopy = copyGraph(graph, numNodes);
-
-    for(int i = 0; i < numNodes; i++) {
-        if(graphCopy[i] == NULL) continue;
-
-        node** conflicts = findConflictingNeighboursForNode(graphCopy[i]);
-        
-        if(conflicts == NULL) continue;
-
-        int numConflicts = findNumberOfConflictsForNode(graphCopy[i]);
-
-        memcpy(conflictingNodes + totalNumConflictingNodes, conflicts, sizeof(node*) * numConflicts);
-
-        totalNumConflictingNodes += numConflicts;
-        printf("%d ", totalNumConflictingNodes);
-
-        freeGraph(conflicts, numConflicts); //this should make the pointers null in the graph copy
-        printf("freed memory ");
-    }
-
-    freeGraph(graphCopy, numNodes);
-
-    return conflictingNodes;
-}
-
 node** findConflictingNeighboursForNode(node* n) {
     node** conflictingNodes = (node**)malloc(n->degree * sizeof(node*));
 

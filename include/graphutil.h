@@ -72,12 +72,6 @@ int nodeIsInConflict(node* node);
 //is present in the graph
 int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour);
 
-//returns an array of nodes which are in conflict in the graph.
-//functions by creating a copy of the graph and systematically moving
-//all of the conflicting nodes to an array, while removing them and their
-//neighbours from the graph copy so as to not waste time
-node** findAllConflictingNodesInGraph(node** graph, int numNodes);
-
 //finds the neighbour nodes which conflict with the provided node and
 //returns them in an array
 node** findConflictingNeighboursForNode(node* n);

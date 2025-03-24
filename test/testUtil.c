@@ -322,29 +322,6 @@ int testWhichColoursInGraphAll() {
     return 0;
 }
 
-int testFindConflictingNodesInGraph() {
-    //create a graph
-    node** g = generateRandomGraph(NUM_NODES, 1);
-
-    //make the first have of the nodes conflict
-    for(int n = 0; n < NUM_NODES; n++) {
-        g[n]->colour = 1;
-    }
-
-    //verify
-    node** conflictingNodes = findAllConflictingNodesInGraph(g, NUM_NODES);
-    for(int n = 0; n < NUM_NODES; n++) {
-        if(conflictingNodes[n]->id != g[n]->id) {
-            return 1;
-        }
-    }
-
-    freeGraph(conflictingNodes, NUM_NODES / 2);
-    freeGraph(g, NUM_NODES);
-
-    return 0;
-}
-
 int testFindConflictingNeighbours() {
     //create a graph
     node** g = generateRandomGraph(NUM_NODES, 1);
