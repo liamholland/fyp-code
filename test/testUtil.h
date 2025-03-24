@@ -21,4 +21,7 @@ int testFetchNodesMoreThanGraph();
 
 int testNodeInConflict();
 
+int testWhichColoursInGraphOnlyOne();
+int testWhichColoursInGraphAll();
+
 #endif

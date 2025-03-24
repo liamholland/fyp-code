@@ -258,7 +258,58 @@ int testNodeInConflict() {
     return 0;
 }
 
-//find which colours in graph
+int testWhichColoursInGraphOnlyOne() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //apply colouring
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = 1;
+    }
+
+    //get colour truth vector
+    int* truthVector = findWhichColoursInGraph(g, NUM_NODES, NUM_NODES);
+
+    //verify
+    if(truthVector[1] == 0) return 1;
+
+    for(int i = 0; i < NUM_NODES; i++) {
+        if(i != 1 && truthVector[i] > 0) {
+            return 1;
+        }
+    }
+
+    free(truthVector);
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testWhichColoursInGraphAll() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //apply colouring
+    for(int n = 0; n < NUM_NODES; n++) {
+        g[n]->colour = g[n]->id + 1;
+    }
+
+    //get truth vector
+    int* truthVector = findWhichColoursInGraph(g, NUM_NODES, NUM_NODES + 1);
+
+    //verify
+    for(int i = 1; i < NUM_NODES + 1; i++) {
+        if(truthVector[i] != 1) {
+            return 1;
+        }
+    }
+
+    free(truthVector);
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
 
 //find the conflicting nodes in the graph
 

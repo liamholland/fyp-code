@@ -4,6 +4,8 @@
 #include "testUtil.h"
 #include "testTests.h"
 
+#define REGISTER_TEST(t) { &t, #t }
+
 typedef struct testStruct {
     int (*test)();
     const char* testName;
@@ -11,22 +13,24 @@ typedef struct testStruct {
 
 const test tests[] = {
     //test tests
-    {&testPass, "testPass"},
-    {&testFail, "testFail"},
+    REGISTER_TEST(testPass),
+    REGISTER_TEST(testFail),
 
     //test utils
-    {&testInitialiseGraphNoNeighbours, "testInitialiseGraphNoNeighbours"},
-    {&testInitialiseGraphWithNeighbours, "testInitialiseGraphWithNeighbours"},
-    {&testCopyUnmodifiedGraph, "testCopyUnmodifiedGraph"},
-    {&testCopyModifiedGraph, "testCopyModifiedGraph"},
-    {&testFreeGraph, "testFreeGraph"},
-    {&testFindNumColoursUsed, "testFindNumColoursUsed"},
-    {&testCountNumConflictsAll, "testCountNumConflictsAll"},
-    {&testCountNumConflictsNone, "testCountNumConflictsNone"},
-    {&testNumUncolouredNodes, "testNumUncolouredNodes"},
-    {&testFetchNodes, "testFetchNodes"},
-    {&testFetchNodesMoreThanGraph, "testFetchNodesMoreThanGraph"},
-    {&testNodeInConflict, "testNodeInConflict"}
+    REGISTER_TEST(testInitialiseGraphNoNeighbours),
+    REGISTER_TEST(testInitialiseGraphWithNeighbours),
+    REGISTER_TEST(testCopyUnmodifiedGraph),
+    REGISTER_TEST(testCopyModifiedGraph),
+    REGISTER_TEST(testFreeGraph),
+    REGISTER_TEST(testFindNumColoursUsed),
+    REGISTER_TEST(testCountNumConflictsAll),
+    REGISTER_TEST(testCountNumConflictsNone),
+    REGISTER_TEST(testNumUncolouredNodes),
+    REGISTER_TEST(testFetchNodes),
+    REGISTER_TEST(testFetchNodesMoreThanGraph),
+    REGISTER_TEST(testNodeInConflict),
+    REGISTER_TEST(testWhichColoursInGraphOnlyOne),
+    REGISTER_TEST(testWhichColoursInGraphAll)
 };
 
 const int NUM_TESTS = sizeof(tests) / sizeof(test);
