@@ -41,7 +41,9 @@ const test tests[] = {
     REGISTER_TEST(testAddEdge),
     REGISTER_TEST(testFindHighestDegree),
     REGISTER_TEST(testFindLowestDegree),
-    REGISTER_TEST(testRemoveNodePointerFromList)
+    REGISTER_TEST(testRemoveNodePointerFromList),
+    REGISTER_TEST(testFindMostCommonColour),
+    REGISTER_TEST(testFindNodeWithID)
 };
 
 const int NUM_TESTS = sizeof(tests) / sizeof(test);

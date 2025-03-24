@@ -45,4 +45,8 @@ int testFindLowestDegree();
 
 int testRemoveNodePointerFromList();
 
+int testFindMostCommonColour();
+
+int testFindNodeWithID();
+
 #endif

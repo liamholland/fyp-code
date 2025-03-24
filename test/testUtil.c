@@ -546,7 +546,40 @@ int testRemoveNodePointerFromList() {
     return 0;
 }
 
+int testFindMostCommonColour() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
 
-//find most common colour in graph
+    int numNodesMinority = 2;
 
-//find node with id
+    //apply a colouring
+    for(int n = 0; n < NUM_NODES - numNodesMinority; n++) {
+        g[n]->colour = 1;
+    }
+
+    for(int n = NUM_NODES - numNodesMinority; n < NUM_NODES; n++) {
+        g[n]->colour = 2;
+    }
+
+    //verify
+    int mostCommon = findMostCommonColourInGraph(g, NUM_NODES, NUM_NODES + 1);
+    if(mostCommon != 1) return 1;
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+
+int testFindNodeWithID() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //verify
+    node* identifiedNode = findNodeWithIdInGraph(g, NUM_NODES, NUM_NODES - 1);
+    if(identifiedNode != g[NUM_NODES - 1]) return 1;
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}

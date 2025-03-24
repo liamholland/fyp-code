@@ -493,8 +493,10 @@ int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
     int* colourFreqVector = findColourFrequencies(graph, numNodes, maxColour);
 
     int mostCommonColour = 0;
+    int highestFreq = 0;
     for(int i = 0; i < maxColour; i++) {
-        if(colourFreqVector[i] > mostCommonColour) {
+        if(colourFreqVector[i] > highestFreq) {
+            highestFreq = colourFreqVector[i];
             mostCommonColour = i;
         }
     }
