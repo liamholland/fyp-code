@@ -498,9 +498,54 @@ int testFindHighestDegree() {
     return 0;
 }
 
-//find node with lowest degree
+int testFindLowestDegree() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
 
-//remove all instances of pointer from list
+    makeNodeOrpan(g[0]);
+
+    node* lowest = findNodeWithLowestDegree(g, NUM_NODES);
+
+    //verify
+    if(lowest != g[0]) return 1;
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
+int testRemoveNodePointerFromList() {
+    //create a graph
+    node** g = generateRandomGraph(NUM_NODES, 1);
+
+    //create a list of nodes
+    int listLength = NUM_NODES;
+    node** nodePtrs = (node**)malloc(sizeof(node*) * NUM_NODES);
+
+    for(int n = 0; n < NUM_NODES / 2; n++) {
+        nodePtrs[n] = g[0];
+    }
+
+    for(int n = NUM_NODES / 2; n < NUM_NODES; n++) {
+        nodePtrs[n] = g[1];
+    }
+
+    //remove g[0] from the list
+    removeAllInstancesOfNodePointerFromList(&nodePtrs, g[0], &listLength);
+    
+    //verify
+    if(listLength != NUM_NODES / 2) return 1;
+    for(int n = 0; n < listLength; n++) {
+        if(nodePtrs[n] == g[0]) {
+            return 1;
+        }
+    }
+
+    freeGraph(g, NUM_NODES);
+
+    return 0;
+}
+
 
 //find most common colour in graph
 

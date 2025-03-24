@@ -41,4 +41,8 @@ int testAddEdge();
 
 int testFindHighestDegree();
 
+int testFindLowestDegree();
+
+int testRemoveNodePointerFromList();
+
 #endif

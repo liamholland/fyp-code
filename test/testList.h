@@ -39,7 +39,9 @@ const test tests[] = {
     REGISTER_TEST(testMakeNodeOrphan),
     REGISTER_TEST(testRemoveNode),
     REGISTER_TEST(testAddEdge),
-    REGISTER_TEST(testFindHighestDegree)
+    REGISTER_TEST(testFindHighestDegree),
+    REGISTER_TEST(testFindLowestDegree),
+    REGISTER_TEST(testRemoveNodePointerFromList)
 };
 
 const int NUM_TESTS = sizeof(tests) / sizeof(test);
