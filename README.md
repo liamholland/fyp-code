@@ -36,10 +36,20 @@ This repository is the code for my **final year project**, dealing with **decent
 
 - clone the repo
 - run make
-```
+```sh
 make
 ```
 - alternatively manually compile the src files with whatever compiler you prefer
+
+## Running Tests
+
+- Run the tests to see that all of the logic works alright on your machine
+- Compile a test executable with
+```sh
+make compile_test
+``` 
+- run the test executable to run the tests
+
 
 ## Usage
 
@@ -127,22 +137,26 @@ options:
 
 #### Example Usage
 **colour a ring graph with 51 nodes and 10000 iterations max**
-```
+```sh
 ./colouring.exe -n 51 -g o -M 10000
 ```
 **colour a random graph which has a probability of 30% that each edge exists**
-```
+```sh
 ./colouring.exe -p 0.3
 ```
 **colour a bipartite graph with 2 nodes in the first set and 4 in the second**
-```
+```sh
 ./colouring.exe -g b -n 6 -s 2
 ```
-**colour a connected random graph with 1001 nodes, starting with 5 colours and working up to 50 max**
-```
+**colour a connected random graph with 1001 nodes, using at least 5 colours and at most 50 colours**
+```sh
 ./colouring.exe -n 1001 -p 1 -c 5 -C 50
 ```
 **colour a random graph with 300 nodes and 70% probability for each edge, using 50 agents that move twice on each turn, save the results and run it on 10 different graphs**
-```
+```sh
 ./colouring.exe -n 300 -p 0.7 -a 50 -m 2 -A 10 -S
+```
+**colour a random graph using the configuration of the decrementing kernel for colouring and the node removal kernel as a dynamic aspect, then view the graph in the interactive mode when finished**
+```sh
+./colouring.exe -n 100 -p 0.5 -K dnx -v
 ```
