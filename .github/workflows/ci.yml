@@ -1,0 +1,19 @@
+name: build and test
+
+on:
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: configure
+      run: ./configure
+    - name: build
+      run: make compile_test
+    - name: test
+      run: ./test_colouring
