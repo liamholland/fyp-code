@@ -160,3 +160,14 @@ options:
 ```sh
 ./colouring.exe -n 100 -p 0.5 -K dnx -v
 ```
+
+## Extending the code
+
+If you want, feel free to fork the repository in order to extend the code with new kernels in order to run new experiments. In order to add a new kernel, you simply need to do the following:
+
+1. navigate to the relevant file
+2. add the new function, following the established function signature
+3. add an option for it in the main function (`colouring.c`)
+4. add a test (optional)
+
+You can then use the kernel in your experiments
