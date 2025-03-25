@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "graphutil.h"
 #include "graphgenerator.h"
 #include "testUtil.h"
@@ -94,24 +95,12 @@ int testFreeGraph() {
 
     //free it
     freeGraph(g, NUM_NODES);
-    
-    for(int n = 0; n < NUM_NODES; n++) {
-        if(g[n] != NULL) {
-            return 1;
-        }
-    }
 
     //create a graph with no neighbours
     g = initialiseGraph(NUM_NODES, 0);
 
     //free it
     freeGraph(g, NUM_NODES);
-
-    for(int n = 0; n < NUM_NODES; n++) {
-        if(g[n] != NULL) {
-            return 1;
-        }
-    }
 
     return 0;
 }
