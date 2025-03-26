@@ -53,4 +53,11 @@ do
     done
 done
 
-echo "completed! please close lid"
+# immutable nodes
+for a in 950 850 750 650 500
+do
+    for p in 0.2 0.5 0.8
+    do
+        ./colouring -n $NUMBER_OF_NODES -p 0.5 -A 5 -S res/imm_$a\_ -M $MAXIMUM_ITERATIONS -k m -a $a -m 0
+    done
+done
