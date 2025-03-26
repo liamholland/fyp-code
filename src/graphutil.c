@@ -66,9 +66,12 @@ node** copyGraph(node** graph, int numNodes) {
 
 int freeGraph(node** graph, int numNodes) {
     for(int n = 0; n < numNodes; n++) {
-        free(graph[n]->neighbours); //dont have to free each member of neighbours since they are all in this array
+        if(graph[n]->degree > 0) {
+            free(graph[n]->neighbours); //dont have to free each member of neighbours since they are all in this array
+        }
+
         free(graph[n]);
-        graph[n] == NULL;
+        graph[n] = NULL;
     }
 
     free(graph);
@@ -193,34 +196,6 @@ int* findWhichColoursInGraph(node** graph, int numNodes, int maxColour) {
     return colourTruthVector;
 }
 
-node** findAllConflictingNodesInGraph(node** graph, int numNodes) {
-    node** conflictingNodes = (node**)malloc(numNodes * sizeof(node*));
-
-    int totalNumConflictingNodes = 0;
-
-    node** graphCopy = copyGraph(graph, numNodes);
-
-    for(int i = 0; i < numNodes; i++) {
-        if(graphCopy[i] == NULL) continue;
-
-        node** conflicts = findConflictingNeighboursForNode(graphCopy[i]);
-        
-        if(conflicts == NULL) continue;
-
-        int numConflicts = findNumberOfConflictsForNode(graphCopy[i]);
-
-        memcpy(conflictingNodes[totalNumConflictingNodes], conflicts, sizeof(node*) * numConflicts);
-
-        totalNumConflictingNodes += numConflicts;
-
-        freeGraph(conflicts, numConflicts); //this should make the pointers null in the graph copy
-    }
-
-    freeGraph(graphCopy, numNodes);
-
-    return conflictingNodes;
-}
-
 node** findConflictingNeighboursForNode(node* n) {
     node** conflictingNodes = (node**)malloc(n->degree * sizeof(node*));
 
@@ -320,9 +295,9 @@ int makeNodeOrpan(node* targetNode) {
         targetNode->neighbours[n] = NULL;
     }
 
+    free(targetNode->neighbours);
     targetNode->neighbours = NULL;
     targetNode->degree = 0;
-    free(targetNode->neighbours);
 
     return 0;
 }
@@ -488,8 +463,10 @@ int findMostCommonColourInGraph(node** graph, int numNodes, int maxColour) {
     int* colourFreqVector = findColourFrequencies(graph, numNodes, maxColour);
 
     int mostCommonColour = 0;
+    int highestFreq = 0;
     for(int i = 0; i < maxColour; i++) {
-        if(colourFreqVector[i] > mostCommonColour) {
+        if(colourFreqVector[i] > highestFreq) {
+            highestFreq = colourFreqVector[i];
             mostCommonColour = i;
         }
     }
