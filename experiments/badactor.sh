@@ -1,0 +1,8 @@
+NUMBER_OF_NODES=30
+NUMBER_OF_AUTO_RUNS=5
+MAXIMUM_ITERATIONS=50000
+
+for p in 0.2 0.5 0.8
+do
+    ./colouring -n $NUMBER_OF_NODES -p $p -k a -S /res/bad_ -A $NUMBER_OF_AUTO_RUNS -M $MAXIMUM_ITERATIONS
+done

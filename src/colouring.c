@@ -206,15 +206,22 @@ int main(int argc, char const *argv[]) {
     node** benchmarkMinimumGraph;
 
     if(save) {
-        char description[100];
-        snprintf(description, 100, "generator: %c; coloring kernel: %c; dynamic kernel: %c; movement kernel: %c; no. nodes: %d; probability: %.3f;",
+        char description[150];
+        snprintf(description, 150, "generator: %c; coloring kernel: %c; dynamic kernel: %c; movement kernel: %c; no. nodes: %d; probability: %.3f;",
             generator, cKernelCode, dKernelCode, mKernelCode, numNodes, prob);
         addHeadersToResultsFile(description);
     }
 
+    //save modifiable values
+    int numNodesSave = numNodes;
+    int numAgentsSave = numAgents;
+
     //run main program loop
     //remember default for this is to run once
     for(int a = 0; a < autoRuns; a++) {
+        numNodes = numNodesSave;
+        numAgents = numAgentsSave;
+        
         //generate the graph
         switch (generator) {
             case 'r':
@@ -244,6 +251,8 @@ int main(int argc, char const *argv[]) {
             maxColour = findNumColoursUsed(benchmarkMinimumGraph, numNodes, numNodes + 1);
         }
 
+        freeGraph(benchmarkMinimumGraph, numNodes);
+
         colouredGraph = agentColour(graph, &numNodes, maxIterations, &numAgents, numMoves, minColour, maxColour + 1, save, colouringKernel, dynamicKernel, movementKernel);
 
         // colouredGraph = pathColour(graph, numNodes, graph[0], graph[1], minColour, maxColour, save, colouringKernel);
@@ -265,7 +274,6 @@ int main(int argc, char const *argv[]) {
         //free memory
         freeGraph(graph, numNodes);
         freeGraph(colouredGraph, numNodes);
-        freeGraph(benchmarkMinimumGraph, numNodes);
     }
 
     if(save) {

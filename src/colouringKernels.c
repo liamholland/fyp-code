@@ -6,7 +6,7 @@
 int colourblindAgentIncrement(node* agent, int maxColour) {
     int numChanges = 0;
     
-    int max = maxColour < agent->degree ? maxColour : agent->degree;
+    int max = maxColour < agent->degree + 1 ? maxColour : agent->degree + 1;
 
     //check for conflicts in neighbours
     if(!agent->colour || nodeIsInConflict(agent)) {
@@ -25,7 +25,7 @@ int colourblindAgentIncrement(node* agent, int maxColour) {
 int colourblindAgentDecrement(node* agent, int maxColour) {
     int numChanges = 0;
     
-    int max = maxColour < agent->degree ? maxColour : agent->degree;
+    int max = maxColour < agent->degree + 1 ? maxColour : agent->degree + 1;
 
     //check for conflicts in neighbours
     if(!agent->colour || nodeIsInConflict(agent)) {

@@ -1,0 +1,27 @@
+generator: r; coloring kernel: a; dynamic kernel: x; movement kernel: x; no. nodes: 30; probability: 0.200;
+benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
+7,30,30,38,30,5,0,0,0.0060
+8,30,30,36,30,6,0,0,0.0010
+6,30,30,38,30,5,0,0,0.0010
+7,30,30,38,30,5,0,0,0.0050
+6,30,30,38,30,4,0,0,0.0020
+
+
+generator: r; coloring kernel: a; dynamic kernel: x; movement kernel: x; no. nodes: 30; probability: 0.500;
+benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
+11,30,30,31,30,9,0,0,0.0030
+9,30,30,32,30,9,0,0,0.0010
+10,30,30,32,30,10,0,0,0.0020
+10,30,30,31,30,10,0,0,0.0010
+10,30,30,33,30,8,0,0,0.0010
+
+
+generator: r; coloring kernel: a; dynamic kernel: x; movement kernel: x; no. nodes: 30; probability: 0.800;
+benchmark, starting nodes, final nodes, iterations, agents, colours, conflicts, missed nodes, time (s)
+15,30,30,26,30,13,0,0,0.0070
+15,30,30,24,30,14,0,0,0.0010
+17,30,30,21,30,15,0,0,0.0010
+15,30,30,29,30,14,0,0,0.0020
+15,30,30,24,30,15,0,0,0.0010
+
+
