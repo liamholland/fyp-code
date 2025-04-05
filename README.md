@@ -36,7 +36,7 @@ This repository is the code for my **final year project**, dealing with **decent
 
 [![demo video](https://img.youtube.com/vi/Zcn6_IQtaDM/0.jpg)](https://www.youtube.com/watch?v=Zcn6_IQtaDM)
 
-(click to wacth)
+(click to watch)
 
 ## Local Setup
 
