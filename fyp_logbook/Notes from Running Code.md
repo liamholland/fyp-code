@@ -1,4 +1,4 @@
-# Random Search
+	# Random Search
 - Implementing random search was fairly easy, but the stopping condition on an algorithm which finds the chromatic number is not
 - I have implemented an approach which begins with the number of nodes as the chromatic number, then whittles it down until it finds a solution with conflicts, at which point it knows that the previous solution was the correct colouring
 - There are a couple of problems with this
@@ -168,6 +168,128 @@ for(int f = 0; f < numFish; f++) {
 - Setting a lower bound reduces the codes ability to improve on the benchmark? ![[Pasted image 20241117175936.png]]
 
 
+# Dynamic Graphs
+- I have the foundations in place to write dynamic graph kernels
+- I have one actual kernel which just removes an edge if there is a conflict
+	- not practically useful
+- What I need to do is decide on some measure to determine when an edge should be removed in order to improve performance
+- One option is to just make it random chance that a kernel might remove an edge
+
+### Doubling the graph
+- I implemented code which copies the graph and tacks the copy on to the original
+- Sometimes this works fine, but sometimes it causes the program to crash for some reason
+- Really not sure why it is crashing, but I will test the structural code with a simpler kernel and come back to it later
+
+### Randomly removing an edge
+- I ran this with a dense graph of size 1001
+- There was a 1 in 1000 chance that an edge was removed from a node
+- It did not have that much impact on the outcome of the colouring process![[Pasted image 20250126124734.png]]
+- Honestly I think a different colouring approach might look more interesting
+
+
+### Debugging removing nodes
+- For some reason when i ran the remove node kernel with less than `numNodes` agents, it always crashed, but at different times
+- It looked like the problem was illegal memory access and i thought the reason was modify the list of agents as i iterated over them
+- However, this should not have made a difference, since I am working with pointers in C
+- I spent actual hours trying to pinpoint the place it was going wrong
+- It looked random, as if the memory access error could happen in a number of different places, again the error had to be something to do with agents
+- Weirdly it seemed like it was the modification of the list, though; the crash occurred at the start of the next iteration
+- I started printing out the list agents in the agent list, and that is when i noticed a lot of the numbers were the same
+- This was the answer: everything was correct, but when i removed a node, i only removed the *first instance* of the pointer in the agents list
+- But any number of the agents could have moved to that node
+- What this means is the memory access would just happen whenever an invalid pointer happened to be left in the list, but it wasn't removed
+- After all that, all the memory manipulation and the double, triple, quadruple checking of pointer dereferencing and memory reallocation, the bug was the single expression `break;`
+- I actually rewrote the function to copy the valid pointers to a new array for simplicities sake (cleaner code)
+
+### What is left to implement
+- Immutable nodes
+- Bad actor
+- Costs of Colours vs Number of conflicts
+	- limit to x colours
+	- nodes must determine the most valuable among them
+	- i.e., move the colours around, rather than colour with conflicts
+	- remove uncoloured nodes?
+	- increase number of colours?
+
+### Bad Actor
+- The bad actor should set its colour to the most common colour in its locality in order to maximise the number of conflicts
+- It will probably be easier to count the frequency of pointers if i create a `vote` struct with the pointer value and a count
+	- Check if the vote has been created and create it if it hasnt
+
+
+# More Ideas
+- What if i tied the kernels to each node
+	- Half the nodes have a random kernel, half of them have a really good one that can correct mistakes
+	- Change the kernel half way through
+		- All are random, then they all start using minimum agent
+- Multithreading
+	- Write a new main loop, which starts a new thread for each node
+	- Compare the times of each
+- "Share with 10 friends" kernel
+	- Start with the most connected node and start colouring each node from there
+	- A node only gets an agent when one next to it has been coloured
+
+
+# Balancing conflicts and influence
+- this experiment involves removing nodes conditionally based on their degree and the number of conflicts
+- For example:
+```C
+if(agent->colour && numConflictingNeighbours > (int)(agent->degree * 0.66)) {
+```
+- I modified the minimum agent kernel to apply the max colour it can if it fails to colour a node, to force conflicts into the system
+- You can then limit the number of colours you want in a graph and let the colouring do its thing
+- Most of the time, this is sorted in the first iteration, since the number of conflicts tends not to increase, but sometimes this does happen, for example: ![[Pasted image 20250128165939.png]]
+- This resulted in the following graph: ![[Pasted image 20250128165956.png]]
+
+# Experiments
+### Random Kernel
+`-n 1000 -p 0.2 -A 20 -S` ![[Pasted image 20250130173304.png]]
+
+`-n 1000 -p 0.8 -A 20 -S` ![[Pasted image 20250130173725.png]]
+
+`-n 1000 -p 0.2 -A 2 -c 2 -S -M 10000` ![[Pasted image 20250130190151.png]]
+
+
+### Decrementing Colour-blind
+`-n 1000 -p 0.2 -A 20 -S` ![[Pasted image 20250130174749.png]]
+
+`-n 1000 -p 0.8 -A 20 -S -M 10000` ![[Pasted image 20250130180642.png]]
+(without outliers) ![[Pasted image 20250130180752.png]]
+
+`-n 1000 -p 0.2 -A 20 -S -M 10000 -a 100 -m 2` ![[Pasted image 20250130183543.png]]
+
+`-n 1000 -p 0.2 -A 2 -c 2 -S -M 10000` ![[Pasted image 20250130185452.png]]
+
+`-n 1000 -p 0.2 -A 20 -c 30 -S -M 10000` ![[Pasted image 20250130191220.png]]
+
+`-n 1000 -p 0.2 -A 5 -c 55 -S -M 10000` ![[Pasted image 20250130195941.png]]
+
+`-n 1000 -p 0.2 -A 5 -c 240 -S -M 10000` ![[Pasted image 20250130200234.png]]
+
+`-n 1000 -p 0.8 -A 20 -c 55 -S -M 10000` ![[Pasted image 20250130195247.png]]
+
+`-n 100 -p 0.2 -A 20 -c 11 -S -M 10000` ![[Pasted image 20250131104645.png]]
+
+`-n 100 -p 0.8 -A 20 -c 35 -S -M 10000` ![[Pasted image 20250131104913.png]]
+
+
+- Density increases wavelength
+- Increasing number of colours reduces amplitude as number of colours gets closer to chromatic colour?
+- Increasing number of nodes reduces frequency?
+
+### Incrementing Colour-blind
+`-n 1000 -p 0.2 -A 20 -S -M 10000` ![[Pasted image 20250130181347.png]]
+
+`-n 1000 -p 0.8 -A 20 -S -M 10000` ![[Pasted image 20250130182830.png]]
+
+`-n 1000 -p 0.2 -A 20 -S -M 10000 -a 100 -m 2` ![[Pasted image 20250130183403.png]]
+
+`-n 1000 -p 0.2 -A 2 -c 1 -S -M 10000` ![[Pasted image 20250130185741.png]]
+
+`-n 1000 -p 0.2 -A 2 -c 2 -S -M 10000` ![[Pasted image 20250130185945.png]]
+
+### Local Minimum Kernel
+`-n 1000 -p 0.2 -A 20 -c 1 -M 10000 -S` ![[Pasted image 20250130184521.png]] 
 
 
 
