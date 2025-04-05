@@ -202,5 +202,17 @@ $$
 
 
 
+# Size of Array Hack
+https://medium.com/@bmqube/find-size-of-an-array-using-pointer-hack-in-c-c-2c1c6743e12e
+
+
+
+# Prior Research
+https://link.springer.com/article/10.1007/s10589-016-9862-9#citeas
+simple colouring algorithm
+
+https://www.researchgate.net/publication/320071527_Fast_Responsive_Decentralized_Graph_Coloring
+wireless networking algorithm
+
 
 #fyp 
