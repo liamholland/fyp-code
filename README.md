@@ -32,6 +32,12 @@
 
 This repository is the code for my **final year project**, dealing with **decentralised approaches to graph colouring**.
 
+## Demo Video
+
+[![demo video](https://img.youtube.com/vi/Zcn6_IQtaDM/0.jpg)](https://www.youtube.com/watch?v=Zcn6_IQtaDM)
+
+(click to wacth)
+
 ## Local Setup
 
 - clone the repo
